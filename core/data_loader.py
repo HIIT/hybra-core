@@ -2,7 +2,7 @@ import json
 import os
 import dateparser
 
-__DATA_DIR = '/Users/mnelimar/code/facebook-datalog/groups/data/' ## TODO: to be fixed
+__DATA_DIR = '../data/' ## TODO: to be fixed
 
 def harmonize_data( data ):
     ## make dates as date objects
@@ -15,7 +15,7 @@ def harmonize_data( data ):
 
     return data2
 
-def load_facebook( terms = 'data_' ): ## todo: better filtering
+def load_facebook( terms = ['data_'] ): ## todo: better filtering
 
     data = []
 
