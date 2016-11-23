@@ -2,15 +2,18 @@ import json
 import os
 import dateparser
 
-__DATA_DIR = '/Users/mnelimar/Documents/data/hybra0/' ## TODO: to be fixed
+__DATA_DIR = '/Users/mnelimar/code/facebook-datalog/groups/data/' ## TODO: to be fixed
 
 def harmonize_data( data ):
     ## make dates as date objects
+    data2 = []
     for d in data:
-        d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
-        d['creator'] = d['from']['name']
+        if 'created_time' in d:
+           d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
+           d['creator'] = d['from']['name']
+           data2.append( d )
 
-    return data
+    return data2
 
 def load_facebook( terms = 'data_' ): ## todo: better filtering
 
@@ -20,6 +23,8 @@ def load_facebook( terms = 'data_' ): ## todo: better filtering
 
         if any( term in f for term in terms ):
 
-            data += json.load( open( __DATA_DIR + f ) ).values()
+            print json.load( open( __DATA_DIR + f ) ).keys()
+
+            data += json.load( open( __DATA_DIR + f ) )['feed']
 
     return harmonize_data( data )
