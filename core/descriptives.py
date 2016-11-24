@@ -1,5 +1,10 @@
 
 def describe( data ):
+
+    if len(data) == 0:
+        print "Dataset empty."
+        return
+
     print "Post together", len(data), "posts"
     print "First post", min( map( lambda d: d['date'], data ) )
     print "Last post", max( map( lambda d: d['date'], data ) )
