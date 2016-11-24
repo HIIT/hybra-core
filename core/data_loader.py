@@ -1,8 +1,10 @@
 import json
 import os
+import sys
+
 import dateparser
 
-__DATA_DIR = '../data/' ## TODO: to be fixed
+__DATA_DIR = '../data/'
 
 def harmonize_data( data ):
     ## make dates as date objects
