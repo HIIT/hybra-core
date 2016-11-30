@@ -1,14 +1,14 @@
 from collections import Counter
-import matplotlib.pyplot as plt
+
+#import plotly.graph_objs as go
 
 def create_timeline( data ):
 
     if len(data) == 0:
         print "Dataset empty."
-        return
+        return [go.Scatter( x = [] , y = [] )]
 
-    date_series = Counter( sorted( map( lambda d: d['date'], data ) ) )
+    timeline_data = Counter( sorted( map( lambda d: d['date'], data ) ) )
+    return timeline_data
 
-    plt.plot_date( x = date_series.keys(), y = date_series.values(), fmt = "r-" )
-    plt.grid( True )
-    plt.show()
+    #return [go.Scatter( x = date_series.keys() , y = date_series.values() )]
