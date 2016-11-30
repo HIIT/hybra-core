@@ -2,7 +2,8 @@ import json
 import os
 import sys
 
-import dateparser
+#import dateparser
+from datetime import datetime
 
 __DATA_DIR = '../data/'
 
@@ -11,7 +12,9 @@ def harmonize_data( data ):
     data2 = []
     for d in data:
         if 'created_time' in d:
-           d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
+           #d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
+
+           d['date'] = datetime.strptime( d['created_time'].replace( 'T', ' ' ).replace( '+0000', '' ), '%Y-%m-%d %H:%M:%S' )
            d['creator'] = d['from']['name']
            data2.append( d )
 
