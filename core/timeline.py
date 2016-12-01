@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 def create_timeline( data ):
     if len(data) == 0:
         print "Dataset empty."
-        return [go.Scatter( x = [] , y = [] )]
+        return
 
     timeline_data = Counter( sorted( map( lambda d: d['date'], data ) ) )
     plt.plot_date( x = timeline_data.keys(), y = timeline_data.values(), fmt = "r-" )

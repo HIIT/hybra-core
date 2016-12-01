@@ -5,7 +5,7 @@ import networkx as nx
 def create_network( data ):
     if len(data) == 0:
         print "Dataset empty."
-        return nx.DiGraph()
+        return
 
     G = nx.DiGraph()
 
