@@ -28,7 +28,7 @@ def load_facebook( terms = ['data_'] ): ## todo: better filtering
 
         if any( term in f for term in terms ):
 
-            print json.load( open( __DATA_DIR + f ) ).keys()
+            #print json.load( open( __DATA_DIR + f ) ).keys()
 
             data += json.load( open( __DATA_DIR + f ) )['feed']
 

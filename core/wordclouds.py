@@ -13,7 +13,7 @@ def create_wordcloud( data ):
     print_frequencies( frequencies )
     frequency_tuples = create_frequency_tuples( frequencies )
 
-    wordcloud = WordCloud().generate_from_frequencies( frequency_tuples )
+    wordcloud = WordCloud( background_color = "white" ).generate_from_frequencies( frequency_tuples )
 
     plt.figure()
     plt.imshow(wordcloud)
@@ -35,7 +35,7 @@ def word_frequencies( text ):
 
     frequencies = Counter( words )
 
-    stopwords = ["the", "a", "or", "tai", "and", "ja"]
+    stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"]
     for word in stopwords:
         del frequencies[word]
 

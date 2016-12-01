@@ -1,6 +1,5 @@
 
 def describe( data ):
-
     if len(data) == 0:
         print "Dataset empty."
         return
