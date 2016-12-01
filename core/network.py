@@ -3,7 +3,6 @@ import networkx as nx
 #from plotly.graph_objs import *
 
 def create_network( data ):
-
     if len(data) == 0:
         print "Dataset empty."
         return nx.DiGraph()
@@ -15,7 +14,7 @@ def create_network( data ):
         for comment in node['__comments']:
             G.add_edge( comment['from']['name'], node['creator'] )
 
-    nx.draw( G, with_labels = True , arrows = True)
+    nx.draw_circular( G, with_labels = True , arrows = True )
 
     #pos = nx.fruchterman_reingold_layout( G )
 
