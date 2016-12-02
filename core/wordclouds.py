@@ -3,7 +3,6 @@ from wordcloud import WordCloud
 from matplotlib import pyplot as plt
 from collections import Counter
 import re
-from matplotlib import pyplot as plt
 
 def create_wordcloud( data ):
     if len(data) == 0:
