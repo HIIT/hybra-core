@@ -7,6 +7,18 @@ from datetime import datetime
 
 __DATA_DIR = '../hybra-data-test1/' ## by default the data comes here
 
+try:
+    from git import Repo
+
+    r = Repo( __DATA_DIR )
+
+    print "Analysis done on data version", r.heads.master.commit,"updated on", r.heads.master.commit.authored_datetime
+    print "Store this for future reference."
+
+except:
+
+    print "Data direcotry is not a git repo. Data might not be up-to-date!"
+
 def harmonize_data( data ):
     ## make dates as date objects
     data2 = []
