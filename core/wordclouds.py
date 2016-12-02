@@ -26,6 +26,9 @@ def get_words( data ):
     for d in data:
         if 'message' in d:
             words += re.findall(r'\w+', d['message'].lower(), re.UNICODE)
+        for c in d['__comments']:
+            if 'message' in c:
+                words += re.findall(r'\w+', c['message'].lower(), re.UNICODE)
     return words
 
 def word_frequencies( word_list ):
