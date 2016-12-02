@@ -17,6 +17,13 @@ def create_network( data ):
     nx.draw_spring( G, with_labels = True , arrows = True )
 
 if __name__ == '__main__':
-    data = data_loader.load_facebook()
-    create_network( data )
-    plt.show()
+
+    for function_name in dir( data_loader ):
+
+        if 'load_' in function_name:
+
+            print function_name
+            f =  getattr( data_loader, function_name )
+            data = f()
+            create_network( data )
+            plt.show()
