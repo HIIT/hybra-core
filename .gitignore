@@ -87,3 +87,12 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# gitmodules
+.gitmodules
+
+# Data folder
+hybra-data-test1/*
+
+# Jupyter notebooks for testing
+core/test.ipynb
