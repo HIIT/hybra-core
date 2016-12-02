@@ -10,8 +10,8 @@ def create_wordcloud( data ):
         print "Dataset empty."
         return
 
-    text = get_messages( data )
-    frequencies = word_frequencies( text )
+    words = get_words( data )
+    frequencies = word_frequencies( words )
     print_frequencies( frequencies )
     frequency_tuples = create_frequency_tuples( frequencies )
 
@@ -21,21 +21,15 @@ def create_wordcloud( data ):
     plt.imshow(wordcloud)
     plt.axis("off")
 
-def get_messages( data ):
-    text = ''
+def get_words( data ):
+    words = []
     for d in data:
         if 'message' in d:
-            text = text + d['message'] + ' '
-        for c in d['__comments']:
-            if 'message' in c:
-                text = text + c['message'] + ' '
-    return text.strip()
+            words += re.findall(r'\w+', d['message'].lower(), re.UNICODE)
+    return words
 
-def word_frequencies( text ):
-    text_lower = text.lower()
-    words = re.findall(r'\w+', text_lower, re.UNICODE)
-
-    frequencies = Counter( words )
+def word_frequencies( word_list ):
+    frequencies = Counter( word_list )
 
     stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"]
     for word in stopwords:
