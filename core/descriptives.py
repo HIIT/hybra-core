@@ -10,14 +10,13 @@ def describe( data ):
     print "Last post", max( map( lambda d: d['date'], data ) )
     print "Number of authors", len( set( map( lambda d: d['creator'], data ) ) )
 
-    d = []
-
-    for post in data:
-        for comment in post['__comments']:
-            d.append( comment )
-
-    print "Comments", len( d )
-
 if __name__ == '__main__':
-    data = data_loader.load_facebook()
-    describe( data )
+
+    for function_name in dir( data_loader ):
+
+        if 'load_' in function_name:
+
+            print function_name
+            f =  getattr( data_loader, function_name )
+            data = f()
+            describe( data )
