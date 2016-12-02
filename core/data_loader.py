@@ -5,7 +5,7 @@ import sys
 #import dateparser
 from datetime import datetime
 
-__DATA_DIR = '../data/'
+__DATA_DIR = '../hybra-data-test1/' ## by default the data comes here
 
 def harmonize_data( data ):
     ## make dates as date objects
