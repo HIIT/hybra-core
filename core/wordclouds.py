@@ -55,6 +55,13 @@ def create_frequency_tuples( frequencies ):
     return tuples
 
 if __name__ == '__main__':
-    data = data_loader.load_facebook()
-    create_wordcloud( data )
-    plt.show()
+
+    for function_name in dir( data_loader ):
+
+        if 'load_' in function_name:
+
+            print function_name
+            f =  getattr( data_loader, function_name )
+            data = f()
+            create_wordcloud( data )
+            plt.show()

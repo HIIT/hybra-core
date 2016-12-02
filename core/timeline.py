@@ -21,6 +21,13 @@ def create_timeline( data ):
     plt.ylim( 0, ymax + 1 )
 
 if __name__ == '__main__':
-    data = data_loader.load_facebook()
-    create_timeline(data)
-    plt.show()
+
+    for function_name in dir( data_loader ):
+
+        if 'load_' in function_name:
+
+            print function_name
+            f =  getattr( data_loader, function_name )
+            data = f()
+            create_timeline( data )
+            plt.show()
