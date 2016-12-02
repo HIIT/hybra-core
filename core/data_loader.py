@@ -19,7 +19,7 @@ except:
 
     print "Data direcotry is not a git repo. Data might not be up-to-date!"
 
-def harmonize_data( data ):
+def __harmonize_data( data ):
     ## make dates as date objects
     data2 = []
     for d in data:
@@ -46,7 +46,7 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
 
             data += json.load( open( path + f ) )['feed']
 
-    return harmonize_data( data )
+    return __harmonize_data( data )
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
