@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# gitmodules
+.gitmodules
+
+# Data folder
+hybra-data-test1/*
