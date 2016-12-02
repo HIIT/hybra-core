@@ -35,3 +35,26 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
             data += json.load( open( path + f ) )['feed']
 
     return harmonize_data( data )
+
+def load_media( terms = ['.json'], data_folder = 'media/' ):
+
+    import pickle ## for now, using picke - JSON later on
+
+    data = []
+
+    path = __DATA_DIR + data_folder
+
+    for f in os.listdir( path ):
+
+        if any( term in f for term in terms ):
+
+            d = pickle.load( open( path + f ) )
+
+            ## TBA: change to standart format correctly
+            d['date'] = min( d['datetime_list'] )
+            d['creator'] = d['author']
+            d['message'] = d['title'] + ' ' + d['ingress'] + ' ' + d['text']
+
+            data.append( d )
+
+    return data
