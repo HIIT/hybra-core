@@ -93,3 +93,6 @@ ENV/
 
 # Data folder
 hybra-data-test1/*
+
+# Jupyter notebooks for testing
+test.ipynb
