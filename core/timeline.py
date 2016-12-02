@@ -1,6 +1,7 @@
 from collections import Counter
 from matplotlib import pyplot as plt
 import datetime
+import data_loader
 
 def create_timeline( data ):
     if len(data) == 0:
@@ -18,3 +19,8 @@ def create_timeline( data ):
     plt.plot_date( x = x_axis, y = y_axis, fmt = "r-" )
     ymin, ymax = plt.ylim()
     plt.ylim( 0, ymax + 1 )
+
+if __name__ == '__main__':
+    data = data_loader.load_facebook()
+    create_timeline(data)
+    plt.show()
