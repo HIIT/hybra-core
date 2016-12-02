@@ -20,16 +20,18 @@ def harmonize_data( data ):
 
     return data2
 
-def load_facebook( terms = ['data_'] ): ## todo: better filtering
+def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: better filtering
 
     data = []
 
-    for f in os.listdir( __DATA_DIR ):
+    path = __DATA_DIR + data_folder
+
+    for f in os.listdir( path ):
 
         if any( term in f for term in terms ):
 
             #print json.load( open( __DATA_DIR + f ) ).keys()
 
-            data += json.load( open( __DATA_DIR + f ) )['feed']
+            data += json.load( open( path + f ) )['feed']
 
     return harmonize_data( data )
