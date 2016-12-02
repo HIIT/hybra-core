@@ -1,7 +1,9 @@
+import data_loader
 from wordcloud import WordCloud
 from matplotlib import pyplot as plt
 from collections import Counter
 import re
+from matplotlib import pyplot as plt
 
 def create_wordcloud( data ):
     if len(data) == 0:
@@ -55,3 +57,8 @@ def create_frequency_tuples( frequencies ):
     for freq in frequencies:
         tuples.append( (freq, frequencies[freq]) )
     return tuples
+
+if __name__ == '__main__':
+    data = data_loader.load_facebook()
+    create_wordcloud( data )
+    plt.show()

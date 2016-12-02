@@ -1,4 +1,6 @@
 import networkx as nx
+import data_loader
+from matplotlib import pyplot as plt
 
 def create_network( data ):
     if len(data) == 0:
@@ -13,3 +15,8 @@ def create_network( data ):
             G.add_edge( comment['from']['name'], node['creator'] )
 
     nx.draw_spring( G, with_labels = True , arrows = True )
+
+if __name__ == '__main__':
+    data = data_loader.load_facebook()
+    create_network( data )
+    plt.show()

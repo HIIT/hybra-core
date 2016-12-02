@@ -1,3 +1,4 @@
+import data_loader
 
 def describe( data ):
     if len(data) == 0:
@@ -16,3 +17,7 @@ def describe( data ):
             d.append( comment )
 
     print "Comments", len( d )
+
+if __name__ == '__main__':
+    data = data_loader.load_facebook()
+    describe( data )
