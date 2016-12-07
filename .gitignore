@@ -90,6 +90,7 @@ ENV/
 
 # gitmodules
 .gitmodules
+.git/*
 
 # Data folder
 hybra-data-test1/*
