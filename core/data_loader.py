@@ -17,7 +17,7 @@ try:
 
 except:
 
-    print "Data direcotry is not a git repo. Data might not be up-to-date!"
+    print "Data directory is not a git repo. Data might not be up-to-date!"
 
 def __harmonize_data( data ):
     ## make dates as date objects
