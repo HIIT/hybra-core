@@ -1,8 +1,8 @@
 import data_loader
 import descriptives
-import network
-import timeline
-import wordclouds
+import network as module_network
+import timeline as module_timeline
+import wordclouds as module_wordclouds
 
 
 def load_data( terms = [], data_folder = '' ):
@@ -49,11 +49,13 @@ def describe( data ):
     else:
         descriptives.describe( data )
 
-def create_timeline( data ):
-    timeline.create_timeline( data )
+## igrap plotting utilities
 
-def create_network( data ):
-    network.create_network( data )
+def timeline( data ):
+    module_timeline.create_timeline( data )
 
-def create_wordcloud( data ):
-    wordclouds.create_wordcloud( data )
+def network( data ):
+    module_network.create_network( data )
+
+def wordcloud( data ):
+    module_wordclouds.create_wordcloud( data )
