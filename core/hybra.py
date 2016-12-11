@@ -4,41 +4,21 @@ import network as module_network
 import timeline as module_timeline
 import wordclouds as module_wordclouds
 
+__sources = dir( data_loader )
+__sources = filter( lambda x: x.startswith('load_') , __sources )
+__sources = map( lambda x: x[5:], __sources )
 
-def load_data( terms = [], data_folder = '' ):
-    if data_folder == '':
-        return load_all_data( terms )
-    else:
-        if '/' not in data_folder:
-            data_folder += '/'
-        loader = data_folder.split( '/' )[0]
-        return load_data_from_folder( terms, loader, data_folder )
+def data_sources():
+    return __sources
 
+def data( type, **kwargs ):
 
-def load_all_data( terms ):
-    data = {}
+    if type not in __sources:
+        raise NameError('Unknown media type')
 
-    for function_name in dir( data_loader ):
-        if 'load_' in function_name:
-            if len( terms ) == 0:
-                f =  getattr( data_loader, function_name )
-            else:
-                f = getattr( data_loader, function_name )( *terms )
-            data[function_name] = f()
+    load = getattr( data_loader, 'load_' + type )
 
-    return data
-
-def load_data_from_folder( terms, loader, data_folder ):
-    data = []
-
-    for function_name in dir( data_loader ):
-        if loader in function_name:
-            if len( terms ) == 0:
-                data += getattr( data_loader, function_name )( data_folder = data_folder )
-            else:
-                data += getattr( data_loader, function_name)( terms, data_folder )
-
-    return data
+    return load( **kwargs )
 
 def describe( data ):
     if isinstance( data, dict ):
