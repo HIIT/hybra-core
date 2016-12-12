@@ -21,13 +21,7 @@ def data( type, **kwargs ):
     return load( **kwargs )
 
 def describe( data ):
-    if isinstance( data, dict ):
-        for loader in data:
-            print loader
-            descriptives.describe( data[loader] )
-            print '\n'
-    else:
-        descriptives.describe( data )
+    descriptives.describe( data )
 
 ## igrap plotting utilities
 
