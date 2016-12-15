@@ -1,7 +1,6 @@
 from collections import Counter
 from matplotlib import pyplot as plt
 import datetime
-import data_loader
 
 def create_timeline( data ):
     if len(data) == 0:

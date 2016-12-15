@@ -1,4 +1,3 @@
-import data_loader
 
 def describe( data ):
     if len(data) == 0:

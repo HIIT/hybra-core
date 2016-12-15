@@ -1,5 +1,4 @@
 import networkx as nx
-import data_loader
 from matplotlib import pyplot as plt
 
 def create_network( data ):
