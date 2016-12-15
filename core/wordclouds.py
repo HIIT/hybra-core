@@ -10,7 +10,7 @@ def create_wordcloud( data ):
         return
 
     words = get_words( data )
-    frequencies = word_frequencies( words )
+    frequencies = remove_stopwords( Counter( words ) )
     print_frequencies( frequencies )
     frequency_tuples = create_frequency_tuples( frequencies )
 
@@ -32,13 +32,10 @@ def get_words( data ):
                     words += re.findall(r'\w+', decode_utf8( c['message'].lower() ), re.UNICODE)
     return words
 
-def word_frequencies( word_list ):
-    frequencies = Counter( word_list )
-
+def remove_stopwords( frequencies ):
     stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"]
     for word in stopwords:
         del frequencies[word]
-
     return frequencies
 
 def print_frequencies( frequencies ):
