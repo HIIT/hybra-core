@@ -24,12 +24,12 @@ def get_words( data ):
     words = []
     for d in data:
         if 'message' in d:
-            words += re.findall(r'\w+', d['message'].lower().decode('utf-8'), re.UNICODE)
+            words += re.findall(r'\w+', decode_utf8( d['message'].lower() ), re.UNICODE)
 
         if '__comments' in d:
             for c in d['__comments']:
                 if 'message' in c:
-                    words += re.findall(r'\w+', c['message'].lower().decode('utf-8'), re.UNICODE)
+                    words += re.findall(r'\w+', decode_utf8( c['message'].lower() ), re.UNICODE)
     return words
 
 def word_frequencies( word_list ):
@@ -51,10 +51,13 @@ def print_frequencies( frequencies ):
         i += 1
 
 def create_frequency_tuples( frequencies ):
-    tuples = []
-    for freq in frequencies:
-        tuples.append( (freq, frequencies[freq]) )
-    return tuples
+    return map( lambda f: (f, frequencies[f]), frequencies  )
+
+def decode_utf8( string ):
+    try:
+        return string.decode('utf8')
+    except UnicodeEncodeError:
+        return string
 
 if __name__ == '__main__':
 
