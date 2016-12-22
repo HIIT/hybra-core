@@ -10,7 +10,7 @@ def create_network( data ):
 
     for node in data:
         G.add_node( node['creator'] )
-        for comment in node['__comments']:
+        for comment in node['___comments']:
             G.add_edge( comment['from']['name'], node['creator'] )
 
     nx.draw_spring( G, with_labels = True , arrows = True )

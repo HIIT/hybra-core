@@ -5,8 +5,8 @@ def describe( data ):
         return
 
     print "Post together", len(data), "posts"
-    print "First post", min( map( lambda d: d['date'], data ) )
-    print "Last post", max( map( lambda d: d['date'], data ) )
+    print "First post", min( map( lambda d: d['timestamp'], data ) )
+    print "Last post", max( map( lambda d: d['timestamp'], data ) )
     print "Number of authors", len( set( map( lambda d: d['creator'], data ) ) )
 
 if __name__ == '__main__':

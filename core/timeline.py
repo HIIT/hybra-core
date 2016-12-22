@@ -7,7 +7,7 @@ def create_timeline( data ):
         print "Dataset empty."
         return
 
-    dates = map( lambda d: d['date'].date(), data )
+    dates = map( lambda d: d['timestamp'].date(), data )
     timeline_data = Counter( dates )
 
     x_axis = sorted( timeline_data )

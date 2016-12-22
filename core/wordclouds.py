@@ -22,11 +22,11 @@ def create_wordcloud( data ):
 def get_words( data ):
     words = []
     for d in data:
-        if 'message' in d:
-            words += re.findall(r'\w+', decode_utf8( d['message'].lower() ), re.UNICODE)
+        if 'text_content' in d:
+            words += re.findall(r'\w+', decode_utf8( d['text_content'].lower() ), re.UNICODE)
 
-        if '__comments' in d:
-            for c in d['__comments']:
+        if '___comments' in d:
+            for c in d['___comments']:
                 if 'message' in c:
                     words += re.findall(r'\w+', decode_utf8( c['message'].lower() ), re.UNICODE)
     return words
