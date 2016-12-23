@@ -22,8 +22,7 @@ def create_wordcloud( data ):
 def get_words( data ):
     words = []
     for d in data:
-        if 'text_content' in d:
-            words += re.findall(r'\w+', decode_utf8( d['text_content'].lower() ), re.UNICODE)
+        words += re.findall(r'\w+', decode_utf8( d['text_content'].lower() ), re.UNICODE)
 
         if '___comments' in d:
             for c in d['___comments']:
