@@ -19,19 +19,34 @@ except:
 
     print "Data directory is not a git repo. Data might not be up-to-date!"
 
-def __harmonize_data( data ):
+def __harmonize_data( data, data_type ):
     ## make dates as date objects
     data2 = []
     for d in data:
 
         d = __format_data( d )
+        d['source'] = data_type
 
-        if '_created_time' in d:
-           #d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
+        if data_type == 'facebook':
+            d['creator'] = d['_from']['name'] if '_from' in d else ''
+            d['text_content'] = d['_message'] if '_message' in d else ''
+            d['url'] = 'https://www.facebook.com/' + d['_id']
+            d['source_detail'] = '' # TO DO: add source detail from facebook data
 
-           d['timestamp'] = datetime.strptime( d['_created_time'].replace( 'T', ' ' ).replace( '+0000', '' ), '%Y-%m-%d %H:%M:%S' )
-           d['creator'] = d['_from']['name']
-           data2.append( d )
+            #d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
+            if 'created_time' in d:
+                d['timestamp'] = datetime.strptime( d['_created_time'].replace( 'T', ' ' ).replace( '+0000', '' ), '%Y-%m-%d %H:%M:%S' )
+            else:
+                d['timestamp'] = ''
+
+        elif data_type == 'news_media':
+            d['creator'] = d['_author']
+            d['timestamp'] = min( d['_datetime_list'] )
+            d['text_content'] = d['_title'] + ' ' + d['_ingress'] + ' ' + d['_text']
+            d['url'] = d['_url']
+            d['source_detail'] = d['_domain'] if '_domain' in d else ''
+
+        data2.append( d )
 
     return data2
 
@@ -54,7 +69,7 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
 
             data += json.load( open( path + f ) )['feed']
 
-    return __harmonize_data( data )
+    return __harmonize_data( data , 'facebook' )
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
@@ -69,17 +84,6 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
         if any( term in f for term in terms ):
 
             d = pickle.load( open( path + f ) )
-
-            ## TBA: change to standart format correctly
-            d['timestamp'] = min( d['datetime_list'] )
-            d['creator'] = d['author']
-            d['text_content'] = d['title'] + ' ' + d['ingress'] + ' ' + d['text']
-
             data.append( d )
 
-    return data
-
-
-if __name__ == '__main__':
-    data = load_facebook(['nokkahuilu'])
-    print data[0].keys()
+    return __harmonize_data( data, 'news_media' )
