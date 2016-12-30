@@ -1,4 +1,5 @@
 import data_loader
+import re
 import descriptives
 import network as module_network
 import timeline as module_timeline
@@ -19,6 +20,20 @@ def data( type, **kwargs ):
     load = getattr( data_loader, 'load_' + type )
 
     return load( **kwargs )
+
+def filter_from_text( data, text = [], substrings = True ):
+    filtered_data = []
+
+    for d in data:
+        if substrings:
+            if all( string in d['text_content'] for string in text ):
+                filtered_data.append( d )
+        else:
+            words = re.findall(r'\w+', d['text_content'], re.UNICODE)
+            if all( string in words for string in text ):
+                filtered_data.append( d )
+
+    return filtered_data
 
 def describe( data ):
     descriptives.describe( data )
