@@ -20,24 +20,27 @@ except:
     print "Data directory is not a git repo. Data might not be up-to-date!"
 
 def __harmonize_data( data, data_type ):
-    ## make dates as date objects
-    data2 = []
+    harmonized_data = []
+
     for d in data:
 
         d = __format_data( d )
         d['source'] = data_type
 
+        #ToDo: Move case handling to loader methods
         if data_type == 'facebook':
             d['creator'] = d['_from']['name'] if '_from' in d else ''
-            d['text_content'] = d['_message'] if '_message' in d else ''
-            d['url'] = 'https://www.facebook.com/' + d['_id']
-            d['source_detail'] = '' # TO DO: add source detail from facebook data
 
             #d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
-            if 'created_time' in d:
+            if '_created_time' in d:
                 d['timestamp'] = datetime.strptime( d['_created_time'].replace( 'T', ' ' ).replace( '+0000', '' ), '%Y-%m-%d %H:%M:%S' )
             else:
                 d['timestamp'] = ''
+
+            d['text_content'] = d['_message'] if '_message' in d else ''
+            d['url'] = 'https://www.facebook.com/' + d['_id']
+            d['source_detail'] = '' # ToDo: add source detail from facebook data
+            d['images'] = [] # ToDo: add image links from facebook data
 
         elif data_type == 'news_media':
             d['creator'] = d['_author']
@@ -45,13 +48,15 @@ def __harmonize_data( data, data_type ):
             d['text_content'] = d['_title'] + ' ' + d['_ingress'] + ' ' + d['_text']
             d['url'] = d['_url']
             d['source_detail'] = d['_domain'] if '_domain' in d else ''
+            d['images'] = d['_images']
 
-        data2.append( d )
+        harmonized_data.append( d )
 
-    return data2
+    return harmonized_data
 
 def __format_data( data ):
     formatted_data = {}
+
     for key in data.keys():
         formatted_data['_' + key] = data[key]
 
@@ -84,6 +89,7 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
         if any( term in f for term in terms ):
 
             d = pickle.load( open( path + f ) )
-            data.append( d )
+
+            data.append(d)
 
     return __harmonize_data( data, 'news_media' )
