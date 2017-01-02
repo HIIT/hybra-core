@@ -26,11 +26,11 @@ def filter_from_text( data, text = [], substrings = True ):
 
     for d in data:
         if substrings:
-            if all( string in d['text_content'] for string in text ):
+            if all( string.lower() in d['text_content'].lower() for string in text ):
                 filtered_data.append( d )
         else:
-            words = re.findall(r'\w+', d['text_content'], re.UNICODE)
-            if all( string in words for string in text ):
+            words = re.findall(r'\w+', d['text_content'].lower(), re.UNICODE)
+            if all( string.lower() in words for string in text ):
                 filtered_data.append( d )
 
     return filtered_data
