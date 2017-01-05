@@ -20,47 +20,23 @@ except:
     print "Data directory is not a git repo. Data might not be up-to-date!"
 
 def __harmonize_data( data, data_type ):
-    harmonized_data = []
 
-    for d in data:
-
-        d = __format_data( d )
-        d['source'] = data_type
-
-        #ToDo: Move case handling to loader methods
-        if data_type == 'facebook':
-            d['creator'] = d['_from']['name'] if '_from' in d else ''
-
-            #d['date'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
-            if '_created_time' in d:
-                d['timestamp'] = datetime.strptime( d['_created_time'].replace( 'T', ' ' ).replace( '+0000', '' ), '%Y-%m-%d %H:%M:%S' )
-            else:
-                d['timestamp'] = ''
-
-            d['text_content'] = d['_message'] if '_message' in d else ''
-            d['url'] = 'https://www.facebook.com/' + d['_id']
-            d['source_detail'] = '' # ToDo: add source detail from facebook data
-            d['images'] = [] # ToDo: add image links from facebook data
-
-        elif data_type == 'news_media':
-            d['creator'] = d['_author']
-            d['timestamp'] = min( d['_datetime_list'] )
-            d['text_content'] = d['_title'] + ' ' + d['_ingress'] + ' ' + d['_text']
-            d['url'] = d['_url']
-            d['source_detail'] = d['_domain'] if '_domain' in d else ''
-            d['images'] = d['_images']
-
-        harmonized_data.append( d )
-
-    return harmonized_data
-
-def __format_data( data ):
-    formatted_data = {}
+    harmonized_data = {}
 
     for key in data.keys():
-        formatted_data['_' + key] = data[key]
+        harmonized_data['_' + key] = data[key]
 
-    return formatted_data
+    harmonized_data['source'] = data_type
+    harmonized_data['creator'] = ''
+    harmonized_data['timestamp'] = ''
+    harmonized_data['text_content'] = ''
+    harmonized_data['url'] = ''
+    harmonized_data['source_detail'] = ''
+    harmonized_data['images'] = []
+    harmonized_data['links'] = []
+    harmonized_data['broken'] = {}
+
+    return harmonized_data
 
 def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: better filtering
 
@@ -72,9 +48,33 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
 
         if any( term in f for term in terms ):
 
-            data += json.load( open( path + f ) )['feed']
+            unharmonized_data = json.load( open( path + f ) )['feed']
 
-    return __harmonize_data( data , 'facebook' )
+            for d in unharmonized_data:
+
+                d = __harmonize_data( d, 'facebook' )
+
+                try:
+                    d['creator'] = d['_from']['name']
+                except Exception, e:
+                    d['broken']['creator'] = e
+
+                try:
+                    #d['timestamp'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
+                    d['timestamp'] = datetime.strptime( d['_created_time'].replace( 'T', ' ' ).replace( '+0000', '' ), '%Y-%m-%d %H:%M:%S' )
+                except Exception, e:
+                    d['broken']['timestamp'] = e
+
+                try:
+                    d['text_content'] = d['_message']
+                except Exception, e:
+                    d['broken']['text_content'] = e
+
+                d['url'] = 'https://www.facebook.com/' + d['_id']
+
+                data.append( d )
+
+    return data
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
@@ -90,6 +90,20 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
 
             d = pickle.load( open( path + f ) )
 
+            d = __harmonize_data( d, 'news_media' )
+
+            d['creator'] = d['_author']
+            d['timestamp'] = min( d['_datetime_list'] )
+            d['text_content'] = d['_title'] + ' ' + d['_ingress'] + ' ' + d['_text']
+            d['url'] = d['_url']
+
+            try:
+                d['source_detail'] = d['_domain']
+            except Exception, e:
+                d['broken']['source_detail'] = e
+
+            d['images'] = d['_images']
+
             data.append(d)
 
-    return __harmonize_data( data, 'news_media' )
+    return data
