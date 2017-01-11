@@ -41,7 +41,7 @@ def describe( data ):
 ## igrap plotting utilities
 
 def timeline( data ):
-    module_timeline.create_timeline( data )
+    return module_timeline.create_timeline( data )
 
 def network( data ):
     module_network.create_network( data )
