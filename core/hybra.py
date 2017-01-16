@@ -5,9 +5,14 @@ import network as module_network
 import timeline as module_timeline
 import wordclouds as module_wordclouds
 
+from IPython.core.display import HTML
+
 __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
 __sources = map( lambda x: x[5:], __sources )
+
+def start():
+    return HTML('<script src="js/d3/d3.min.js"></script>')
 
 def data_sources():
     return __sources
@@ -41,7 +46,7 @@ def describe( data ):
 ## igrap plotting utilities
 
 def timeline( data ):
-    return module_timeline.create_timeline( data )
+    return HTML( module_timeline.create_timeline( data ) )
 
 def network( data ):
     module_network.create_network( data )
