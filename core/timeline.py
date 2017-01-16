@@ -5,7 +5,7 @@ from string import Template
 
 def create_timeline(data):
 
-    dates = map( lambda d: str(d['timestamp'].date()), data )
+    dates = map( lambda d: str( d['timestamp'].date() ), filter( lambda d: d['timestamp'] is not '', data ) )
     timeline_data = Counter( dates )
 
     x_axis = sorted( timeline_data )
