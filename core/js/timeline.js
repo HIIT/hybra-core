@@ -20,7 +20,7 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.close); });
 
 // Adds the svg canvas
-var svg = d3.select("#graph")
+var svg = d3.select("#timeline_graph")
     .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
