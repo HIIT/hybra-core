@@ -6,30 +6,36 @@ from string import Template
 def create_timeline(data):
 
     dates = map( lambda d: d['timestamp'].date(), filter( lambda d: d['timestamp'] is not '', data ) )
-    timeline_data = Counter( dates )
 
-    start = min( timeline_data )
-    end = max( timeline_data )
-    delta = end - start
+    y_axis = Counter( dates )
 
-    x_axis = map( lambda date: start + timedelta( days = date ), range( delta.days + 1 ) )
+    start_date = min( y_axis )
+    end_date = max( y_axis )
+    delta = end_date - start_date
 
-    formatted_data = []
-    for date in x_axis:
-        if date in timeline_data:
-            formatted_data.append({'close' : timeline_data[date], 'date' : str(date)})
-        else:
-            formatted_data.append({'close' : 0, 'date' : str(date)})
+    x_axis = map( lambda date: start_date + timedelta( days = date ), range( delta.days + 1 ) )
 
-    css_text = codecs.open('css/timeline.css', 'r').read()
+    data_points = create_data_points( x_axis, y_axis )
 
     js_text_template = Template( codecs.open('js/timeline.js', 'r').read() )
-
     html_template = Template( codecs.open('html/timeline.html', 'r').read() )
 
-    js_text = js_text_template.substitute({'data' : formatted_data})
+    css_text = codecs.open('css/timeline.css', 'r').read()
+    js_text = js_text_template.substitute({'data' : data_points})
 
     return html_template.substitute( {'css': css_text, 'js': js_text} )
+
+
+def create_data_points( x_axis, y_axis ):
+    data_points = []
+
+    for date in x_axis:
+        if date in y_axis:
+            data_points.append({'close' : y_axis[date], 'date' : str(date)})
+        else:
+            data_points.append({'close' : 0, 'date' : str(date)})
+
+    return data_points
 
 
 if __name__ == '__main__':
