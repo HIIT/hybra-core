@@ -1,6 +1,9 @@
 import networkx as nx
 from matplotlib import pyplot as plt
 
+import codecs
+from string import Template
+
 def create_network( data ):
     if len(data) == 0:
         print "Dataset empty."
@@ -14,6 +17,14 @@ def create_network( data ):
             G.add_edge( comment['from']['name'], node['creator'] )
 
     nx.draw_spring( G, with_labels = True , arrows = True )
+
+def create_network_d3():
+    html_template = Template( codecs.open('html/network.html', 'r').read() )
+
+    css_text = codecs.open('css/network.css', 'r').read()
+    js_text = codecs.open('js/network.js', 'r').read()
+
+    return html_template.substitute( {'css': css_text, 'js': js_text} )
 
 if __name__ == '__main__':
 

@@ -7,6 +7,10 @@ import wordclouds as module_wordclouds
 
 from IPython.core.display import display, HTML
 
+import codecs
+from string import Template
+import json
+
 __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
 __sources = map( lambda x: x[5:], __sources )
@@ -50,6 +54,9 @@ def timeline( data ):
 
 def network( data ):
     module_network.create_network( data )
+
+def network_d3():
+    return HTML( module_network.create_network_d3() )
 
 def wordcloud( data ):
     module_wordclouds.create_wordcloud( data )
