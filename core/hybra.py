@@ -5,7 +5,7 @@ import network as module_network
 import timeline as module_timeline
 import wordclouds as module_wordclouds
 
-from IPython.core.display import HTML
+from IPython.core.display import display, HTML
 
 __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
