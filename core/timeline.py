@@ -40,17 +40,12 @@ def create_data_points( x_axis, y_axis ):
 
 if __name__ == '__main__':
 
-    import data_loader
-    data = data_loader.load_facebook( ['nokkahuilu'] )
+    for function_name in dir( data_loader ):
 
-    create_timeline(data)
+        if 'load_' in function_name:
 
-    #for function_name in dir( data_loader ):
-
-        #if 'load_' in function_name:
-
-            #print function_name
-            #f =  getattr( data_loader, function_name )
-            #data = f()
-            #create_timeline( data )
-            #plt.show()
+            print function_name
+            f =  getattr( data_loader, function_name )
+            data = f()
+            create_timeline( data )
+            plt.show()
