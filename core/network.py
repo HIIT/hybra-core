@@ -1,39 +1,27 @@
 import networkx as nx
-from matplotlib import pyplot as plt
-
+from networkx.readwrite import json_graph
 import codecs
 from string import Template
 
-def create_network( data ):
-    if len(data) == 0:
-        print "Dataset empty."
-        return
+def create_network(data):
 
     G = nx.DiGraph()
 
     for node in data:
-        G.add_node( node['creator'] )
-        for comment in node['___comments']:
-            G.add_edge( comment['from']['name'], node['creator'] )
+        G.add_node( node['creator'].encode('utf-8') )
 
-    nx.draw_spring( G, with_labels = True , arrows = True )
+        if '___comments' in node:
+            for comment in node['___comments']:
+                G.add_edge( comment['from']['name'].encode('utf-8'), node['creator'].encode('utf-8') )
 
-def create_network_d3():
+    d = json_graph.node_link_data(G)
+
     html_template = Template( codecs.open('html/network.html', 'r').read() )
 
+    js_template_type = 'svg' if len(d['nodes']) < 500 else 'canvas'
+    js_text_template = Template( codecs.open('js/network_' + js_template_type +'.js', 'r').read() )
+
     css_text = codecs.open('css/network.css', 'r').read()
-    js_text = codecs.open('js/network.js', 'r').read()
+    js_text = js_text_template.substitute({'nodes' : d['nodes'], 'links' : d['links']})
 
     return html_template.substitute( {'css': css_text, 'js': js_text} )
-
-if __name__ == '__main__':
-
-    for function_name in dir( data_loader ):
-
-        if 'load_' in function_name:
-
-            print function_name
-            f =  getattr( data_loader, function_name )
-            data = f()
-            create_network( data )
-            plt.show()
