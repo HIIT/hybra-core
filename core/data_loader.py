@@ -107,3 +107,55 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
             data.append(d)
 
     return data
+
+def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
+
+    """This is currently written to deal with data from Twitter's Streaming API.
+       The data format for Search API data is slightly different
+       and allows some things to be done slightly more conveniently;
+       we could write this to work with Streaming API data as well. 
+    """
+    
+    data = []
+    
+    path = __DATA_DIR + data_folder
+    
+    for f in os.listdir( path ):
+        
+        if any( term in f for term in terms ):
+            
+            unharmonized_data = []
+            
+            with open( path + f ) as current_file:
+                unharmonized_data = json.load( current_file )
+            
+            for d in unharmonized_data:
+                
+                d = __harmonize_data( d, 'twitter' )
+            
+                try:
+                    d['creator'] = d['_user']['screen_name']
+                except Exception, e:
+                    d['broken']['creator'] = e
+
+                try:
+                    #d['timestamp'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
+                    
+                    ## Assumes that timezone is always +0000, not absolutely sure that this holds
+                    d['timestamp'] = datetime.strptime( d['_created_at'], '%a %b %d %H:%M:%S +0000 %Y' )
+                except Exception, e:
+                    d['broken']['timestamp'] = e
+
+                try:
+                    d['text_content'] = d['_text']
+                except Exception, e:
+                    d['broken']['text_content'] = e
+                
+                try:
+                    d['url'] = 'https://www.twitter.com/statuses/' + d['_id_str']
+                except Exception, e:
+                    d['broken']['url'] = e
+                   
+                data.append(d)
+                
+    return data
