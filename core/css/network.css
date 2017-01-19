@@ -8,11 +8,3 @@
     stroke: #777;
     stroke-width: 2px;
 }
-
-button {
-    position: absolute;
-    width: 30px;
-}
-button#slow {
-    margin-left: 40px;
-}

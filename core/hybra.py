@@ -47,16 +47,11 @@ def filter_from_text( data, text = [], substrings = True ):
 def describe( data ):
     descriptives.describe( data )
 
-## igrap plotting utilities
-
 def timeline( data ):
     return HTML( module_timeline.create_timeline( data ) )
 
 def network( data ):
-    module_network.create_network( data )
-
-def network_d3():
-    return HTML( module_network.create_network_d3() )
+    return HTML( module_network.create_network(data) )
 
 def wordcloud( data ):
     module_wordclouds.create_wordcloud( data )
