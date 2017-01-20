@@ -8,11 +8,11 @@ def create_network(data):
     G = nx.DiGraph()
 
     for node in data:
-        G.add_node( node['creator'].encode('utf-8') )
+        G.add_node( encode_utf8( node['creator'] ) )
 
         if '___comments' in node:
             for comment in node['___comments']:
-                G.add_edge( comment['from']['name'].encode('utf-8'), node['creator'].encode('utf-8') )
+                G.add_edge( encode_utf8( comment['from']['name'] ), encode_utf8( node['creator'] ) )
 
     d = json_graph.node_link_data(G)
 
@@ -25,3 +25,9 @@ def create_network(data):
     js_text = js_text_template.substitute({'nodes' : d['nodes'], 'links' : d['links']})
 
     return html_template.substitute( {'css': css_text, 'js': js_text} )
+
+def encode_utf8( string ):
+    try:
+        return string.encode('utf8')
+    except UnicodeDecodeError:
+        return string
