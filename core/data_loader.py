@@ -3,22 +3,26 @@ import os
 import sys
 import re
 
+from git import Repo
+
 #import dateparser
 from datetime import datetime
 
 __DATA_DIR = '../hybra-data-test1/' ## by default the data comes here
 
-try:
-    from git import Repo
+def _version( folder ):
 
-    r = Repo( __DATA_DIR )
+    print "Data in folder", folder
 
-    print "Analysis done on data version", r.heads.master.commit,"updated on", r.heads.master.commit.authored_datetime
-    print "Store this for future reference."
+    try:
+        r = Repo( __DATA_DIR + folder )
+        print "\t Version", r.heads.master.commit
+        print "\t Updated on", r.heads.master.commit.authored_datetime
 
-except:
+    except:
 
-    print "Data directory is not a git repo. Data might not be up-to-date!"
+        print "\t Data is not stored in a repo. Data might not be up-to-date!"
+
 
 def __harmonize_data( data, data_type ):
 

@@ -1,5 +1,4 @@
 import data_loader
-import re
 import descriptives
 import network as module_network
 import timeline as module_timeline
@@ -7,9 +6,12 @@ import wordclouds as module_wordclouds
 
 from IPython.core.display import display, HTML
 
+import os
+import re
+import json
+
 import codecs
 from string import Template
-import json
 
 __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
@@ -18,6 +20,17 @@ __sources = map( lambda x: x[5:], __sources )
 ## TODO: this should be more nicely put, preferable without needed a start function as such.
 def start():
     return HTML('<script src="js/d3/d3.min.js"></script>')
+
+def set_data_path( path ):
+    data_loader.__DATA_DIR = path
+
+    ## when data path is set, automatically print out the versions
+    for folder in os.listdir( path ):
+        if( os.path.isdir( path + folder ) ):
+            data_loader._version( folder )
+
+def data_path():
+    return data_loader.__DATA_DIR
 
 def data_sources():
     return __sources
