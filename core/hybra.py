@@ -15,6 +15,7 @@ __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
 __sources = map( lambda x: x[5:], __sources )
 
+## TODO: this should be more nicely put, preferable without needed a start function as such.
 def start():
     return HTML('<script src="js/d3/d3.min.js"></script>')
 
