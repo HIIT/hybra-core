@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import json
 import os
 import sys
@@ -12,16 +14,16 @@ __DATA_DIR = '../hybra-data-test1/' ## by default the data comes here
 
 def _version( folder ):
 
-    print "Data in folder", folder
+    print( "Data in folder", folder )
 
     try:
         r = Repo( __DATA_DIR + folder )
-        print "\t Version", r.heads.master.commit
-        print "\t Updated on", r.heads.master.commit.authored_datetime
+        print( "\t Version", r.heads.master.commit )
+        print( "\t Updated on", r.heads.master.commit.authored_datetime )
 
     except:
 
-        print "\t Data is not stored in a repo. Data might not be up-to-date!"
+        print( "\t Data is not stored in a repo. Data might not be up-to-date!" )
 
 
 def __harmonize_data( data, data_type ):

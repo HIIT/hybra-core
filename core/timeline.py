@@ -1,6 +1,9 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 from collections import Counter
 from datetime import date, timedelta
 import codecs
+
 from string import Template
 
 def create_timeline(data):
@@ -44,7 +47,7 @@ if __name__ == '__main__':
 
         if 'load_' in function_name:
 
-            print function_name
+            print( function_name )
             f =  getattr( data_loader, function_name )
             data = f()
             create_timeline( data )

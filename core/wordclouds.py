@@ -1,7 +1,10 @@
-from wordcloud import WordCloud
-from matplotlib import pyplot as plt
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 from collections import Counter
 import re
+
+from wordcloud import WordCloud
+from matplotlib import pyplot as plt
 
 def create_wordcloud( data ):
     if len(data) == 0:
@@ -42,7 +45,7 @@ def print_frequencies( frequencies ):
 
     i = 1
     for word in frequencies.most_common(10):
-        print str( i ) + ". " + word[0] + " - " + str( word[1] )
+        print( i , " ", word[0], "-", word[1] )
         i += 1
 
 def create_frequency_tuples( frequencies ):
@@ -60,7 +63,7 @@ if __name__ == '__main__':
 
         if 'load_' in function_name:
 
-            print function_name
+            print( function_name )
             f =  getattr( data_loader, function_name )
             data = f()
             create_wordcloud( data )
