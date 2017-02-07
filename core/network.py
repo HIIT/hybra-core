@@ -1,7 +1,11 @@
-import networkx as nx
-from networkx.readwrite import json_graph
 import codecs
 from string import Template
+
+import os
+
+import networkx as nx
+from networkx.readwrite import json_graph
+
 
 path = os.path.dirname(os.path.abspath(__file__))
 
