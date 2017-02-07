@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 def describe( data ):
     if len(data) == 0:
-        print "Dataset empty."
+        print( "Dataset empty." )
         return
 
     print( "Post together", len(data), "posts" )
