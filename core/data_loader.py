@@ -55,9 +55,11 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
 
         if any( term in f for term in terms ):
 
-            unharmonized_data = json.load( open( path + f ) )['feed']
+            dump = json.load( open( path + f ) )
+            
+            source_detail = dump['name']
 
-            for d in unharmonized_data:
+            for d in dump['feed']:
 
                 d = __harmonize_data( d, 'facebook' )
 
@@ -88,6 +90,8 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
                 d['images'] = attachments
 
                 d['links'] = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', d['text_content'] )
+
+                d['source_detail'] = source_detail
 
 
 
