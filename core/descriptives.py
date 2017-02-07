@@ -4,6 +4,8 @@ import datetime
 
 import timeline
 
+from collections import *
+
 def describe( data ):
     if len(data) == 0:
         print( "Dataset empty." )
@@ -20,9 +22,15 @@ def describe( data ):
     print( "Last post", max( map( lambda d: d['timestamp'], date_ok  ) ) )
 
     print("Data sources")
-    sources = set( map( lambda d: d['source_detail'] , data ) )
-    for s in sources:
-        print("\t - ", s)
+
+    ## todo: reimplement?
+    counter = defaultdict( int )
+
+    for post in fb_w1:
+        counter[ post['source_detail'] ] += 1
+
+    for name, count in counter.items():
+        print( '-', name, count )
 
     return timeline.create_timeline( data )
 
