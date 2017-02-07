@@ -1,14 +1,31 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import division, print_function
+
+import datetime
+
+import timeline
 
 def describe( data ):
     if len(data) == 0:
         print( "Dataset empty." )
         return
 
-    print( "Post together", len(data), "posts" )
-    print( "First post", min( map( lambda d: d['timestamp'], filter( lambda d: d['timestamp'] is not '', data ) ) ) )
-    print( "Last post", max( map( lambda d: d['timestamp'], filter( lambda d: d['timestamp'] is not '', data ) ) ) )
-    print( "Number of authors", len( set( map( lambda d: d['creator'], filter( lambda d: d['creator'] is not '', data ) ) ) ) )
+    print( "Entries together", len(data) )
+    print( "Number of different authors", len( set( map( lambda d: d['creator'], filter( lambda d: d['creator'] is not '', data ) ) ) ) )
+
+    ## remove dates which can not be true
+    date_ok = filter( lambda d: d['timestamp'] is not '', data )
+    date_ok = filter( lambda d: d['timestamp'] > datetime.datetime(1970,1,1,0,10), date_ok )
+
+    print( "First post", min( map( lambda d: d['timestamp'], date_ok ) ) )
+    print( "Last post", max( map( lambda d: d['timestamp'], date_ok  ) ) )
+
+    print("Data sources")
+    sources = set( map( lambda d: d['source_detail'] , data ) )
+    for s in sources:
+        print("\t - ", s)
+
+    return timeline.create_timeline( data )
+
 
 if __name__ == '__main__':
 
