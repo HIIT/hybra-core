@@ -3,6 +3,8 @@ from networkx.readwrite import json_graph
 import codecs
 from string import Template
 
+path = os.path.dirname(os.path.abspath(__file__))
+
 def create_network(data):
 
     G = nx.DiGraph()
@@ -16,12 +18,12 @@ def create_network(data):
 
     d = json_graph.node_link_data(G)
 
-    html_template = Template( codecs.open('html/network.html', 'r').read() )
+    html_template = Template( codecs.open( path + '/html/network.html', 'r').read() )
 
     js_template_type = 'svg' if len(d['nodes']) < 500 else 'canvas'
-    js_text_template = Template( codecs.open('js/network_' + js_template_type +'.js', 'r').read() )
+    js_text_template = Template( codecs.open( path + '/js/network_' + js_template_type +'.js', 'r').read() )
 
-    css_text = codecs.open('css/network.css', 'r').read()
+    css_text = codecs.open( path + '/css/network.css', 'r').read()
     js_text = js_text_template.substitute({'nodes' : d['nodes'], 'links' : d['links']})
 
     return html_template.substitute( {'css': css_text, 'js': js_text} )

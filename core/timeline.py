@@ -1,4 +1,7 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import division, print_function
+import os
+
+path = os.path.dirname(os.path.abspath(__file__))
 
 from collections import Counter
 from datetime import date, timedelta
@@ -20,10 +23,10 @@ def create_timeline(data):
 
     data_points = create_data_points( x_axis, y_axis )
 
-    js_text_template = Template( codecs.open('js/timeline.js', 'r').read() )
-    html_template = Template( codecs.open('html/timeline.html', 'r').read() )
+    js_text_template = Template( codecs.open( path + '/js/timeline.js', 'r').read() )
+    html_template = Template( codecs.open( path + '/html/timeline.html', 'r').read() )
 
-    css_text = codecs.open('css/timeline.css', 'r').read()
+    css_text = codecs.open( path + '/css/timeline.css', 'r').read()
     js_text = js_text_template.substitute({'data' : data_points})
 
     return html_template.substitute( {'css': css_text, 'js': js_text} )

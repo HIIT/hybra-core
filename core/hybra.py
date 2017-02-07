@@ -4,7 +4,7 @@ import network as module_network
 import timeline as module_timeline
 import wordclouds as module_wordclouds
 
-from IPython.core.display import display, HTML
+from IPython.core.display import display, HTML, Javascript
 
 import os
 import re
@@ -19,7 +19,10 @@ __sources = map( lambda x: x[5:], __sources )
 
 ## TODO: this should be more nicely put, preferable without needed a start function as such.
 def start():
-    return HTML('<script src="js/d3/d3.min.js"></script>')
+    import os
+    path = os.path.dirname(os.path.abspath(__file__))
+    ## return Javascript( open( path + '/js/d3/d3.js' ).read() )
+    return HTML('<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>')
 
 def set_data_path( path ):
     data_loader.__DATA_DIR = path
