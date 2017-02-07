@@ -35,7 +35,7 @@ def __harmonize_data( data, data_type ):
 
     harmonized_data['source'] = data_type
     harmonized_data['creator'] = ''
-    harmonized_data['timestamp'] = ''
+    harmonized_data['timestamp'] = datetime.strptime( '1970-01-01 00:00:00', '%Y-%m-%d %H:%M:%S' )
     harmonized_data['text_content'] = ''
     harmonized_data['url'] = ''
     harmonized_data['source_detail'] = ''
