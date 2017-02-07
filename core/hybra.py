@@ -17,13 +17,6 @@ __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
 __sources = map( lambda x: x[5:], __sources )
 
-## TODO: this should be more nicely put, preferable without needed a start function as such.
-def start():
-    import os
-    path = os.path.dirname(os.path.abspath(__file__))
-    ## return Javascript( open( path + '/js/d3/d3.js' ).read() )
-    return HTML('<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>')
-
 def set_data_path( path ):
     data_loader.__DATA_DIR = path
 
@@ -31,6 +24,13 @@ def set_data_path( path ):
     for folder in os.listdir( path ):
         if( os.path.isdir( path + folder ) ):
             data_loader._version( folder )
+
+    ## TOTALLY UNRELATED BUT LETS USE THIS TO INIT THE D3JS TOO
+    ## check if there is any way to not use exernal cloud d3js
+    ## import os
+    ## path = os.path.dirname(os.path.abspath(__file__))
+    ## return Javascript( open( path + '/js/d3/d3.js' ).read() )
+    return HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Data science OK!</p>')
 
 def data_path():
     return data_loader.__DATA_DIR
