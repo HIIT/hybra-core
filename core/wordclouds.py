@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 
 def create_wordcloud( data ):
     if len(data) == 0:
-        print "Dataset empty."
+        print( "Dataset empty." )
         return
 
     words = get_words( data )
@@ -40,8 +40,8 @@ def remove_stopwords( frequencies ):
     return frequencies
 
 def print_frequencies( frequencies ):
-    print "\n" + "Distinct words: " + str( len(frequencies) ) + "\n"
-    print "10 most common words: "
+    print(  "\nDistinct words:", len(frequencies) )
+    print( "10 most common words:" )
 
     i = 1
     for word in frequencies.most_common(10):
