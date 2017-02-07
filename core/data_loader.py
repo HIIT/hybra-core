@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import division, print_function
 
 import json
 import os
@@ -97,8 +97,6 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
-    import pickle ## for now, using picke - JSON later on
-
     data = []
 
     path = __DATA_DIR + data_folder
@@ -107,23 +105,28 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
 
         if any( term in f for term in terms ):
 
-            d = pickle.load( open( path + f ) )
+            for d in json.load( open( path + f ) ):
 
-            d = __harmonize_data( d, 'news_media' )
+                d = __harmonize_data( d, 'news_media' )
 
-            d['creator'] = d['_author']
-            d['timestamp'] = min( d['_datetime_list'] )
-            d['text_content'] = d['_title'] + ' ' + d['_ingress'] + ' ' + d['_text']
-            d['url'] = d['_url']
+                d['creator'] = d['_author']
 
-            try:
-                d['source_detail'] = d['_domain']
-            except Exception, e:
-                d['broken']['source_detail'] = e
+                ## ensure data is always in a list
+                if isinstance( d['_datetime_list'] , str) or isinstance( d['_datetime_list']  , unicode):
+                    d['_datetime_list'] = [ d['_datetime_list'] ]
 
-            d['images'] = d['_images']
+                d['timestamp'] = datetime.strptime( min( d['_datetime_list'] ), '%Y-%m-%d %H:%M:%S' ) ## todo: works for YLE, don't know of others
+                d['text_content'] = d['_title'] + ' ' + d['_ingress'] + ' ' + d['_text']
+                d['url'] = d['_url']
 
-            data.append(d)
+                try:
+                    d['source_detail'] = d['_domain']
+                except Exception, e:
+                    d['broken']['source_detail'] = e
+
+                d['images'] = d['_images']
+
+                data.append(d)
 
     return data
 
