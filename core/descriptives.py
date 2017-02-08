@@ -26,7 +26,7 @@ def describe( data ):
     ## todo: reimplement?
     counter = defaultdict( int )
 
-    for post in fb_w1:
+    for post in data:
         counter[ post['source_detail'] ] += 1
 
     for name, count in counter.items():
