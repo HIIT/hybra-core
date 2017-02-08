@@ -5,8 +5,6 @@ import os
 import sys
 import re
 
-from git import Repo
-
 #import dateparser
 from datetime import datetime
 
@@ -17,6 +15,9 @@ def _version( folder ):
     print( "Data in folder", folder )
 
     try:
+
+        from git import Repo
+
         r = Repo( __DATA_DIR + folder )
         print( "\t Version", r.heads.master.commit )
         print( "\t Updated on", r.heads.master.commit.authored_datetime )
@@ -56,7 +57,7 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
         if any( term in f for term in terms ):
 
             dump = json.load( open( path + f ) )
-            
+
             source_detail = dump['name']
 
             for d in dump['feed']:
