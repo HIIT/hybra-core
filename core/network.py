@@ -16,8 +16,8 @@ def create_network(data):
     for node in data:
         G.add_node( encode_utf8( node['creator'] ) )
 
-        if '___comments' in node:
-            for comment in node['___comments']:
+        if '_comments' in node:
+            for comment in node['_comments']:
                 G.add_edge( encode_utf8( comment['from']['name'] ), encode_utf8( node['creator'] ) )
 
     d = json_graph.node_link_data(G)
