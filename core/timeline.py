@@ -42,16 +42,3 @@ def create_data_points( x_axis, y_axis ):
             data_points.append({'close' : 0, 'date' : str(date)})
 
     return data_points
-
-
-if __name__ == '__main__':
-
-    for function_name in dir( data_loader ):
-
-        if 'load_' in function_name:
-
-            print( function_name )
-            f =  getattr( data_loader, function_name )
-            data = f()
-            create_timeline( data )
-            plt.show()
