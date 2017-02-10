@@ -32,7 +32,7 @@ def describe( data ):
     for name, count in counter.items():
         print( '-', name, count )
 
-    return timeline.create_timeline( data )
+    return timeline.create_timeline( datasets = [data] )
 
 
 if __name__ == '__main__':
