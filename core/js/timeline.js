@@ -20,7 +20,7 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.close); });
 
 // Adds the svg canvas
-var svg = d3.select("#timeline_graph")
+var svg = d3.select("#timeline_graph_" + $graph_div_id)
     .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -28,30 +28,41 @@ var svg = d3.select("#timeline_graph")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
+var plots = $plots;
+var line_colors = $line_colors;
 
-var data = $data;
+for (i = 0; i < plots.length; i++) {
+    var data = plots[i];
 
-data.forEach(function(d) {
-    d.date = new Date(d.date);
-    d.close = +d.close;
-});
+    if (i < line_colors.length) {
+      var color = line_colors[i];
+    } else {
+      var color = "steelblue";
+    }
 
-// Scale the range of the data
-x.domain(d3.extent(data, function(d) { return d.date; }));
-y.domain([0, d3.max(data, function(d) { return d.close; })]);
+    data.forEach(function(d) {
+        d.date = new Date(d.date);
+        d.close = +d.close;
+    });
 
-// Add the valueline path.
-svg.append("path")
-    .attr("class", "line")
-    .attr("d", valueline(data));
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.close; })]);
 
-// Add the X Axis
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    // Add the valueline path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("stroke", color)
+        .attr("d", valueline(data));
 
-// Add the Y Axis
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis);
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+}
