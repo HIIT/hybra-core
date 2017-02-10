@@ -64,8 +64,8 @@ def filter_from_text( data, text = [], substrings = True ):
 def describe( data ):
     return HTML( descriptives.describe( data ) )
 
-def timeline( data ):
-    return HTML( module_timeline.create_timeline( data ) )
+def timeline( **kwargs ):
+    return HTML( module_timeline.create_timeline( **kwargs ) )
 
 def network( data ):
     return HTML( module_network.create_network(data) )
