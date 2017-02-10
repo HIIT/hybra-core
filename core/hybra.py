@@ -1,7 +1,7 @@
 import data_loader
 import descriptives
-import network as module_network
-import timeline as module_timeline
+from network import module_network
+from timeline import module_timeline
 import wordclouds as module_wordclouds
 
 from IPython.core.display import display, HTML, Javascript
