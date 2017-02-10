@@ -4,7 +4,7 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 
 from collections import Counter
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 import codecs
 import time
 
@@ -42,7 +42,7 @@ def create_plots( datasets ):
 
 
 def create_axes( data ):
-    dates = map( lambda d: d['timestamp'].date(), filter( lambda d: d['timestamp'] is not '', data ) )
+    dates = map( lambda d: d['timestamp'].date(), filter( lambda d: d['timestamp'] > datetime(1970,1,1,0,10), data ) )
 
     y_axis = Counter( dates )
 
