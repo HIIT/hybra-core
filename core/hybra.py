@@ -62,7 +62,7 @@ def filter_from_text( data, text = [], substrings = True ):
     return filtered_data
 
 def describe( data ):
-    descriptives.describe( data )
+    return HTML( descriptives.describe( data ) )
 
 def timeline( data ):
     return HTML( module_timeline.create_timeline( data ) )
