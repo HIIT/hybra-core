@@ -14,7 +14,7 @@ var force = d3.layout.force()
     .links(links)
     .start();
 
-var svg = d3.select('#network_graph').append('svg')
+var svg = d3.select('#network_graph_' + $graph_div_id).append('svg')
     .attr('width', width)
     .attr('height', height);
 
