@@ -31,6 +31,38 @@ var svg = d3.select("#timeline_graph_" + $graph_div_id)
 var plots = $plots;
 var line_colors = $line_colors;
 
+var y_max = 0;
+var x_range = new Array(2);
+
+for (i = 0; i < plots.length; i++) {
+    var data = plots[i];
+
+    data.forEach(function(d) {
+        d.date = new Date(d.date);
+        d.close = +d.close;
+    });
+
+    var x_extent = d3.extent(data, function(d) { return d.date; });
+
+    if (x_range[0] == null) {
+      x_range[0] = x_extent[0];
+      x_range[1] = x_extent[1];
+    }
+
+    if (x_range[0] > x_extent[0]) {
+      x_range[0] = x_extent[0];
+    }
+
+    if (x_range[1] < x_extent[1]) {
+      x_range[1] = x_extent[1];
+    }
+
+    var y_largest = d3.max(data, function(d) { return d.close; });
+    if (y_max < y_largest) {
+      y_max = y_largest;
+    }
+}
+
 for (i = 0; i < plots.length; i++) {
     var data = plots[i];
 
@@ -40,14 +72,11 @@ for (i = 0; i < plots.length; i++) {
       var color = "steelblue";
     }
 
-    data.forEach(function(d) {
-        d.date = new Date(d.date);
-        d.close = +d.close;
-    });
-
     // Scale the range of the data
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.close; })]);
+    var y_range = [0, y_max];
+
+    x.domain(x_range);
+    y.domain(y_range);
 
     // Add the valueline path.
     svg.append("path")

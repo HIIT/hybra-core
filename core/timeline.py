@@ -23,14 +23,15 @@ def create_timeline( datasets = [], colors = [] ):
 
     css_text = create_css_text()
     js_text = js_template.substitute( {'graph_div_id' : graph_div_id,
-                                      'plots' : plots,
-                                      'line_colors' : colors} )
+                                       'plots' : plots,
+                                       'line_colors' : colors} )
 
     return html_template.substitute( {'css': css_text, 'js': js_text} )
 
 
 def create_plots( datasets ):
     plots = []
+
     for data in datasets:
         x_axis, y_axis = create_axes( data )
         plots.append( create_data_points( x_axis, y_axis ) )
