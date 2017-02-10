@@ -42,7 +42,8 @@ def create_plots( datasets ):
 
 
 def create_axes( data ):
-    dates = map( lambda d: d['timestamp'].date(), filter( lambda d: d['timestamp'] > datetime(1970,1,1,0,10), data ) )
+    dates_ok = filter( lambda d: d['timestamp'] > datetime(1970,1,1,0,10), data )
+    dates = map( lambda d: d['timestamp'].date(), dates_ok )
 
     y_axis = Counter( dates )
 
