@@ -2,7 +2,7 @@ from __future__ import division, print_function
 
 import datetime
 
-import timeline
+from timeline import module_timeline
 
 from collections import *
 
@@ -32,7 +32,7 @@ def describe( data ):
     for name, count in counter.items():
         print( '-', name, count )
 
-    return timeline.create_timeline( data )
+    return module_timeline.create_timeline( datasets = [data] )
 
 
 if __name__ == '__main__':

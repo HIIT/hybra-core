@@ -6,7 +6,7 @@ var color = d3.scale.category20();
 var nodes = $nodes,
     links = $links;
 
-var canvas = d3.select('#network_graph').append('canvas')
+var canvas = d3.select('#network_graph_' + $graph_div_id).append('canvas')
     .attr('width', width)
     .attr('height', height)
 var context = canvas.node().getContext("2d");

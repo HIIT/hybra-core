@@ -1,7 +1,7 @@
 import data_loader
 import descriptives
-import network as module_network
-import timeline as module_timeline
+from network import module_network
+from timeline import module_timeline
 import wordclouds as module_wordclouds
 
 from IPython.core.display import display, HTML, Javascript
@@ -62,10 +62,10 @@ def filter_from_text( data, text = [], substrings = True ):
     return filtered_data
 
 def describe( data ):
-    descriptives.describe( data )
+    return HTML( descriptives.describe( data ) )
 
-def timeline( data ):
-    return HTML( module_timeline.create_timeline( data ) )
+def timeline( **kwargs ):
+    return HTML( module_timeline.create_timeline( **kwargs ) )
 
 def network( data ):
     return HTML( module_network.create_network(data) )

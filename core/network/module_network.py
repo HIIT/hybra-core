@@ -1,4 +1,5 @@
 import codecs
+import time
 from string import Template
 
 import os
@@ -22,15 +23,22 @@ def create_network(data):
 
     d = json_graph.node_link_data(G)
 
-    html_template = Template( codecs.open( path + '/html/network.html', 'r').read() )
+    graph_div_id = int( time.time() * 1000 )
+
+    html_template = Template( codecs.open( path + '/network.html', 'r').read() )
 
     js_template_type = 'svg' if len(d['nodes']) < 500 else 'canvas'
-    js_text_template = Template( codecs.open( path + '/js/network_' + js_template_type +'.js', 'r').read() )
+    js_template = Template( codecs.open( path + '/network_' + js_template_type +'.js', 'r').read() )
 
-    css_text = codecs.open( path + '/css/network.css', 'r').read()
-    js_text = js_text_template.substitute({'nodes' : d['nodes'], 'links' : d['links']})
+    css_text = codecs.open( path + '/network.css', 'r').read()
 
-    return html_template.substitute( {'css': css_text, 'js': js_text} )
+    js_text = js_template.substitute( {'graph_div_id' : graph_div_id,
+                                       'nodes' : d['nodes'],
+                                       'links' : d['links']} )
+
+    return html_template.substitute( {'graph_div_id': 'network_graph_' + str(graph_div_id),
+                                      'css': css_text,
+                                      'js': js_text} )
 
 def encode_utf8( string ):
     try:
