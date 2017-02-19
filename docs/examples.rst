@@ -1,5 +1,5 @@
 Examples
-=======
+=========
 
 Find mentions to cats and print them
 *************************************
