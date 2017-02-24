@@ -21,4 +21,4 @@ Use your University of Helsinki account.
 
 ## Documentation
 
-See documentation at [readthedocs.org/(http://hybra.readthedocs.io/en/latest/)
+Documentation is developing at [readthedocs.org/(http://hybra.readthedocs.io/en/latest/).
