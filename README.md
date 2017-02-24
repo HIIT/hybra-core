@@ -18,3 +18,7 @@ In project root folder, execute
 Use your University of Helsinki account.
 
 **Do not do any serious stuff with this data. It is for illustration only.**
+
+## Documentation
+
+See documentation at [readthedocs.org/(http://hybra.readthedocs.io/en/latest/)
