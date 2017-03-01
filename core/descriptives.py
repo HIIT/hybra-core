@@ -16,7 +16,7 @@ def describe( data ):
 
     ## remove dates which can not be true
     date_ok = filter( lambda d: d['timestamp'] is not '', data )
-    date_ok = filter( lambda d: d['timestamp'] > datetime.datetime(1970,1,1,0,10), date_ok )
+    date_ok = filter( lambda d: d['timestamp'] > datetime.datetime(1970,1,1,23,59), date_ok )
 
     print( "First post", min( map( lambda d: d['timestamp'], date_ok ) ) )
     print( "Last post", max( map( lambda d: d['timestamp'], date_ok  ) ) )
@@ -32,7 +32,7 @@ def describe( data ):
     for name, count in counter.items():
         print( '-', name, count )
 
-    return module_timeline.create_timeline( datasets = [data] )
+    return module_timeline.create_timeline( datasets = [date_ok] )
 
 
 if __name__ == '__main__':
