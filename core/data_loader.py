@@ -83,8 +83,8 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
                 d['url'] = 'https://www.facebook.com/' + d['_id']
 
                 attachments = []
-                if 'attachments' in d and 'data' in d['attachments']:
-                    for attachment in d['attachments']['data']:
+                if '_attachments' in d and 'data' in d['_attachments']:
+                    for attachment in d['_attachments']['data']:
                         if attachment['type'] == 'photo':
                             attachments.append( attachment['media']['image']['src']  )
 
