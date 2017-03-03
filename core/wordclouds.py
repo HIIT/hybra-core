@@ -6,17 +6,21 @@ import re
 from wordcloud import WordCloud
 from matplotlib import pyplot as plt
 
-def create_wordcloud( data ):
+def create_wordcloud( data, stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"] ):
     if len(data) == 0:
         print( "Dataset empty." )
         return
 
     words = get_words( data )
-    frequencies = remove_stopwords( Counter( words ) )
-    print_frequencies( frequencies )
-    frequency_tuples = create_frequency_tuples( frequencies )
 
-    wordcloud = WordCloud( background_color = "white" ).generate_from_frequencies( frequency_tuples )
+    ## remove stopwords
+    frequencies = remove_stopwords( Counter( words ) )
+    for word in stopwords:
+        del frequencies[word]
+
+    print_frequencies( frequencies )
+
+    wordcloud = WordCloud( background_color = "white" ).generate_from_frequencies( frequencies.items() )
 
     plt.figure()
     plt.imshow(wordcloud)
@@ -27,17 +31,11 @@ def get_words( data ):
     for d in data:
         words += re.findall(r'\w+', decode_utf8( d['text_content'].lower() ), re.UNICODE)
 
-        if '___comments' in d:
-            for c in d['___comments']:
+        if '_comments' in d:
+            for c in d['_comments']:
                 if 'message' in c:
                     words += re.findall(r'\w+', decode_utf8( c['message'].lower() ), re.UNICODE)
     return words
-
-def remove_stopwords( frequencies ):
-    stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"]
-    for word in stopwords:
-        del frequencies[word]
-    return frequencies
 
 def print_frequencies( frequencies ):
     print(  "\nDistinct words:", len(frequencies) )
@@ -48,8 +46,6 @@ def print_frequencies( frequencies ):
         print( i , " ", word[0], "-", word[1] )
         i += 1
 
-def create_frequency_tuples( frequencies ):
-    return map( lambda f: (f, frequencies[f]), frequencies  )
 
 def decode_utf8( string ):
     try:
