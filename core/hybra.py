@@ -118,11 +118,11 @@ def network( data ):
     """
     return HTML( module_network.create_network(data) )
 
-def wordcloud( data ):
+def wordcloud( data, **kwargs ):
     """Draws a wordcloud the dataset `data`.
 
     :todo: check kwargs
 
     :param data: list of data entries.
     """
-    module_wordclouds.create_wordcloud( data )
+    module_wordclouds.create_wordcloud( data, **kwargs )
