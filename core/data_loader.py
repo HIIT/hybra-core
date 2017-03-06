@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import re
+import requests
 
 #import dateparser
 from datetime import datetime
@@ -45,6 +46,7 @@ def __harmonize_data( data, data_type ):
     harmonized_data['broken'] = {}
 
     return harmonized_data
+
 
 def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: better filtering
 
@@ -94,11 +96,10 @@ def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: bett
 
                 d['source_detail'] = source_detail
 
-
-
                 data.append( d )
 
     return data
+
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
@@ -134,6 +135,7 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
                 data.append(d)
 
     return data
+
 
 def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
 
@@ -186,3 +188,92 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
                 data.append(d)
 
     return data
+
+
+def load_futusome( query, data_folder = 'futusome/', api_key = '', **kwargs ):
+
+    data = []
+
+    path = __DATA_DIR + data_folder
+
+    query_string = 'https://api.futusome.com/api/searches.json?'
+
+    query_string += '&api_search[query]=' + query
+
+    for key, value in kwargs.items():
+        query_string += '&api_search[' + key + ']=' + value
+
+    unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path )
+
+    if not unharmonized_data: return data
+
+    for d in unharmonized_data['documents']:
+
+        d = __harmonize_data( d['fields'], 'futusome' )
+
+        try:
+            d['creator'] = d['_author']
+        except Exception, e:
+            d['broken']['creator'] = e
+
+        try:
+            d['timestamp'] = datetime.strptime( d['_published'], '%Y-%m-%d %H:%M:%S +0000' )
+        except Exception, e:
+            d['broken']['timestamp'] = e
+
+        d['text_content'] = ''
+        text_content_errors = []
+        try:
+            d['text_content'] += d['_name'] + ' '
+        except Exception, e:
+            text_content_errors.append(e)
+            d['broken']['text_content'] = text_content_errors
+
+        try:
+            d['text_content'] += d['_text']
+        except Exception, e:
+            text_content_errors.append[e]
+            d['broken']['text_content'] = text_content_errors
+
+        try:
+            d['url'] = d['_blog_id'] or d['_url']
+        except Exception, e:
+            d['broken']['url'] = e
+
+        try:
+            d['source_detail'] = d['_type']
+        except Exception, e:
+            d['broken']['source_detail'] = e
+
+    return data
+
+
+def load_unharmonized_futusome_data( query_string, api_key, data_path ):
+
+    query_base = 'https://api.futusome.com/api/searches.json?'
+
+    unharmonized_data = []
+
+    print( "Checking local data path for cached data..." )
+
+    for f in os.listdir( data_path ):
+
+        if query_string.replace(query_base, '') == f.replace('.json', ''):
+            print("Data returned from cache.")
+
+            with open( data_path + '/' + f ) as current_file:
+                unharmonized_data = json.load( current_file )
+
+    if api_key and not unharmonized_data:
+
+        print( "Data not in cache. Querying Futusome api..." )
+
+        r = requests.get(query_string + '&api_key=' + api_key)
+
+        unharmonized_data = r.json()
+
+        cache_file = query_string.replace(query_base, '')
+
+        json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '.json', 'w' ) )
+
+    return unharmonized_data
