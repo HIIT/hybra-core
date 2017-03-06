@@ -245,6 +245,8 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', **kwargs ):
         except Exception, e:
             d['broken']['source_detail'] = e
 
+        data.append(d)
+
     return data
 
 
