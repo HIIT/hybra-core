@@ -284,7 +284,7 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
 
         for ofs in range( offset ):
 
-            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( limit ) + '&api_search[offset]=' + str( offset ) )
+            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( limit ) + '&api_search[offset]=' + str( limit * offset + 1 ) )
 
             r =  r.json()
 
