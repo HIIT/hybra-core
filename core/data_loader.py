@@ -276,7 +276,7 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
         offset = 1
 
         if limit > 5000:
-            offset = int( limit / 5000 ) + 1
+            offset = int( limit / 5000 )
             limit = 5000
 
         unharmonized_data = {}
@@ -284,7 +284,7 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
 
         for ofs in range( offset ):
 
-            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( limit ) + '&api_search[offset]=' + str( limit * offset ) )
+            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( limit ) + '&api_search[offset]=' + str( limit * offset + 1 ) )
 
             r =  r.json()
 
