@@ -264,7 +264,7 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
     for f in os.listdir( data_path ):
 
         if query_string.replace(query_base, '') == f.replace('.json', ''):
-            print("Data returned from cache.")
+            print("Data returned from " + data_path)
 
             with open( data_path + '/' + f ) as current_file:
                 unharmonized_data = json.load( current_file )
@@ -297,6 +297,6 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
 
         cache_file = query_string.replace(query_base, '')
 
-        json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '.json', 'w' ) )
+        json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '&api_search[limit]=' + str( limit ) + '.json', 'w' ) )
 
     return unharmonized_data
