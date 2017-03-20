@@ -238,10 +238,19 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000,
             text_content_errors.append[e]
             d['broken']['text_content'] = text_content_errors
 
+        url_errors = []
         try:
-            d['url'] = d['_blog_id'] or d['_url']
+            d['url'] = d['_blog_id']
         except Exception, e:
-            d['broken']['url'] = e
+            url_errors.append(e)
+            d['broken']['url'] = url_errors
+
+        if d['url'] == '':
+            try:
+                d['url'] = d['_url']
+            except Exception, e:
+                url_errors.append(e)
+                d['broken']['url'] = url_errors
 
         try:
             d['source_detail'] = d['_type']
