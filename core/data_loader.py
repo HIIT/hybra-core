@@ -257,6 +257,19 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000,
         except Exception, e:
             d['broken']['source_detail'] = e
 
+        if '_forum_post_id' in d:
+            d['_id'] = d['_forum_post_id']
+        elif '_twitter_retweet_id' in d:
+            d['_id'] = 'twitter_' + d['_twitter_retweet_id']
+        elif '_facebook_id' in d:
+            d['_id'] = 'facebook_' + d['_facebook_id']
+        elif '_twitter_tweet_id' in d:
+            d['_id'] = 'twitter_' + d['_twitter_tweet_id']
+        else:
+            ## make uniq ID ourself
+            text =  d['_url'].encode('ascii', 'ignore') + str( d['timestamp'] ) + d['text_content'].encode('ascii', 'ignore')
+            d['_id'] = 'created_id_' + hashlib.md5( text ).hexdigest()
+
         data.append(d)
 
     return data
