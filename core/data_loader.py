@@ -196,6 +196,9 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', **kwargs ):
 
     path = __DATA_DIR + data_folder
 
+    if not os.path.exists( path ):
+        os.makedirs( path )
+
     query_string = 'https://api.futusome.com/api/searches.json?'
 
     query_string += '&api_search[query]=' + query
