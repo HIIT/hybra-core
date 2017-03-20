@@ -190,7 +190,7 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
     return data
 
 
-def load_futusome( query, data_folder = 'futusome/', api_key = '', **kwargs ):
+def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000, **kwargs ):
 
     data = []
 
@@ -206,7 +206,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', **kwargs ):
     for key, value in kwargs.items():
         query_string += '&api_search[' + key + ']=' + str( value )
 
-    unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path )
+    unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path, limit )
 
     if not unharmonized_data: return data
 
@@ -253,7 +253,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', **kwargs ):
     return data
 
 
-def load_unharmonized_futusome_data( query_string, api_key, data_path ):
+def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
 
     query_base = 'https://api.futusome.com/api/searches.json?'
 
@@ -273,9 +273,27 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path ):
 
         print( "Data not in cache. Querying Futusome api..." )
 
-        r = requests.get(query_string + '&api_key=' + api_key)
+        offset = 1
 
-        unharmonized_data = r.json()
+        if limit > 5000:
+            offset = int( limit / 5000 ) + 1
+            limit = 5000
+
+        unharmonized_data = {}
+        unharmonized_data['documents'] = []
+
+        for ofs in range( offset ):
+
+            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( limit ) + '&api_search[offset]=' + str( offset ) )
+
+            r =  r.json()
+
+            unharmonized_data['metadata'] = {
+                'count' : r['count'],
+                'query' : r['query']
+            }
+
+            unharmonized_data['documents'] += r['documents']
 
         cache_file = query_string.replace(query_base, '')
 
