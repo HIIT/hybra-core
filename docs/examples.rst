@@ -7,7 +7,7 @@ Start using hybra-core by importing it and setting the data path
 
   from hybra.core import hybra
 
-  hybra.set_data_path('path_to_data')
+  hybra.set_data_path('path/to/data')
 
 
 Load media data from folder 'yle'
