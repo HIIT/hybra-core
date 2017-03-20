@@ -48,7 +48,7 @@ def __harmonize_data( data, data_type ):
     return harmonized_data
 
 
-def load_facebook( terms = ['data_'], data_folder = 'facebook/' ): ## todo: better filtering
+def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: better filtering
 
     data = []
 
