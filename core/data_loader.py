@@ -204,7 +204,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', **kwargs ):
     query_string += '&api_search[query]=' + query
 
     for key, value in kwargs.items():
-        query_string += '&api_search[' + key + ']=' + value
+        query_string += '&api_search[' + key + ']=' + str( value )
 
     unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path )
 
