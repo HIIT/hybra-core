@@ -191,7 +191,7 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
     return data
 
 
-def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000, **kwargs ):
+def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000, override_cache = False, **kwargs ):
 
     data = []
 
@@ -207,7 +207,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000,
     for key, value in kwargs.items():
         query_string += '&api_search[' + key + ']=' + str( value )
 
-    unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path, limit )
+    unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path, limit, override_cache )
 
     if not unharmonized_data: return data
 
@@ -276,28 +276,30 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000,
     return data
 
 
-def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
+def load_unharmonized_futusome_data( query_string, api_key, data_path, limit, override_cache ):
 
     query_base = 'https://api.futusome.com/api/searches.json?'
 
     unharmonized_data = {}
 
-    print( "Checking local data path for cached data..." )
-
     cache_file = query_string + '&api_search[limit]=' + str( limit )
     cache_file = cache_file.replace(query_base, '')
 
-    for f in os.listdir( data_path ):
+    if override_cache == False:
 
-        if cache_file == f.replace('.json', ''):
-            print("Data returned from " + data_path)
+        print( "Checking local data path for cached data..." )
 
-            with open( data_path + '/' + f ) as current_file:
-                unharmonized_data = json.load( current_file )
+        for f in os.listdir( data_path ):
+
+            if cache_file == f.replace('.json', ''):
+                print("Data returned from " + data_path)
+
+                with open( data_path + '/' + f ) as current_file:
+                    unharmonized_data = json.load( current_file )
 
     if api_key and not unharmonized_data:
 
-        print( "Data not in cache. Querying Futusome api..." )
+        print( "Data not returned from cache. Querying Futusome api..." )
 
         unharmonized_data['documents'] = []
 
@@ -337,7 +339,7 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
 
             unharmonized_data['documents'] += r['documents']
 
-
         json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '.json', 'w' ) )
+        print('Data saved to ' + data_path + '/' + cache_file + '.json')
 
     return unharmonized_data
