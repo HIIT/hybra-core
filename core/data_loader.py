@@ -5,6 +5,7 @@ import os
 import sys
 import re
 import requests
+import hashlib
 
 #import dateparser
 from datetime import datetime
