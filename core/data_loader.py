@@ -279,13 +279,16 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
 
     query_base = 'https://api.futusome.com/api/searches.json?'
 
-    unharmonized_data = []
+    unharmonized_data = {}
 
     print( "Checking local data path for cached data..." )
 
+    cache_file = query_string + '&api_search[limit]=' + str( limit )
+    cache_file = cache_file.replace(query_base, '')
+
     for f in os.listdir( data_path ):
 
-        if query_string.replace(query_base, '') == f.replace('.json', ''):
+        if cache_file == f.replace('.json', ''):
             print("Data returned from " + data_path)
 
             with open( data_path + '/' + f ) as current_file:
@@ -295,30 +298,45 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit ):
 
         print( "Data not in cache. Querying Futusome api..." )
 
-        offset = 1
-
-        if limit > 5000:
-            offset = int( limit / 5000 )
-            limit = 5000
-
-        unharmonized_data = {}
         unharmonized_data['documents'] = []
 
-        for ofs in range( offset ):
+        r = requests.get( query_string + '&api_key=' + api_key + '&api_search[limit]=1' )
+        r = r.json()
 
-            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( limit ) + '&api_search[offset]=' + str( limit * offset + 1 ) )
+        unharmonized_data['metadata'] = {
+            'count' : r['count'],
+            'query' : r['query']
+        }
+
+        print( 'Documents found in Futusome data: ' + str(r['count']) )
+
+        if limit == -1:
+            limit = r['count']
+
+        pagination = 1
+        documents = limit
+
+        if limit > 5000:
+            pagination = int( limit / 5000 ) + 1
+            documents = 5000
+
+        for page in range( pagination ):
+
+            offset = page * 5000
+
+            if offset + documents > limit:
+                documents = max(0, limit - offset)
+
+            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( documents ) + '&api_search[offset]=' + str( offset ) )
 
             r =  r.json()
 
-            unharmonized_data['metadata'] = {
-                'count' : r['count'],
-                'query' : r['query']
-            }
+            if r['documents'] == 0:
+                break
 
             unharmonized_data['documents'] += r['documents']
 
-        cache_file = query_string.replace(query_base, '')
 
-        json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '&api_search[limit]=' + str( limit ) + '.json', 'w' ) )
+        json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '.json', 'w' ) )
 
     return unharmonized_data
