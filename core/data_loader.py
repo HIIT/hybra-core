@@ -192,7 +192,7 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
     return data
 
 
-def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000, override_cache = False, **kwargs ):
+def load_futusome( query, data_folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False ):
 
     data = []
 
@@ -205,10 +205,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000,
 
     query_string += '&api_search[query]=' + query
 
-    for key, value in kwargs.items():
-        query_string += '&api_search[' + key + ']=' + str( value )
-
-    unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path, limit, override_cache )
+    unharmonized_data = load_unharmonized_futusome_data( query_string, api_key, path, check_document_count, override_cache )
 
     if not unharmonized_data: return data
 
@@ -277,14 +274,20 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', limit = 1000,
     return data
 
 
-def load_unharmonized_futusome_data( query_string, api_key, data_path, limit, override_cache ):
+def load_unharmonized_futusome_data( query_string, api_key, data_path, check_document_count, override_cache ):
+
+    if check_document_count:
+        r = requests.get( query_string + '&api_key=' + api_key + '&api_search[limit]=1' )
+        r =  r.json()
+        print('Total document count: ' + str(r['count']))
+        return
 
     query_base = 'https://api.futusome.com/api/searches.json?'
 
     unharmonized_data = {}
 
-    cache_file = query_string + '&api_search[limit]=' + str( limit )
-    cache_file = cache_file.replace(query_base, '')
+    cache_file = query_string.replace(query_base, '')
+    cache_file = cache_file.replace('&api_search[query]=', '')
 
     if not override_cache:
 
@@ -336,16 +339,14 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit, ov
                 print( r ) ## for debug
                 break ## everything OK
 
-
-
             documents += r['documents']
             collected += len( r['documents'] )
 
             print( '\tNow', collected,'documents and at', documents[-1]['fields']['indexed'], 'and going deeper...')
 
-        documents = {'documents' : documents}
+        unharmonized_data = {'documents' : documents}
 
-        json.dump( documents , open(  data_path + '/' + cache_file + '.json', 'w' ) )
+        json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '.json', 'w' ) )
         print('Data saved to ' + data_path + '/' + cache_file + '.json')
 
-    return documents
+    return unharmonized_data
