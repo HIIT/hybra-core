@@ -9,6 +9,7 @@ import hashlib
 
 #import dateparser
 from datetime import datetime
+from datetime import timedelta
 
 __DATA_DIR = '../hybra-data-test1/' ## by default the data comes here
 
@@ -285,7 +286,7 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit, ov
     cache_file = query_string + '&api_search[limit]=' + str( limit )
     cache_file = cache_file.replace(query_base, '')
 
-    if override_cache == False:
+    if not override_cache:
 
         print( "Checking local data path for cached data..." )
 
@@ -301,45 +302,50 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, limit, ov
 
         print( "Data not returned from cache. Querying Futusome api..." )
 
-        unharmonized_data['documents'] = []
+        documents = []
 
-        r = requests.get( query_string + '&api_key=' + api_key + '&api_search[limit]=1' )
-        r = r.json()
+        collected = 0
+        jump = timedelta(365*25) ## high enough
 
-        unharmonized_data['metadata'] = {
-            'count' : r['count'],
-            'query' : r['query']
-        }
+        while True:
 
-        print( 'Documents found in Futusome data: ' + str(r['count']) )
+            ## min-range
 
-        if limit == -1:
-            limit = r['count']
+            time = ''
 
-        pagination = 1
-        documents = limit
+            if collected:
+                ## start to do jumps
+                max_date = documents[-1]['fields']['indexed']
+                max_date = datetime.strptime( max_date , "%Y-%m-%d %H:%M:%S +0000")
+                min_date = max_date - jump
+                max_date = str( int( max_date.strftime('%s') ) * 1000 - 1 ) ## fixme
+                min_date = str( int( min_date.strftime('%s') ) * 1000 ) ## fixme
+                time = ' AND indexed.at:['  + min_date + ' TO ' + max_date + ']' ## could also be indexed at? is it faster?
 
-        if limit > 5000:
-            pagination = int( limit / 5000 ) + 1
-            documents = 5000
-
-        for page in range( pagination ):
-
-            offset = page * 5000
-
-            if offset + documents > limit:
-                documents = max(0, limit - offset)
-
-            r = requests.get(query_string + '&api_key=' + api_key + '&api_search[limit]=' + str( documents ) + '&api_search[offset]=' + str( offset ) )
-
+            r = requests.get( query_string + time + '&api_key=' + api_key + '&api_search[limit]=5000&api_search[sort]=indexed.at' )
             r =  r.json()
 
-            if r['documents'] == 0:
+            if 'error' in r:
+                print( r )
                 break
 
-            unharmonized_data['documents'] += r['documents']
+            if not collected:
+                print( '\tTotal sample is', r['count'] )
 
-        json.dump( unharmonized_data , open(  data_path + '/' + cache_file + '.json', 'w' ) )
+            if len( r['documents'] ) == 0:
+                print( r ) ## for debug
+                break ## everything OK
+
+
+
+            documents += r['documents']
+            collected += len( r['documents'] )
+
+            print( '\tNow', collected,'documents and at', documents[-1]['fields']['indexed'], 'and going deeper...')
+
+        documents = {'documents' : documents}
+
+        json.dump( documents , open(  data_path + '/' + cache_file + '.json', 'w' ) )
         print('Data saved to ' + data_path + '/' + cache_file + '.json')
 
-    return unharmonized_data
+    return documents
