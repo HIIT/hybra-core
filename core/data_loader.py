@@ -321,8 +321,8 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, check_doc
                 max_date = documents[-1]['fields']['indexed']
                 max_date = datetime.strptime( max_date , "%Y-%m-%d %H:%M:%S +0000")
                 min_date = max_date - jump
-                max_date = str( int( max_date.strftime('%s') ) * 1000 - 1 ) ## fixme
-                min_date = str( int( min_date.strftime('%s') ) * 1000 ) ## fixme
+                max_date = str( ( int( max_date.strftime('%s') ) + 7200 ) * 1000 - 1 ) # correct for UTC time
+                min_date = str( int( min_date.strftime('%s') ) * 1000 )
                 time = ' AND indexed.at:['  + min_date + ' TO ' + max_date + ']' ## could also be indexed at? is it faster?
 
             r = requests.get( query_string + time + '&api_key=' + api_key + '&api_search[limit]=5000&api_search[sort]=indexed.at' )
