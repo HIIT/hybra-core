@@ -13,6 +13,8 @@ def create_wordcloud( data, stopwords = ["the", "a", "or", "tai", "and", "ja", "
 
     words = get_words( data )
 
+    frequencies = Counter( words )
+
     ## remove stopwords
     for word in stopwords:
         del frequencies[word]
