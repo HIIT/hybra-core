@@ -7,7 +7,7 @@ import re
 import requests
 import hashlib
 
-#import dateparser
+import dateparser
 from datetime import datetime
 from datetime import timedelta
 
@@ -74,8 +74,7 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
                     d['broken']['creator'] = e
 
                 try:
-                    #d['timestamp'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
-                    d['timestamp'] = datetime.strptime( d['_created_time'].replace( 'T', ' ' ).replace( '+0000', '' ), '%Y-%m-%d %H:%M:%S' )
+                    d['timestamp'] = dateparser.parse( d['_created_time'] ) ## should take care of the various formats
                 except Exception, e:
                     d['broken']['timestamp'] = e
 
@@ -123,8 +122,10 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
                 if isinstance( d['_datetime_list'] , str) or isinstance( d['_datetime_list']  , unicode):
                     d['_datetime_list'] = [ d['_datetime_list'] ]
 
-                d['timestamp'] = datetime.strptime( min( d['_datetime_list'] ), '%Y-%m-%d %H:%M:%S' ) ## todo: works for YLE, don't know of others
+                d['timestamp'] = dateparser.parse( min( d['_datetime_list'] ), ) ## should take care of the various formats
+
                 d['text_content'] = d['_title'] + ' ' + d['_ingress'] + ' ' + d['_text']
+
                 d['url'] = d['_url']
 
                 try:
@@ -170,10 +171,7 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
                     d['broken']['creator'] = e
 
                 try:
-                    #d['timestamp'] = dateparser.parse( d['created_time'] ) ## should take care of the various formats
-
-                    ## Assumes that timezone is always +0000, not absolutely sure that this holds
-                    d['timestamp'] = datetime.strptime( d['_created_at'], '%a %b %d %H:%M:%S +0000 %Y' )
+                    d['timestamp'] = dateparser.parse( d['_created_at'] ) ## should take care of the various formats
                 except Exception, e:
                     d['broken']['timestamp'] = e
 
@@ -219,7 +217,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
             d['broken']['creator'] = e
 
         try:
-            d['timestamp'] = datetime.strptime( d['_published'], '%Y-%m-%d %H:%M:%S +0000' )
+            d['timestamp'] = dateparser.parse(d['_published'])
         except Exception, e:
             d['broken']['timestamp'] = e
 
