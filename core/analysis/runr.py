@@ -54,26 +54,25 @@ def runr( execute, globalenv = None, **kwargs ):
         rpy2.robjects.globalenv = globalenv
 
     for name, value in kwargs.items():
-        print name, value
 
         if isinstance( value, dict ):
             ## use pandas
             value = pandas.DataFrame.from_dict( value )
             rpy2.robjects.globalenv[ name ] = pandas2ri.py2ri( value )
         else:
-            print name, value
             rpy2.robjects.globalenv[ name ] = converter.py2ri( value )
 
 
     ## rpy2.robjects.globalenv['cats'] = interface.p2ri( kwargs['cats'] )
 
-    if os.path.isfile( execute ):
-        execute = open( execute ).read()
+    ## search inside analsis folder
+    p = os.path.realpath(__file__)
+    p = os.path.dirname( p ) + '/' + execute
 
+    if os.path.isfile( p ):
+        execute = open( p ).read()
 
     rpy2.robjects.r( execute )
-
-    return rpy2.robjects.globalenv
 
 if __name__ == '__main__':
     execute = '''
