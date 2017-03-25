@@ -67,10 +67,14 @@ def runr( execute, globalenv = None, **kwargs ):
 
     ## search inside analsis folder
     p = os.path.realpath(__file__)
-    p = os.path.dirname( p ) + '/' + execute
+    p = os.path.dirname( p ) + '/' + execute + '.r'
 
     if os.path.isfile( p ):
         execute = open( p ).read()
+
+    if os.path.isfile( execute ):
+        execute = open( execute ).read()
+
 
     robjects.r( execute )
 
