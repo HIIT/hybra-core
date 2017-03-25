@@ -4,6 +4,8 @@ from network import module_network
 from timeline import module_timeline
 import wordclouds as module_wordclouds
 
+from analysis.runr import runr
+
 from IPython.core.display import display, HTML, Javascript
 
 import os
@@ -126,3 +128,12 @@ def wordcloud( data, **kwargs ):
     :param data: list of data entries.
     """
     module_wordclouds.create_wordcloud( data, **kwargs )
+
+def analyse( script, **kwargs ):
+
+    globalenv = None
+    if 'previous' in kwargs:
+        globalenv = kwargs[ g ]
+        del kwargs['previous']
+
+    runr( script, globalenv, **kwargs )

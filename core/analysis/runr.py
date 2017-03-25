@@ -1,0 +1,95 @@
+import os
+
+import rpy2
+import rpy2.robjects as robjects
+from rpy2.robjects import default_converter
+
+import pandas
+from rpy2.robjects import pandas2ri
+
+## convert magic
+from rpy2.robjects.conversion import Converter
+
+simple_conver = Converter('simple')
+
+def list_to_vector( list ):
+    if len( list ) == 0:
+        return rpy2.rinterface.NA_Real
+
+    if isinstance( list[0], str ):
+        return rpy2.rinterface.StrSexpVector( list )
+    if isinstance( list[0], int ):
+        return rpy2.rinterface.IntSexpVector( list )
+    if isinstance( list[0], float ):
+        return rpy2.rinterface.FloatSexpVector( list )
+    if isinstance( list[0], bool ):
+        return rpy2.rinterface.BoolSexpVector( list )
+
+    if isinstance( list[0], dict ): ## need to convert to data frame
+
+        ## let's hope the keys are always the same for each of things in the list
+        keys = list[0].keys()
+
+        ## init new dict where values are collected
+        dataframe = {}
+
+        for key in keys:
+            dataframe[ key ] = []
+
+        for row in list:
+            for key, value in row.items():
+                dataframe[ key ].append( value )
+
+        dataframe = pandas.DataFrame.from_dict( dataframe )
+        return pandas2ri.py2ri( dataframe )
+
+
+simple_conver.py2ri.register( list, list_to_vector )
+
+converter = default_converter + simple_conver
+
+def runr( execute, globalenv = None, **kwargs ):
+
+    if globalenv:
+        rpy2.robjects.globalenv = globalenv
+
+    for name, value in kwargs.items():
+        print name, value
+
+        if isinstance( value, dict ):
+            ## use pandas
+            value = pandas.DataFrame.from_dict( value )
+            rpy2.robjects.globalenv[ name ] = pandas2ri.py2ri( value )
+        else:
+            print name, value
+            rpy2.robjects.globalenv[ name ] = converter.py2ri( value )
+
+
+    ## rpy2.robjects.globalenv['cats'] = interface.p2ri( kwargs['cats'] )
+
+    if os.path.isfile( execute ):
+        execute = open( execute ).read()
+
+
+    rpy2.robjects.r( execute )
+
+    return rpy2.robjects.globalenv
+
+if __name__ == '__main__':
+    execute = '''
+        library('ggplot2')
+        # create a function `f`
+        f <- function(r, verbose=FALSE) {
+            if (verbose) {
+                cat("I am calling f().\n")
+            }
+            2 * pi * r
+        }
+        # call the function `f` with argument value 3
+        print( f(3) )
+        print( example1 )
+        print( example2 )
+        x = f(4)
+        '''
+
+    runr( execute, example1 = [1,2,3,4], example2 = [{'name': 'example2', 'value': 5}]  )
