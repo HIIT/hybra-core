@@ -72,7 +72,9 @@ def runr( execute, globalenv = None, **kwargs ):
     if os.path.isfile( p ):
         execute = open( p ).read()
 
-    rpy2.robjects.r( execute )
+    robjects.r( execute )
+
+    return robjects.r ## return all computed things
 
 if __name__ == '__main__':
     execute = '''
@@ -86,8 +88,8 @@ if __name__ == '__main__':
         }
         # call the function `f` with argument value 3
         print( f(3) )
-        print( example1 )
-        print( example2 )
+        #print( example1 )
+        #print( example2 )
         x = f(4)
         '''
 

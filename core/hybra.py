@@ -136,4 +136,4 @@ def analyse( script, **kwargs ):
         globalenv = kwargs[ g ]
         del kwargs['previous']
 
-    runr( script, globalenv, **kwargs )
+    return runr( script, globalenv, **kwargs )
