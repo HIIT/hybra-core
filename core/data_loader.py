@@ -289,6 +289,7 @@ def load_unharmonized_futusome_data( query_string, api_key, data_path, check_doc
 
     cache_file = query_string.replace(query_base, '')
     cache_file = cache_file.replace('&api_search[query]=', '')
+    cache_file = cache_file.replace('/', '_')
 
     if not override_cache:
 
