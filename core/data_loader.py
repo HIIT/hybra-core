@@ -192,6 +192,16 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
 
 def load_futusome( query, data_folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False ):
 
+    """ Checks local data folder for files matching the given query and returns them if a match is found.
+        If no local data is found and an API key is given, Futusome API is queried.
+
+        :param query: String with which data is queried.
+        :param data_folder: Local data folder as a string.
+        :param api_key: API key as a string for querying Futusome API.
+        :param check_document_count: Boolean. Defaults to False. If True, method checks Futusome API for document count returned by the given query. If False, loads the documents and saves them.
+        :param override_cache: Boolean. Defaults to False. If True, always queries Futusome and saves the data over local files. If False, checks local cache for data.
+    """
+
     data = []
 
     path = __DATA_DIR + data_folder
