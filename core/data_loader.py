@@ -125,8 +125,7 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
                                     '_ingress' : 'text_content',
                                     '_text' : 'text_content',
                                     '_url' : 'url',
-                                    '_domain' : 'source_detail',
-                                    '_images' : 'images'}
+                                    '_domain' : 'source_detail'}
 
                 d = __harmonize_data( d, 'news_media', common_data_keys )
 
@@ -138,6 +137,8 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
                     d['timestamp'] = dateparser.parse( min( d['_datetime_list'] ), ) ## should take care of the various formats
                 except Exception, e:
                     d['broken']['_datetime_list'] = e
+
+                d['images'] = d['_images']
 
                 data.append(d)
 
@@ -213,7 +214,6 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
 
     cache_file = query.replace('/', '_') # Slashes not allowed in filenames
 
-
     # If just checking document count, query for only one document
     if check_document_count:
         r = requests.get( query_base + query + '&api_key=' + api_key + '&api_search[limit]=1' )
@@ -221,9 +221,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
         print('Total document count: ' + str(r['count']))
         return
 
-
     unharmonized_data = {}
-
 
     # Check if data matching the query is cached in the data path
     if not override_cache:
@@ -289,10 +287,8 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
         json.dump( unharmonized_data , open(  path + '/' + cache_file + '.json', 'w' ) )
         print('Data saved to ' + path + '/' + cache_file + '.json')
 
-
     # If no data found in cache or Futusome, just return
     if not unharmonized_data: return data
-
 
     # Harmonize data to common format and return it
     for d in unharmonized_data['documents']:
