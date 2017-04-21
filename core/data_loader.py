@@ -11,6 +11,9 @@ import dateparser
 from datetime import datetime
 from datetime import timedelta
 
+import locale
+locale.setlocale(locale.LC_ALL, 'C')
+
 __DATA_DIR = '../hybra-data-test1/' ## by default the data comes here
 
 def _version( folder ):
@@ -62,7 +65,7 @@ def __harmonize_data( data, data_type, common_data_keys ):
     if not harmonized_data['timestamp']:
         harmonized_data['timestamp'] = '1970-01-01 00:00:00'
 
-    harmonized_data['timestamp'] = dateparser.parse( harmonized_data['timestamp'] )
+    harmonized_data['timestamp'] = dateparser.parse( harmonized_data['timestamp'], settings={'RETURN_AS_TIMEZONE_AWARE': False} )
 
     return harmonized_data
 
