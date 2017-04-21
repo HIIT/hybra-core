@@ -155,13 +155,13 @@ def export( data, file_path ):
 
     file_type = file_path.split('.')[1]
 
-    if file_type == 'csv':
-        exporter.export_csv( data, file_path )
+    try:
+        file_exporter = getattr( exporter, 'export_' + file_type )
 
-    elif file_type == 'xlsx':
-        exporter.export_xlsx( data, file_path )
+        file_exporter( data, file_path )
 
-    else:
-        print("Unrecognized file type. Recognized types:")
-        print(".csv")
-        print(".xlsx")
+    except Exception, e:
+        print("File export failed. Supported file types:")
+
+        for f_type in filter( lambda x: x.startswith('export_') , dir( exporter ) ):
+            print( '.' + f_type.replace('export_', '') )
