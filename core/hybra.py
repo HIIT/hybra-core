@@ -153,7 +153,7 @@ def export( data, file_path ):
     :param file_path: Path to output file. Recognizes output format from file extension in the path.
     """
 
-    file_type = file_path.split('.')[1]
+    file_type = file_path.split('.')[-1]
 
     try:
         file_exporter = getattr( exporter, 'export_' + file_type )
@@ -161,6 +161,7 @@ def export( data, file_path ):
         file_exporter( data, file_path )
 
     except Exception, e:
+        print(repr(e))
         print("File export failed. Supported file types:")
 
         for f_type in filter( lambda x: x.startswith('export_') , dir( exporter ) ):
