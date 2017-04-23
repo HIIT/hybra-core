@@ -1,4 +1,5 @@
 import data_loader
+import exporter
 import descriptives
 from network import module_network
 from timeline import module_timeline
@@ -11,6 +12,8 @@ from IPython.core.display import display, HTML, Javascript
 import os
 import re
 import json
+import csv
+import xlsxwriter
 
 import codecs
 from string import Template
@@ -46,11 +49,13 @@ def set_data_path( path ):
 def data_path():
     """ Returns the existing data path.
     """
+
     return data_loader.__DATA_DIR
 
 def data_sources():
     """ Lists possible data sources hybra core can parse.
     """
+
     return __sources
 
 def data( source, **kwargs ):
@@ -81,7 +86,6 @@ def filter_from_text( data, text = [], substrings = True ):
     For example `hybra.filter_from_text( example, ['cat', 'dog'])` would match text `cats and dogs are nice`, whereas `hybra.filter_from_text( example, ['cat', 'dog'], substrings = False )` would not.
     """
 
-
     filtered_data = []
 
     for d in data:
@@ -100,6 +104,7 @@ def describe( data ):
 
     :param data: list of data entries.
     """
+
     return HTML( descriptives.describe( data ) )
 
 def timeline( **kwargs ):
@@ -109,6 +114,7 @@ def timeline( **kwargs ):
 
     :param data: list of data entries.
     """
+
     return HTML( module_timeline.create_timeline( **kwargs ) )
 
 def network( data ):
@@ -118,6 +124,7 @@ def network( data ):
 
     :param data: list of data entries.
     """
+
     return HTML( module_network.create_network(data) )
 
 def wordcloud( data, **kwargs ):
@@ -127,6 +134,7 @@ def wordcloud( data, **kwargs ):
 
     :param data: list of data entries.
     """
+
     module_wordclouds.create_wordcloud( data, **kwargs )
 
 def analyse( script, **kwargs ):
@@ -137,3 +145,24 @@ def analyse( script, **kwargs ):
         del kwargs['previous']
 
     return runr( script, globalenv, **kwargs )
+
+def export( data, file_path ):
+    """Export data in common format to the given file format.
+
+    :param data: List of data entries to be exported.
+    :param file_path: Path to output file. Recognizes output format from file extension in the path.
+    """
+
+    file_type = file_path.split('.')[-1]
+
+    try:
+        file_exporter = getattr( exporter, 'export_' + file_type )
+
+        file_exporter( data, file_path )
+
+    except Exception, e:
+        print(repr(e))
+        print("File export failed. Supported file types:")
+
+        for f_type in filter( lambda x: x.startswith('export_') , dir( exporter ) ):
+            print( '.' + f_type.replace('export_', '') )
