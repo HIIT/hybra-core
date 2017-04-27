@@ -10,6 +10,7 @@ import hashlib
 import dateparser
 from datetime import datetime
 from datetime import timedelta
+import pytz
 
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
@@ -103,7 +104,7 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
                 d['images'] = attachments
 
                 d['links'] = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', d['text_content'] )
-                
+
                 if '_link' in d:
                    d['links'].append( d['_link'] )
 
@@ -252,6 +253,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
 
         collected = 0
         jump = timedelta(365*25) ## high enough
+        tz = pytz.timezone("Europe/Helsinki") ## for timezone correction
 
         while True:
 
@@ -264,7 +266,10 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
                 max_date = documents[-1]['fields']['indexed']
                 max_date = datetime.strptime( max_date , "%Y-%m-%d %H:%M:%S +0000")
                 min_date = max_date - jump
-                max_date = str( ( int( max_date.strftime('%s') ) + 7200 ) * 1000 - 1 ) # correct for UTC time
+
+                utc_correct = int( tz.localize(max_date).utcoffset().total_seconds() ) # correct for UTC time
+
+                max_date = str( ( int( max_date.strftime('%s') ) + utc_correct ) * 1000 - 1 )
                 min_date = str( int( min_date.strftime('%s') ) * 1000 )
                 time = ' AND indexed.at:['  + min_date + ' TO ' + max_date + ']' ## could also be indexed at? is it faster?
 
