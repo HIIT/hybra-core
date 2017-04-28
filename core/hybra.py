@@ -167,7 +167,7 @@ def export( data, file_path ):
             print( '.' + f_type.replace('export_', '') )
 
 def sample(data, size, seed = None, export_file = None):
-    """Takes a random sample of the dataset `data`. Optionally exports the sample to file.
+    """Takes a random sample of the dataset `data`. Optionally exports the sample to file using the hybra module export method.
 
     :param data: List of the data entries to be exported.
     :param size: An integer value specifying the sample size.
