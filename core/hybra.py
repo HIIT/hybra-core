@@ -146,10 +146,10 @@ def analyse( script, **kwargs ):
     return runr( script, globalenv, **kwargs )
 
 def export( data, file_path ):
-    """Export the dataset `data` in common format to the given file format.
+    """Export the dataset `data` in common format to the given file format. Recognizes output format from file extension in given file path.
 
     :param data: List of data entries to be exported.
-    :param file_path: Path to output file. Recognizes output format from file extension in the path.
+    :param file_path: Path to output file.
     """
 
     file_type = file_path.split('.')[-1]
