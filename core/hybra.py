@@ -12,8 +12,7 @@ from IPython.core.display import display, HTML, Javascript
 import os
 import re
 import json
-import csv
-import xlsxwriter
+import random
 
 import codecs
 from string import Template
@@ -147,7 +146,7 @@ def analyse( script, **kwargs ):
     return runr( script, globalenv, **kwargs )
 
 def export( data, file_path ):
-    """Export data in common format to the given file format.
+    """Export the dataset `data` in common format to the given file format.
 
     :param data: List of data entries to be exported.
     :param file_path: Path to output file. Recognizes output format from file extension in the path.
@@ -166,3 +165,22 @@ def export( data, file_path ):
 
         for f_type in filter( lambda x: x.startswith('export_') , dir( exporter ) ):
             print( '.' + f_type.replace('export_', '') )
+
+def sample(data, size, seed = None, export_file = None):
+    """Takes a random sample of the dataset `data`. Optionally exports the sample to file.
+
+    :param data: List of the data entries to be exported.
+    :param size: An integer value specifying the sample size.
+    :param seed: Seed to use in randomization. Defaults to None.
+    :param export_file: Path to output file. Defaults to None.
+    """
+
+    if seed:
+        random.seed(seed)
+
+    data_sample = random.sample(data, size)
+
+    if export_file:
+        export( data_sample, export_file )
+
+    return random.sample(data, size)
