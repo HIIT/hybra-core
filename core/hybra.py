@@ -166,17 +166,16 @@ def export( data, file_path ):
         for f_type in filter( lambda x: x.startswith('export_') , dir( exporter ) ):
             print( '.' + f_type.replace('export_', '') )
 
-def sample(data, size, seed = None, export_file = None):
+def sample(data, size, seed = 100, export_file = None):
     """Takes a random sample of the dataset `data`. Optionally exports the sample to file using the hybra module export method.
 
     :param data: List of the data entries to be exported.
     :param size: An integer value specifying the sample size.
-    :param seed: Seed to use in randomization. Defaults to None.
+    :param seed: Seed to use in randomization. Defaults to 100.
     :param export_file: Path to output file. Defaults to None.
     """
 
-    if seed:
-        random.seed(seed)
+    random.seed(seed)
 
     data_sample = random.sample(data, size)
 
