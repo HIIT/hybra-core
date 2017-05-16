@@ -104,7 +104,7 @@ def describe( data ):
     :param data: list of data entries.
     """
 
-    return HTML( descriptives.describe( data ) )
+    return display( HTML( descriptives.describe( data ) ) )
 
 def timeline( **kwargs ):
     """Draws a timeline the dataset `data`.
@@ -114,7 +114,7 @@ def timeline( **kwargs ):
     :param data: list of data entries.
     """
 
-    return HTML( module_timeline.create_timeline( **kwargs ) )
+    return display( HTML( module_timeline.create_timeline( **kwargs ) ) )
 
 def network( data ):
     """Draws a network the dataset `data`.
@@ -124,7 +124,7 @@ def network( data ):
     :param data: list of data entries.
     """
 
-    return HTML( module_network.create_network(data) )
+    return display( HTML( module_network.create_network(data) ) )
 
 def wordcloud( data, **kwargs ):
     """Draws a wordcloud the dataset `data`.
