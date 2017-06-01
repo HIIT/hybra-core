@@ -117,39 +117,41 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
-    data = []
-
     path = __DATA_DIR + data_folder
 
-    for f in os.listdir( path ):
+    print( path )
 
-        if any( term in f for term in terms ):
+    for dirpath, subdirs, files in os.walk(path):
 
-            for d in json.load( open( path + f ) ):
+        for f in files:
 
-                common_data_keys = {'_author' : 'creator',
-                                    '_title' : 'text_content',
-                                    '_ingress' : 'text_content',
-                                    '_text' : 'text_content',
-                                    '_url' : 'url',
-                                    '_domain' : 'source_detail'}
+            f = os.path.join( dirpath, f )
 
-                d = __harmonize_data( d, 'news_media', common_data_keys )
+            if any( term in f for term in terms ):
 
-                ## ensure data is always in a list
-                if isinstance( d['_datetime_list'] , str) or isinstance( d['_datetime_list']  , unicode):
-                    d['_datetime_list'] = [ d['_datetime_list'] ]
+                for d in json.load( open( f ) ):
 
-                try:
-                    d['timestamp'] = dateparser.parse( min( d['_datetime_list'] ), ) ## should take care of the various formats
-                except Exception, e:
-                    d['broken']['_datetime_list'] = e
+                    common_data_keys = {'_author' : 'creator',
+                                        '_title' : 'text_content',
+                                        '_ingress' : 'text_content',
+                                        '_text' : 'text_content',
+                                        '_url' : 'url',
+                                        '_domain' : 'source_detail'}
 
-                d['images'] = d['_images']
+                    d = __harmonize_data( d, 'news_media', common_data_keys )
 
-                data.append(d)
+                    ## ensure data is always in a list
+                    if isinstance( d['_datetime_list'] , str) or isinstance( d['_datetime_list']  , unicode):
+                        d['_datetime_list'] = [ d['_datetime_list'] ]
 
-    return data
+                    try:
+                        d['timestamp'] = dateparser.parse( min( d['_datetime_list'] ), ) ## should take care of the various formats
+                    except Exception, e:
+                        d['broken']['_datetime_list'] = e
+
+                    d['images'] = d['_images']
+
+                    yield d
 
 
 def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
