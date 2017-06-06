@@ -13,7 +13,9 @@ import os
 import re
 import json
 import random
+
 import dateparser
+from urlparse import urlparse
 
 import codecs
 from string import Template
@@ -120,6 +122,54 @@ def filter_by_datetime( data, after = '', before = '' ):
         print 'No dates given for filtering!'
 
     return data
+
+def filter_by_author( data, authors = [] ):
+    """Filter data by author given in parameter `authors`.
+
+    :param data: list of data entries.
+    :param authors: list of authors to filter the data by.
+    """
+
+    authors = set(authors)
+
+    if authors:
+        data = filter( lambda d: d['creator'] in authors, data )
+    else:
+        print 'No authors given for filtering!'
+
+    return data
+
+def filter_by_domain( data, domains = [] ):
+    """Filter data by domains given in paramater `domains`.
+
+    :param data: list of data entries.
+    :param domains: list of domains to filter the data by.
+    """
+
+    domains  = set(domains)
+
+    if domains:
+        data = filter( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ) in domains, data )
+    else:
+        print 'No domains given for filtering!'
+
+    return data
+
+def get_author_counts( data ):
+    """List entry counts of distinct authors found in the dataset `data`.
+
+    :param data: list of data entries.
+    """
+
+    descriptives.author_counts( data )
+
+def get_domain_counts( data ):
+    """List entry counts of distinct domains found in the dataset `data`.
+
+    :param data: list of data entries.
+    """
+
+    descriptives.domain_counts( data )
 
 def describe( data ):
     """Describe the dataset `data`, showing the amount of posts, number of authors, historical data and more detailed data sources.
