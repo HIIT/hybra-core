@@ -13,6 +13,7 @@ import os
 import re
 import json
 import random
+import dateparser
 
 import codecs
 from string import Template
@@ -97,6 +98,28 @@ def filter_from_text( data, text = [], substrings = True ):
                 filtered_data.append( d )
 
     return filtered_data
+
+def filter_by_datetime( data, after = '', before = '' ):
+    """ Filter data by datetime given in parameters `after` and `before`.
+
+    :param data: list of data entries.
+    :param after: string representation of the datetime after which data is to be returned.
+    :param before: string representation of the datetime before which data is to be returned.
+    """
+
+    after = dateparser.parse(after)
+    before = dateparser.parse(before)
+
+    if (after != None) & (before != None):
+        data = filter( lambda d: (d['timestamp'] > after) & (d['timestamp'] < before), data )
+    elif after:
+        data = filter( lambda d: d['timestamp'] > after, data )
+    elif before:
+        data = filter( lambda d: d['timestamp'] < before, data )
+    else:
+        print 'No dates given for filtering!'
+
+    return data
 
 def describe( data ):
     """Describe the dataset `data`, showing the amount of posts, number of authors, historical data and more detailed data sources.
