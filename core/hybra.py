@@ -137,7 +137,7 @@ def filter_by_author( data, authors = [] ):
     :param authors: list of authors to filter the data by.
     """
 
-    authors = set(authors)
+    authors = set( map( lambda a: a.decode('utf8'), authors) )
 
     if authors:
         data = filter( lambda d: d['creator'] in authors, data )
