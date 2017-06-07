@@ -95,16 +95,20 @@ def filter_from_text( data, text = [], substrings = True, inclusive = True ):
 
     for d in data:
         if substrings:
-            if inclusive & all( string.lower() in d['text_content'].lower() for string in text ):
-                filtered_data.append( d )
-            elif any( string.lower() in d['text_content'].lower() for string in text ):
-                filtered_data.append( d )
+            if inclusive:
+                if all( string.lower() in d['text_content'].lower() for string in text ):
+                    filtered_data.append( d )
+            else:
+                if any( string.lower() in d['text_content'].lower() for string in text ):
+                    filtered_data.append( d )
         else:
             words = re.findall(r'\w+', d['text_content'].lower(), re.UNICODE)
-            if inclusive & all( string.lower() in words for string in text ):
-                filtered_data.append( d )
-            elif any( string.lower() in words for string in text ):
-                filtered_data.append( d )
+            if inclusive:
+                if all( string.lower() in words for string in text ):
+                    filtered_data.append( d )
+            else:
+                if any( string.lower() in words for string in text ):
+                    filtered_data.append( d )
 
     return filtered_data
 
