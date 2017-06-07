@@ -79,24 +79,31 @@ def data( source, **kwargs ):
 
     return load( **kwargs )
 
-def filter_from_text( data, text = [], substrings = True ):
+def filter_from_text( data, text = [], substrings = True, inclusive = True ):
     """ Only choose parts of data which have certain words, given in parameter `text`.
 
     :param data: list of data entries.
     :param text: list of words looked for. This is *inclusive* all the words need to be in the text to qualify.
     :param substrings: if we accept texts which match all words or texts which has all words. Default behavior is to accept based on match.
     For example `hybra.filter_from_text( example, ['cat', 'dog'])` would match text `cats and dogs are nice`, whereas `hybra.filter_from_text( example, ['cat', 'dog'], substrings = False )` would not.
+    :param inclusive: boolean specifying whether all of the words are required to be in the text. Default: True.
     """
 
     filtered_data = []
 
+    text = map( lambda t: t.decode('utf8'), text)
+
     for d in data:
         if substrings:
-            if all( string.lower() in d['text_content'].lower() for string in text ):
+            if inclusive & all( string.lower() in d['text_content'].lower() for string in text ):
+                filtered_data.append( d )
+            elif any( string.lower() in d['text_content'].lower() for string in text ):
                 filtered_data.append( d )
         else:
             words = re.findall(r'\w+', d['text_content'].lower(), re.UNICODE)
-            if all( string.lower() in words for string in text ):
+            if inclusive & all( string.lower() in words for string in text ):
+                filtered_data.append( d )
+            elif any( string.lower() in words for string in text ):
                 filtered_data.append( d )
 
     return filtered_data
