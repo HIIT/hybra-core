@@ -61,7 +61,7 @@ def domain_counts( data ):
         print( "Dataset empty." )
         return
 
-    domains = map( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ), data )
+    domains = map( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ).replace('www.', ''), data )
 
     domain_counts = Counter(domains)
 

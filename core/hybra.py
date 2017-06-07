@@ -153,10 +153,10 @@ def filter_by_domain( data, domains = [] ):
     :param domains: list of domains to filter the data by.
     """
 
-    domains  = set(domains)
+    domains  = set( map( lambda d: d.replace('www', ''), domains))
 
     if domains:
-        data = filter( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ) in domains, data )
+        data = filter( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ).replace('www.', '') in domains, data )
     else:
         print 'No domains given for filtering!'
 
