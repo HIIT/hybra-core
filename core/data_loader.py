@@ -83,7 +83,7 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
 
             dump = json.load( open( path + f ) )
 
-            source_detail = dump['name']
+            source_detail = dump['name'] + ' (' + dump['meta']['type'] + ')'
 
             for d in dump['feed']:
 
