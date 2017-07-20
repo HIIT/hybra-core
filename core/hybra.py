@@ -78,39 +78,40 @@ def data( source, **kwargs ):
     return load( **kwargs )
 
 def describe( data ):
-    """Describe the dataset `data`, showing the amount of posts, number of authors, historical data and more detailed data sources.
+    """ Describe the dataset `data`, showing the amount of posts,
+        number of authors, historical data and more detailed data sources.
 
-    :param data: list of data entries.
+        :param data: list of data entries.
     """
 
     return display( HTML( descriptives.describe( data ) ) )
 
 def timeline( **kwargs ):
-    """Draws a timeline the dataset `data`.
+    """ Draws a timeline the dataset `data`.
 
-    :todo: check kwargs
+        :todo: check kwargs
 
-    :param data: list of data entries.
+        :param data: list of data entries.
     """
 
     return display( HTML( module_timeline.create_timeline( **kwargs ) ) )
 
 def network( data ):
-    """Draws a network the dataset `data`.
+    """ Draws a network the dataset `data`.
 
-    :todo: check kwargs
+        :todo: check kwargs
 
-    :param data: list of data entries.
+        :param data: list of data entries.
     """
 
     return display( HTML( module_network.create_network(data) ) )
 
 def wordcloud( data, **kwargs ):
-    """Draws a wordcloud the dataset `data`.
+    """ Draws a wordcloud the dataset `data`.
 
-    :todo: check kwargs
+        :todo: check kwargs
 
-    :param data: list of data entries.
+        :param data: list of data entries.
     """
 
     module_wordclouds.create_wordcloud( data, **kwargs )
@@ -125,10 +126,11 @@ def analyse( script, **kwargs ):
     return runr( script, globalenv, **kwargs )
 
 def export( data, file_path ):
-    """Export the dataset `data` in common format to the given file format. Recognizes output format from file extension in given file path.
+    """ Export the dataset `data` in common format to the given file format.
+        Recognizes output format from file extension in given file path.
 
-    :param data: List of data entries to be exported.
-    :param file_path: Path to output file.
+        :param data: List of data entries to be exported.
+        :param file_path: Path to output file.
     """
 
     file_type = file_path.split('.')[-1]
@@ -146,12 +148,13 @@ def export( data, file_path ):
             print( '.' + f.replace('export_', '') )
 
 def sample(data, size, seed = 100, export_file = None):
-    """Takes a random sample of the dataset `data`. Optionally exports the sample to file using the hybra module export method.
+    """ Takes a random sample of the dataset `data`.
+        Optionally exports the sample to file using the hybra module export method.
 
-    :param data: List of the data entries to be exported.
-    :param size: An integer value specifying the sample size.
-    :param seed: Seed to use in randomization. Defaults to 100.
-    :param export_file: Path to output file. Defaults to None.
+        :param data: List of the data entries to be exported.
+        :param size: An integer value specifying the sample size.
+        :param seed: Seed to use in randomization. Defaults to 100.
+        :param export_file: Path to output file. Defaults to None.
     """
 
     random.seed(seed)
@@ -164,6 +167,15 @@ def sample(data, size, seed = 100, export_file = None):
     return random.sample(data, size)
 
 def filter_by( data, filter_type, **kwargs ):
+    """ Filters the dataset `data` with the filter given in `filter_type`.
+        Returns the filtered data if `filter_type` matches a filtering method
+        in the modude helpers.
+
+        :todo: check kwargs
+
+        :param data: List of the data entries to be filtered.
+        :param filter_type: String giving the filter type to be used.
+    """
 
     try:
         filter_helper = getattr( helpers, 'filter_by_' + filter_type )
@@ -177,16 +189,26 @@ def filter_by( data, filter_type, **kwargs ):
         for f in filter(lambda x: x.startswith('filter_by_'), dir(helpers) ):
             print( f.replace('filter_by_', '') )
 
-def counts( data, count_type ):
+def counts( data, count_by ):
+    """ Counts the occurrences of the feature `count_by` in the dataset `data`.
+
+        :param data: List of the data entries to be counted.
+        :param count_by: String giving the feature to be used for counting.
+
+        :Example:
+
+        ``hybra.counts(data, count_by = 'author') ## counts distinct authors in data.``
+        ``hybra.counts(data, count_by = 'domain') ## counts distinct domain in data.``
+    """
 
     try:
-        counts_helper = getattr( helpers, 'counts_' + count_type )
+        counts_helper = getattr( helpers, 'counts_' + count_by )
 
         counts_helper( data )
 
     except Exception, e:
         print(repr(e))
-        print("Getting counts failed. Supported count types:")
+        print("Getting counts failed. Supported features to count by:")
 
         for c in filter( lambda x: x.startswith('counts_'), dir( helpers ) ):
             print( c.replace('counts_', '') )
