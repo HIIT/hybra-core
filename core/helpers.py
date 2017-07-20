@@ -1,5 +1,6 @@
 import re
 import dateparser
+import tldextract
 from urlparse import urlparse
 from collections import Counter
 
@@ -64,7 +65,7 @@ def filter_by_domain( data, domains = [] ):
     domains  = set( map( lambda d: d.replace('www.', ''), domains))
 
     if domains:
-        data = filter( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ).replace('www.', '') in domains, data )
+        data = filter( lambda d: '.'.join( tldextract.extract( d['url'] )[-2:] ) in domains, data )
     else:
         print 'No domains given for filtering!'
 
@@ -95,7 +96,7 @@ def counts_domain( data ):
         print "Dataset empty."
         return
 
-    domains = map( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ).replace('www.', ''), data )
+    domains = extract_domains( map( lambda d: d['url'], data ) )
 
     domain_counts = Counter(domains)
 
@@ -107,3 +108,11 @@ def counts_domain( data ):
 
     for domain, count in domain_counts.most_common(total_count):
         print '-', domain, count
+
+def extract_domains( links ):
+
+    def fix( link ):
+        link = tldextract.extract( link )
+        return '.'.join( link[-2:] )
+
+    return map( fix , links )
