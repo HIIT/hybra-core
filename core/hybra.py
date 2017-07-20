@@ -1,5 +1,6 @@
 import data_loader
 import exporter
+import helpers
 import descriptives
 from network import module_network
 from timeline import module_timeline
@@ -13,9 +14,6 @@ import os
 import re
 import json
 import random
-
-import dateparser
-from urlparse import urlparse
 
 import codecs
 from string import Template
@@ -78,109 +76,6 @@ def data( source, **kwargs ):
     load = getattr( data_loader, 'load_' + source )
 
     return load( **kwargs )
-
-def filter_from_text( data, text = [], substrings = True, inclusive = True ):
-    """ Only choose parts of data which have certain words, given in parameter `text`.
-
-    :param data: list of data entries.
-    :param text: list of words looked for. This is *inclusive* all the words need to be in the text to qualify.
-    :param substrings: if we accept texts which match all words or texts which has all words. Default behavior is to accept based on match.
-    For example `hybra.filter_from_text( example, ['cat', 'dog'])` would match text `cats and dogs are nice`, whereas `hybra.filter_from_text( example, ['cat', 'dog'], substrings = False )` would not.
-    :param inclusive: boolean specifying whether all of the words are required to be in the text. Default: True.
-    """
-
-    filtered_data = []
-
-    text = map( lambda t: t.decode('utf8'), text)
-
-    for d in data:
-        if substrings:
-            if inclusive:
-                if all( string.lower() in d['text_content'].lower() for string in text ):
-                    filtered_data.append( d )
-            else:
-                if any( string.lower() in d['text_content'].lower() for string in text ):
-                    filtered_data.append( d )
-        else:
-            words = re.findall(r'\w+', d['text_content'].lower(), re.UNICODE)
-            if inclusive:
-                if all( string.lower() in words for string in text ):
-                    filtered_data.append( d )
-            else:
-                if any( string.lower() in words for string in text ):
-                    filtered_data.append( d )
-
-    return filtered_data
-
-def filter_by_datetime( data, after = '', before = '' ):
-    """ Filter data by datetime given in parameters `after` and `before`.
-
-    :param data: list of data entries.
-    :param after: string representation of the datetime after which data is to be returned.
-    :param before: string representation of the datetime before which data is to be returned.
-    """
-
-    after = dateparser.parse(after)
-    before = dateparser.parse(before)
-
-    if (after != None) & (before != None):
-        data = filter( lambda d: (d['timestamp'] > after) & (d['timestamp'] < before), data )
-    elif after:
-        data = filter( lambda d: d['timestamp'] > after, data )
-    elif before:
-        data = filter( lambda d: d['timestamp'] < before, data )
-    else:
-        print 'No dates given for filtering!'
-
-    return data
-
-def filter_by_author( data, authors = [] ):
-    """Filter data by author given in parameter `authors`.
-
-    :param data: list of data entries.
-    :param authors: list of authors to filter the data by.
-    """
-
-    authors = set( map( lambda a: a.decode('utf8'), authors) )
-
-    if authors:
-        data = filter( lambda d: d['creator'] in authors, data )
-    else:
-        print 'No authors given for filtering!'
-
-    return data
-
-def filter_by_domain( data, domains = [] ):
-    """Filter data by domains given in paramater `domains`.
-
-    :param data: list of data entries.
-    :param domains: list of domains to filter the data by.
-    """
-
-    domains  = set( map( lambda d: d.replace('www.', ''), domains))
-
-    if domains:
-        data = filter( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ).replace('www.', '') in domains, data )
-    else:
-        print 'No domains given for filtering!'
-
-    return data
-
-def get_author_counts( data ):
-    """List entry counts of distinct authors found in the dataset `data`.
-
-    :param data: list of data entries.
-    """
-
-    descriptives.author_counts( data )
-
-def get_domain_counts( data ):
-    """List entry counts of distinct domains found in the dataset `data`.
-
-    :param data: list of data entries.
-    """
-
-    descriptives.domain_counts( data )
 
 def describe( data ):
     """Describe the dataset `data`, showing the amount of posts, number of authors, historical data and more detailed data sources.
@@ -247,8 +142,8 @@ def export( data, file_path ):
         print(repr(e))
         print("File export failed. Supported file types:")
 
-        for f_type in filter( lambda x: x.startswith('export_') , dir( exporter ) ):
-            print( '.' + f_type.replace('export_', '') )
+        for f in filter( lambda x: x.startswith('export_') , dir( exporter ) ):
+            print( '.' + f.replace('export_', '') )
 
 def sample(data, size, seed = 100, export_file = None):
     """Takes a random sample of the dataset `data`. Optionally exports the sample to file using the hybra module export method.
@@ -267,3 +162,31 @@ def sample(data, size, seed = 100, export_file = None):
         export( data_sample, export_file )
 
     return random.sample(data, size)
+
+def filter_by( data, filter_type, **kwargs ):
+
+    try:
+        filter_helper = getattr( helpers, 'filter_by_' + filter_type )
+
+        return filter_helper( data, **kwargs )
+
+    except Exception, e:
+        print(repr(e))
+        print('Data filtering failed. Supported filters:')
+
+        for f in filter(lambda x: x.startswith('filter_by_'), dir(helpers) ):
+            print( f.replace('filter_by_', '') )
+
+def counts( data, count_type ):
+
+    try:
+        counts_helper = getattr( helpers, 'counts_' + count_type )
+
+        counts_helper( data )
+
+    except Exception, e:
+        print(repr(e))
+        print("Getting counts failed. Supported count types:")
+
+        for c in filter( lambda x: x.startswith('counts_'), dir( helpers ) ):
+            print( c.replace('counts_', '') )

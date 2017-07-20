@@ -6,8 +6,6 @@ from timeline import module_timeline
 
 from collections import *
 
-from urlparse import urlparse
-
 def describe( data ):
     if len(data) == 0:
         print( "Dataset empty." )
@@ -35,44 +33,6 @@ def describe( data ):
         print( '-', name, count )
 
     return module_timeline.create_timeline( datasets = [date_ok] )
-
-def author_counts( data ):
-
-    if len(data) == 0:
-        print( "Dataset empty." )
-        return
-
-    authors = map( lambda d: d['creator'], data )
-
-    author_counts = Counter(authors)
-
-    total_count = len( author_counts.keys() )
-
-    print('Authors found in data:', total_count)
-
-    print('Entry counts by author')
-
-    for author, count in author_counts.most_common(total_count):
-        print('-', author, count)
-
-def domain_counts( data ):
-
-    if len(data) == 0:
-        print( "Dataset empty." )
-        return
-
-    domains = map( lambda d: '{uri.netloc}'.format( uri= urlparse( d['url'] ) ).replace('www.', ''), data )
-
-    domain_counts = Counter(domains)
-
-    total_count = len( domain_counts.keys() )
-
-    print('Domains found in data:', total_count)
-
-    print('Entry counts by domain:')
-
-    for domain, count in domain_counts.most_common(total_count):
-        print('-', domain, count)
 
 if __name__ == '__main__':
 
