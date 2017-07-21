@@ -189,11 +189,13 @@ def filter_by( data, filter_type, **kwargs ):
         for f in filter(lambda x: x.startswith('filter_by_'), dir(helpers) ):
             print( f.replace('filter_by_', '') )
 
-def counts( data, count_by ):
+def counts( data, count_by, verbose = True ):
     """ Counts the occurrences of the feature `count_by` in the dataset `data`.
+        Returns the counts as a Counter object and prints them is `verbose` is True.
 
         :param data: List of the data entries to be counted.
         :param count_by: String giving the feature to be used for counting.
+        :param verbose: Boolean determining whether to print the counts.
 
         :Example:
 
@@ -204,7 +206,7 @@ def counts( data, count_by ):
     try:
         counts_helper = getattr( helpers, 'counts_' + count_by )
 
-        counts_helper( data )
+        return counts_helper( data, verbose )
 
     except Exception, e:
         print(repr(e))

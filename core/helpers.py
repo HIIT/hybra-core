@@ -71,7 +71,7 @@ def filter_by_domain( data, domains = [] ):
 
     return data
 
-def counts_author( data ):
+def counts_author( data, verbose ):
 
     if len(data) == 0:
         print "Dataset empty."
@@ -81,16 +81,13 @@ def counts_author( data ):
 
     author_counts = Counter(authors)
 
-    total_count = len( author_counts.keys() )
+    if verbose:
 
-    print 'Authors found in data:', total_count
+        print_counts( author_counts, 'author' )
 
-    print 'Entry counts by author'
+    return author_counts
 
-    for author, count in author_counts.most_common(total_count):
-        print '-', author, count
-
-def counts_domain( data ):
+def counts_domain( data, verbose ):
 
     if len(data) == 0:
         print "Dataset empty."
@@ -100,14 +97,22 @@ def counts_domain( data ):
 
     domain_counts = Counter(domains)
 
-    total_count = len( domain_counts.keys() )
+    if verbose:
 
-    print 'Domains found in data:', total_count
+        print_counts( domain_counts,  'domain' )
 
-    print 'Entry counts by domain:'
+    return domain_counts
 
-    for domain, count in domain_counts.most_common(total_count):
-        print '-', domain, count
+def print_counts( counts, count_type ):
+
+    total_count = len( counts.keys() )
+
+    print count_type.title() + 's found in data:', total_count
+
+    print 'Entry counts by ' + count_type + ':'
+
+    for key, value in counts.most_common(total_count):
+        print '-', key, value
 
 def extract_domains( links ):
 
