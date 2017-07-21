@@ -198,7 +198,9 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
 
                     d = __harmonize_data( d, 'twitter', common_data_keys )
 
-                    d['links'] = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', d['text_content'] )
+                    if '_entities' in d:
+                        if 'urls' in d['_entities']:
+                            d['links'] = map( lambda u: u['expanded_url'], d['_entities']['urls'] )
 
                     d['links_domains'] = helpers.extract_domains( d['links'] )
 
