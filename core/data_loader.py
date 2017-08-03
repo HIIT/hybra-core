@@ -114,6 +114,26 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
 
     return data
 
+def load_mediacloud( file = '' ):
+
+    data = []
+
+    for e in json.load( open( file ) ):
+
+        try:
+
+            d = {}
+
+            d['text_content'] = e['full_text_bow']
+            d['timestamp'] = dateparser.parse( e['publish_date'] )
+            d['source'] = e['media_name']
+            d['source_detail'] = e['publish_date']
+            data.append( d )
+
+        except:
+            pass
+
+    return data
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
