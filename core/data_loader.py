@@ -7,15 +7,9 @@ import json
 import os
 import sys
 import re
-import requests
 import hashlib
 
-import helpers
-
-import dateparser
-from datetime import datetime
-from datetime import timedelta
-import pytz
+from datetime import datetime, timedelta
 
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
@@ -40,6 +34,8 @@ def _version( folder ):
 
 
 def __harmonize_data( data, data_type, common_data_keys ):
+
+    import dateparser
 
     harmonized_data = {}
 
@@ -78,6 +74,8 @@ def __harmonize_data( data, data_type, common_data_keys ):
 
 
 def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: better filtering
+
+    import helpers
 
     data = []
 
@@ -125,6 +123,8 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
 
 def load_media( terms = ['.json'], data_folder = 'media/' ):
 
+    import dateparser
+
     path = __DATA_DIR + data_folder
 
     print( path )
@@ -169,6 +169,8 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
        and allows some things to be done slightly more conveniently;
        we could write this to work with Streaming API data as well.
     """
+
+    import helpers
 
     data = []
 
@@ -225,6 +227,10 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
         :param check_document_count: Boolean. Defaults to False. If True, method checks Futusome API for document count returned by the given query. If False, loads the documents and saves them.
         :param override_cache: Boolean. Defaults to False. If True, always queries Futusome and saves the data over local files. If False, checks local cache for data.
     """
+
+    import requests
+    import pytz
+    import helpers
 
     data = []
 

@@ -1,16 +1,14 @@
-import codecs
+import os
 import time
 from string import Template
-
-import os
-
-import networkx as nx
-from networkx.readwrite import json_graph
-
 
 path = os.path.dirname(os.path.abspath(__file__))
 
 def create_network(data):
+
+    import codecs
+    import networkx as nx
+    from networkx.readwrite import json_graph
 
     G = nx.DiGraph()
 

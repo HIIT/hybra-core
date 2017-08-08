@@ -1,7 +1,4 @@
 import re
-import dateparser
-import tldextract
-from urlparse import urlparse
 from collections import Counter
 
 def filter_by_text( data, text = [], substrings = True, inclusive = True ):
@@ -35,6 +32,8 @@ def filter_by_text( data, text = [], substrings = True, inclusive = True ):
 
 def filter_by_datetime( data, after = '', before = '' ):
 
+    import dateparser
+
     after = dateparser.parse(after)
     before = dateparser.parse(before)
 
@@ -61,6 +60,8 @@ def filter_by_author( data, authors = [] ):
     return data
 
 def filter_by_domain( data, domains = [] ):
+
+    import tldextract
 
     domains  = set( map( lambda d: d.replace('www.', ''), domains))
 
@@ -115,6 +116,8 @@ def print_counts( counts, count_type ):
         print '-', key, value
 
 def extract_domains( links ):
+
+    import tldextract
 
     def fix( link ):
         link = tldextract.extract( link )

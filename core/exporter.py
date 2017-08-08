@@ -1,6 +1,4 @@
 import csv
-import xlsxwriter
-
 
 def __get_common_keys( data ):
 
@@ -33,6 +31,8 @@ def export_csv( data, file_path ):
 
 
 def export_xlsx( data, file_path ):
+
+    import xlsxwriter
 
     workbook = xlsxwriter.Workbook( open(file_path, 'wb'), {'strings_to_urls': False} )
 

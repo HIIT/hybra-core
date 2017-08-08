@@ -1,16 +1,15 @@
 from __future__ import division, print_function
 import os
+from collections import Counter
+from datetime import datetime, date, timedelta
+import time
+from string import Template
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-from collections import Counter
-from datetime import datetime, date, timedelta
-import codecs
-import time
-
-from string import Template
-
 def create_timeline( datasets = [], colors = [] ):
+
+    import codecs
 
     if not datasets: return "No data given to create timeline."
 
