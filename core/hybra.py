@@ -171,7 +171,7 @@ def sample(data, size, seed = 100, export_file = None):
     if export_file:
         export( data_sample, export_file )
 
-    return random.sample(data, size)
+    return data_sample
 
 def filter_by( data, filter_type, **kwargs ):
     """ Filters the dataset `data` with the filter given in `filter_type`.
