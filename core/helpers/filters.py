@@ -1,8 +1,12 @@
 import re
+<<<<<<< HEAD:core/helpers/filters.py
 import dateparser
 
 import tldextract
 from urlparse import urlparse
+=======
+from collections import Counter
+>>>>>>> 52fba2a8e114b5e82509f5b2cc2a44541ab3dab8:core/helpers.py
 
 def filter_by_text( data, text = [], substrings = True, inclusive = True ):
 
@@ -35,6 +39,8 @@ def filter_by_text( data, text = [], substrings = True, inclusive = True ):
 
 def filter_by_datetime( data, after = '', before = '' ):
 
+    import dateparser
+
     after = dateparser.parse(after)
     before = dateparser.parse(before)
 
@@ -62,6 +68,8 @@ def filter_by_author( data, authors = [] ):
 
 def filter_by_domain( data, domains = [] ):
 
+    import tldextract
+
     domains  = set( map( lambda d: d.replace('www.', ''), domains))
 
     if domains:
@@ -70,3 +78,59 @@ def filter_by_domain( data, domains = [] ):
         print 'No domains given for filtering!'
 
     return data
+<<<<<<< HEAD:core/helpers/filters.py
+=======
+
+def counts_author( data, verbose ):
+
+    if len(data) == 0:
+        print "Dataset empty."
+        return
+
+    authors = map( lambda d: d['creator'], data )
+
+    author_counts = Counter(authors)
+
+    if verbose:
+
+        print_counts( author_counts, 'author' )
+
+    return author_counts
+
+def counts_domain( data, verbose ):
+
+    if len(data) == 0:
+        print "Dataset empty."
+        return
+
+    domains = extract_domains( map( lambda d: d['url'], data ) )
+
+    domain_counts = Counter(domains)
+
+    if verbose:
+
+        print_counts( domain_counts,  'domain' )
+
+    return domain_counts
+
+def print_counts( counts, count_type ):
+
+    total_count = len( counts.keys() )
+
+    print count_type.title() + 's found in data:', total_count
+
+    print 'Entry counts by ' + count_type + ':'
+
+    for key, value in counts.most_common(total_count):
+        print '-', key, value
+
+def extract_domains( links ):
+
+    import tldextract
+
+    def fix( link ):
+        link = tldextract.extract( link )
+        return '.'.join( link[-2:] )
+
+    return map( fix , links )
+>>>>>>> 52fba2a8e114b5e82509f5b2cc2a44541ab3dab8:core/helpers.py

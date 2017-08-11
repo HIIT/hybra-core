@@ -3,10 +3,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from collections import Counter
 import re
 
-from wordcloud import WordCloud
-from matplotlib import pyplot as plt
-
 def create_wordcloud( data, stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"] ):
+
+    from wordcloud import WordCloud
+    from matplotlib import pyplot as plt
+
     if len(data) == 0:
         print( "Dataset empty." )
         return
@@ -55,6 +56,8 @@ def decode_utf8( string ):
         return string
 
 if __name__ == '__main__':
+
+    from matplotlib import pyplot as plt
 
     for function_name in dir( data_loader ):
 

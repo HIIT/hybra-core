@@ -1,12 +1,11 @@
 from __future__ import division, print_function
-
 import datetime
-
-from timeline import module_timeline
-
 from collections import *
 
 def describe( data ):
+
+    from timeline import module_timeline
+
     if len(data) == 0:
         print( "Dataset empty." )
         return

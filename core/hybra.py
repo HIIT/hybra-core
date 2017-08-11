@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import data_loader
 import exporter
 
@@ -10,11 +11,14 @@ from analysis.runr import runr
 
 from IPython.core.display import display, HTML, Javascript
 
+=======
+>>>>>>> 52fba2a8e114b5e82509f5b2cc2a44541ab3dab8
 import os
 import re
 import json
 import random
 
+<<<<<<< HEAD
 import codecs
 from string import Template
 
@@ -25,6 +29,8 @@ __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
 __sources = map( lambda x: x[5:], __sources )
 
+=======
+>>>>>>> 52fba2a8e114b5e82509f5b2cc2a44541ab3dab8
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
         :param path: Where the data is stored
@@ -35,6 +41,9 @@ def set_data_path( path ):
         hybra.set_data_path('~/Documents/data/hybra-data') ## data in folder Documents/data/hybra-data``
     """
 
+    import data_loader
+    from IPython.core.display import HTML
+
     data_loader.__DATA_DIR = path
 
     ## when data path is set, automatically print out the versions
@@ -44,14 +53,13 @@ def set_data_path( path ):
 
     ## TOTALLY UNRELATED BUT LETS USE THIS TO INIT THE D3JS TOO
     ## check if there is any way to not use exernal cloud d3js
-    ## import os
-    ## path = os.path.dirname(os.path.abspath(__file__))
-    ## return Javascript( open( path + '/js/d3/d3.js' ).read() )
     return HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Data science OK!</p>')
 
 def data_path():
     """ Returns the existing data path.
     """
+
+    import data_loader
 
     return data_loader.__DATA_DIR
 
@@ -59,7 +67,13 @@ def data_sources():
     """ Lists possible data sources hybra core can parse.
     """
 
-    return __sources
+    import data_loader
+
+    sources = dir( data_loader )
+    sources = filter( lambda x: x.startswith('load_') , sources )
+    sources = map( lambda x: x[5:], sources )
+
+    return sources
 
 def data( source, **kwargs ):
     """ Load data of type `source` using the parser for that data.
@@ -73,7 +87,9 @@ def data( source, **kwargs ):
         ``hybra.data('media', folder = 'yle') ## load yle-data from the subfolder YLE in your data folder.``
     """
 
-    if source not in __sources:
+    import data_loader
+
+    if source not in data_sources():
         raise NameError('Unknown media type')
 
     load = getattr( data_loader, 'load_' + source )
@@ -87,6 +103,9 @@ def describe( data ):
         :param data: list of data entries.
     """
 
+    import descriptives
+    from IPython.core.display import display, HTML
+
     return display( HTML( descriptives.describe( data ) ) )
 
 def timeline( **kwargs ):
@@ -96,6 +115,9 @@ def timeline( **kwargs ):
 
         :param data: list of data entries.
     """
+
+    from timeline import module_timeline
+    from IPython.core.display import display, HTML
 
     return display( HTML( module_timeline.create_timeline( **kwargs ) ) )
 
@@ -107,6 +129,9 @@ def network( data ):
         :param data: list of data entries.
     """
 
+    from network import module_network
+    from IPython.core.display import display, HTML
+
     return display( HTML( module_network.create_network(data) ) )
 
 def wordcloud( data, **kwargs ):
@@ -117,9 +142,14 @@ def wordcloud( data, **kwargs ):
         :param data: list of data entries.
     """
 
+    import wordclouds as module_wordclouds
+    from IPython.core.display import display, HTML
+
     module_wordclouds.create_wordcloud( data, **kwargs )
 
 def analyse( script, **kwargs ):
+
+    from analysis.runr import runr
 
     globalenv = None
     if 'previous' in kwargs:
@@ -135,6 +165,8 @@ def export( data, file_path ):
         :param data: List of data entries to be exported.
         :param file_path: Path to output file.
     """
+
+    import exporter
 
     file_type = file_path.split('.')[-1]
 
@@ -167,7 +199,7 @@ def sample(data, size, seed = 100, export_file = None):
     if export_file:
         export( data_sample, export_file )
 
-    return random.sample(data, size)
+    return data_sample
 
 def filter_by( data, filter_type, **kwargs ):
     """ Filters the dataset `data` with the filter given in `filter_type`.
@@ -179,6 +211,8 @@ def filter_by( data, filter_type, **kwargs ):
         :param data: List of the data entries to be filtered.
         :param filter_type: String giving the filter type to be used.
     """
+
+    import helpers
 
     try:
         filter_helper = getattr( filters, 'filter_by_' + filter_type )
@@ -192,9 +226,9 @@ def filter_by( data, filter_type, **kwargs ):
         for f in filter(lambda x: x.startswith('filter_by_'), dir(filters) ):
             print( f.replace('filter_by_', '') )
 
-def counts( data, count_by, verbose = True ):
+def counts( data, count_by, verbose = False ):
     """ Counts the occurrences of the feature `count_by` in the dataset `data`.
-        Returns the counts as a Counter object and prints them is `verbose` is True.
+        Returns the counts as a Counter object and prints them if `verbose` is True.
 
         :param data: List of the data entries to be counted.
         :param count_by: String giving the feature to be used for counting.
@@ -205,6 +239,8 @@ def counts( data, count_by, verbose = True ):
         ``hybra.counts(data, count_by = 'author') ## counts distinct authors in data.``
         ``hybra.counts(data, count_by = 'domain') ## counts distinct domain in data.``
     """
+
+    import helpers
 
     try:
         counts_helper = getattr( counters, 'counts_' + count_by )
