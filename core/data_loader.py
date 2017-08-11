@@ -10,7 +10,7 @@ import re
 import requests
 import hashlib
 
-import helpers
+from helpers import domains
 
 import dateparser
 from datetime import datetime
@@ -39,7 +39,7 @@ def _version( folder ):
         print( "\t Data is not stored in a repo. Data might not be up-to-date!" )
 
 
-def __harmonize_data( data, data_type, common_data_keys ):
+def __init_harmonize_data( data, data_type, common_data_keys ):
 
     harmonized_data = {}
 
@@ -74,7 +74,15 @@ def __harmonize_data( data, data_type, common_data_keys ):
 
     harmonized_data['timestamp'] = dateparser.parse( harmonized_data['timestamp'], settings={'RETURN_AS_TIMEZONE_AWARE': False} )
 
+    d['links_domains'] = domains.extract_domains( d['links'] )
+
     return harmonized_data
+
+def __post_harmonize_data( d ):
+
+    d['links_domains'] = domains.extract_domains( d['links'] )
+
+    return d
 
 
 def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: better filtering
@@ -97,7 +105,7 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
                                     '_created_time' : 'timestamp',
                                     '_message' : 'text_content'}
 
-                d = __harmonize_data( d, 'facebook', common_data_keys )
+                d = __init_harmonize_data( d, 'facebook', common_data_keys )
 
                 d['url'] = 'https://www.facebook.com/' + d['_id']
 
@@ -114,10 +122,9 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
                 if '_link' in d:
                    d['links'].append( d['_link'] )
 
-                d['links_domains'] = helpers.extract_domains( d['links'] )
-
                 d['source_detail'] = source_detail
 
+                d = __post_harmonize_data( d )
                 data.append( d )
 
     return data
@@ -168,7 +175,7 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
                                         '_url' : 'url',
                                         '_domain' : 'source_detail'}
 
-                    d = __harmonize_data( d, 'news_media', common_data_keys )
+                    d = __init_harmonize_data( d, 'news_media', common_data_keys )
 
                     ## ensure data is always in a list
                     if isinstance( d['_datetime_list'] , str) or isinstance( d['_datetime_list']  , unicode):
@@ -181,6 +188,7 @@ def load_media( terms = ['.json'], data_folder = 'media/' ):
 
                     d['images'] = d['_images']
 
+                    d = __post_harmonize_data( d )
                     yield d
 
 
@@ -218,13 +226,11 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
                                         '_created_at' : 'timestamp',
                                         '_text' : 'text_content'}
 
-                    d = __harmonize_data( d, 'twitter', common_data_keys )
+                    d = __init_harmonize_data( d, 'twitter', common_data_keys )
 
                     if '_entities' in d:
                         if 'urls' in d['_entities']:
                             d['links'] = map( lambda u: u['expanded_url'], d['_entities']['urls'] )
-
-                    d['links_domains'] = helpers.extract_domains( d['links'] )
 
                     try:
                         d['url'] = 'https://www.twitter.com/statuses/' + d['_id_str']
@@ -350,7 +356,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
                             '_blog_id' : 'url',
                             '_type' : 'source_detail'}
 
-        d = __harmonize_data( d['fields'], 'futusome', common_data_keys )
+        d = __init_harmonize_data( d['fields'], 'futusome', common_data_keys )
 
         d['timestamp'] = d['timestamp'].replace(tzinfo = None)
 
@@ -359,9 +365,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
         # Hack to fix backtracking issue with the regex, should be fixed in the regex itself
         text_for_url_parsing = re.sub('\.{2,}', '', d['text_content'])
 
-        d['links'] = re.findall( url_regex, text_for_url_parsing)
-
-        d['links_domains'] = helpers.extract_domains( d['links'] )
+        d['links'] = re.findall( url_regex, text_for_url_parsing )
 
         if '_forum_post_id' in d:
             d['_id'] = d['_forum_post_id']
@@ -380,5 +384,8 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
            d['_id'] = 'created_id_' + hashlib.md5( text ).hexdigest()
 
         data.append(d)
+
+        ## reharmonize
+        d = __post_harmonize_data( d['fields'], 'futusome', common_data_keys )
 
     return data
