@@ -1,6 +1,6 @@
 import data_loader
 import exporter
-import helpers
+
 import descriptives
 from network import module_network
 from timeline import module_timeline
@@ -17,6 +17,9 @@ import random
 
 import codecs
 from string import Template
+
+from helpers import filters
+from helpers import counters
 
 __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
@@ -169,7 +172,7 @@ def sample(data, size, seed = 100, export_file = None):
 def filter_by( data, filter_type, **kwargs ):
     """ Filters the dataset `data` with the filter given in `filter_type`.
         Returns the filtered data if `filter_type` matches a filtering method
-        in the modude helpers.
+        in the modude filters.
 
         :todo: check kwargs
 
@@ -178,7 +181,7 @@ def filter_by( data, filter_type, **kwargs ):
     """
 
     try:
-        filter_helper = getattr( helpers, 'filter_by_' + filter_type )
+        filter_helper = getattr( filters, 'filter_by_' + filter_type )
 
         return filter_helper( data, **kwargs )
 
@@ -186,7 +189,7 @@ def filter_by( data, filter_type, **kwargs ):
         print(repr(e))
         print('Data filtering failed. Supported filters:')
 
-        for f in filter(lambda x: x.startswith('filter_by_'), dir(helpers) ):
+        for f in filter(lambda x: x.startswith('filter_by_'), dir(filters) ):
             print( f.replace('filter_by_', '') )
 
 def counts( data, count_by, verbose = True ):
@@ -204,7 +207,7 @@ def counts( data, count_by, verbose = True ):
     """
 
     try:
-        counts_helper = getattr( helpers, 'counts_' + count_by )
+        counts_helper = getattr( counters, 'counts_' + count_by )
 
         return counts_helper( data, verbose )
 
@@ -212,5 +215,5 @@ def counts( data, count_by, verbose = True ):
         print(repr(e))
         print("Getting counts failed. Supported features to count by:")
 
-        for c in filter( lambda x: x.startswith('counts_'), dir( helpers ) ):
+        for c in filter( lambda x: x.startswith('counts_'), dir( counters ) ):
             print( c.replace('counts_', '') )
