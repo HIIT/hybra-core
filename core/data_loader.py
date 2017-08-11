@@ -73,9 +73,7 @@ def __init_harmonize_data( data, data_type, common_data_keys ):
         harmonized_data['timestamp'] = '1970-01-01 00:00:00'
 
     harmonized_data['timestamp'] = dateparser.parse( harmonized_data['timestamp'], settings={'RETURN_AS_TIMEZONE_AWARE': False} )
-
-    d['links_domains'] = domains.extract_domains( d['links'] )
-
+    
     return harmonized_data
 
 def __post_harmonize_data( d ):
