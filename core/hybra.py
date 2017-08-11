@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import data_loader
 import exporter
 
@@ -11,14 +10,11 @@ from analysis.runr import runr
 
 from IPython.core.display import display, HTML, Javascript
 
-=======
->>>>>>> 52fba2a8e114b5e82509f5b2cc2a44541ab3dab8
 import os
 import re
 import json
 import random
 
-<<<<<<< HEAD
 import codecs
 from string import Template
 
@@ -29,8 +25,6 @@ __sources = dir( data_loader )
 __sources = filter( lambda x: x.startswith('load_') , __sources )
 __sources = map( lambda x: x[5:], __sources )
 
-=======
->>>>>>> 52fba2a8e114b5e82509f5b2cc2a44541ab3dab8
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
         :param path: Where the data is stored
