@@ -20,7 +20,7 @@ import pytz
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
 
-__DATA_DIR = '../hybra-data-test1/' ## by default the data comes here
+__DATA_DIR = '../data/' ## by default the data comes here
 
 def _version( folder ):
 
@@ -123,6 +123,8 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
     return data
 
 def load_mediacloud( file = '' ):
+
+    ## TODO: implement here hybra-core like caching and API management
 
     data = []
 
