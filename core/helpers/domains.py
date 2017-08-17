@@ -1,7 +1,8 @@
-import tldextract
 from urlparse import urlparse
 
 def extract_domains( links ):
+
+    import tldextract
 
     def fix( link ):
         link = tldextract.extract( link )

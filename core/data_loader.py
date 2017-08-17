@@ -9,12 +9,7 @@ import sys
 import re
 import hashlib
 
-from helpers import domains
-
-import dateparser
-import pytz
 from datetime import datetime, timedelta
-
 
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
@@ -79,14 +74,14 @@ def __init_harmonize_data( data, data_type, common_data_keys ):
 
 def __post_harmonize_data( d ):
 
+    from helpers import domains
+
     d['links_domains'] = domains.extract_domains( d['links'] )
 
     return d
 
 
 def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: better filtering
-
-    import helpers
 
     data = []
 
@@ -131,6 +126,8 @@ def load_facebook( terms = ['.json'], data_folder = 'facebook/' ): ## todo: bett
     return data
 
 def load_mediacloud( file = '' ):
+
+    import dateparser
 
     ## TODO: implement here hybra-core like caching and API management
 
@@ -203,8 +200,6 @@ def load_twitter( terms = ['data_'], data_folder = 'twitter/' ):
        we could write this to work with Streaming API data as well.
     """
 
-    import helpers
-
     data = []
 
     path = __DATA_DIR + data_folder
@@ -261,7 +256,6 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
 
     import requests
     import pytz
-    import helpers
 
     data = []
 
@@ -395,6 +389,6 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
         data.append(d)
 
         ## reharmonize
-        d = __post_harmonize_data( d['fields'], 'futusome', common_data_keys )
+        d = __post_harmonize_data( d )
 
     return data

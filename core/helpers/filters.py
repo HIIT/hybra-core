@@ -1,10 +1,5 @@
 import re
-
-import dateparser
-
-import tldextract
 from urlparse import urlparse
-
 from collections import Counter
 
 def filter_by_text( data, text = [], substrings = True, inclusive = True ):
