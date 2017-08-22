@@ -1,5 +1,4 @@
 import collections
-import domains
 
 def counts_author( data, verbose ):
 
@@ -14,6 +13,8 @@ def counts_author( data, verbose ):
     return author_counts
 
 def counts_domain( data, verbose ):
+
+    import domains
 
     domains = domains.extract_domains( map( lambda d: d['url'], data ) )
 

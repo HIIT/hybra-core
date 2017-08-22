@@ -1,29 +1,5 @@
-import data_loader
-import exporter
-
-import descriptives
-from network import module_network
-from timeline import module_timeline
-import wordclouds as module_wordclouds
-
-from analysis.runr import runr
-
-from IPython.core.display import display, HTML, Javascript
-
 import os
-import re
-import json
 import random
-
-import codecs
-from string import Template
-
-from helpers import filters
-from helpers import counters
-
-__sources = dir( data_loader )
-__sources = filter( lambda x: x.startswith('load_') , __sources )
-__sources = map( lambda x: x[5:], __sources )
 
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
@@ -137,7 +113,6 @@ def wordcloud( data, **kwargs ):
     """
 
     import wordclouds as module_wordclouds
-    from IPython.core.display import display, HTML
 
     module_wordclouds.create_wordcloud( data, **kwargs )
 
@@ -206,7 +181,7 @@ def filter_by( data, filter_type, **kwargs ):
         :param filter_type: String giving the filter type to be used.
     """
 
-    import helpers
+    from helpers import filters
 
     try:
         filter_helper = getattr( filters, 'filter_by_' + filter_type )
@@ -234,7 +209,7 @@ def counts( data, count_by, verbose = False ):
         ``hybra.counts(data, count_by = 'domain') ## counts distinct domain in data.``
     """
 
-    import helpers
+    from helpers import counters
 
     try:
         counts_helper = getattr( counters, 'counts_' + count_by )
