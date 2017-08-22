@@ -15,8 +15,6 @@ import common
 
 def load( terms = ['.json'], data_folder = 'facebook/' ): ## todo: better filtering
 
-    data = []
-
     path = common.__DATA_DIR + data_folder
 
     for f in os.listdir( path ):
@@ -53,6 +51,4 @@ def load( terms = ['.json'], data_folder = 'facebook/' ): ## todo: better filter
                 d['source_detail'] = source_detail
 
                 d = common.__post_harmonize_data( d )
-                data.append( d )
-
-    return data
+                yield d

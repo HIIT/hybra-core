@@ -21,8 +21,6 @@ def load( terms = ['data_'], data_folder = 'twitter/' ):
        we could write this to work with Streaming API data as well.
     """
 
-    data = []
-
     path = common.__DATA_DIR + data_folder
 
     for f in os.listdir( path ):
@@ -58,6 +56,6 @@ def load( terms = ['data_'], data_folder = 'twitter/' ):
                     except Exception, e:
                         d['broken']['url'] = e
 
-                    data.append(d)
+                    d = common.__post_harmonize_data( d )
 
-    return data
+                    yield d

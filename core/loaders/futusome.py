@@ -29,8 +29,6 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
     import requests
     import pytz
 
-    data = []
-
     path = common.__DATA_DIR + data_folder
 
     if not os.path.exists( path ):
@@ -158,9 +156,6 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
            text =  str( d['timestamp'] ) + d['text_content'].encode('ascii', 'ignore')
            d['_id'] = 'created_id_' + hashlib.md5( text ).hexdigest()
 
-        data.append(d)
-
         ## reharmonize
         d = common.__post_harmonize_data( d )
-
-    return data
+        yield d

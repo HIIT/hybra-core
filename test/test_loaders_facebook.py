@@ -11,8 +11,7 @@ class TestUM:
         self.listdata = list( self.data )
 
     def test_get_everything(self):
-
-        assert len( self.data ) == 4
+        assert len( self.listdata ) == 4
 
     def test_links(self):
         assert len( self.listdata[0]['links'] ) == 4

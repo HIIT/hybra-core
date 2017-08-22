@@ -4,8 +4,6 @@ def load( file = '' ):
 
     ## TODO: implement here hybra-core like caching and API management
 
-    data = []
-
     for e in json.load( open( file ) ):
 
         try:
@@ -16,9 +14,8 @@ def load( file = '' ):
             d['timestamp'] = dateparser.parse( e['publish_date'] )
             d['source'] = e['media_name']
             d['source_detail'] = e['publish_date']
-            data.append( d )
+
+            yield data
 
         except:
-            pass
-
-    return data
+            pass ## potentially breaks everything
