@@ -1,6 +1,9 @@
 import os
 import random
 
+from loaders import common as datacommon
+import importlib
+
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
         :param path: Where the data is stored
@@ -10,17 +13,15 @@ def set_data_path( path ):
         ``hybra.set_data_path('.') ## search for data from the current folder
         hybra.set_data_path('~/Documents/data/hybra-data') ## data in folder Documents/data/hybra-data``
     """
-
-    import data_loader
-    from IPython.core.display import HTML
-
-    data_loader.__DATA_DIR = path
+    datacommon.__DATA_DIR = path
 
     ## when data path is set, automatically print out the versions
     for folder in os.listdir( path ):
         if( os.path.isdir( path + folder ) ):
-            data_loader._version( folder )
+            datacommon._version( folder )
 
+
+    from IPython.core.display import HTML
     ## TOTALLY UNRELATED BUT LETS USE THIS TO INIT THE D3JS TOO
     ## check if there is any way to not use exernal cloud d3js
     return HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Data science OK!</p>')
@@ -28,22 +29,12 @@ def set_data_path( path ):
 def data_path():
     """ Returns the existing data path.
     """
-
-    import data_loader
-
-    return data_loader.__DATA_DIR
+    return datacommon.__DATA_DIR
 
 def data_sources():
     """ Lists possible data sources hybra core can parse.
     """
-
-    import data_loader
-
-    sources = dir( data_loader )
-    sources = filter( lambda x: x.startswith('load_') , sources )
-    sources = map( lambda x: x[5:], sources )
-
-    return sources
+    return ["facebook", "futusome", "mediacloud", "news", "twitter"] ## FIXME
 
 def data( source, **kwargs ):
     """ Load data of type `source` using the parser for that data.
@@ -56,15 +47,13 @@ def data( source, **kwargs ):
 
         ``hybra.data('media', folder = 'yle') ## load yle-data from the subfolder YLE in your data folder.``
     """
-
-    import data_loader
-
     if source not in data_sources():
         raise NameError('Unknown media type')
 
-    load = getattr( data_loader, 'load_' + source )
 
-    return load( **kwargs )
+    loader = importlib.import_module( 'loaders.' + source )
+    
+    return loader.load( **kwargs )
 
 def describe( data ):
     """ Describe the dataset `data`, showing the amount of posts,

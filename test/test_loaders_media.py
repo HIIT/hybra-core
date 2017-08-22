@@ -10,7 +10,7 @@ import datetime
 class TestUM:
 
     def setup(self):
-        self.data = hybra.data( 'media', data_folder = '', terms = ['yle.json'] )
+        self.data = hybra.data( 'news', data_folder = '', terms = ['yle.json'] )
         self.listdata = list( self.data )
 
     def test_get_everything(self):
