@@ -4,6 +4,11 @@ from collections import *
 
 def describe( data ):
 
+    import types
+
+    if isinstance( data, types.GeneratorType ):
+        data = list( data )
+
     from timeline import module_timeline
 
     if len(data) == 0:
