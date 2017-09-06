@@ -1,5 +1,5 @@
 import sys, os
-sys.path.append( os.path.dirname(os.path.realpath(__file__)) )
+sys.path.append( os.path.dirname(os.path.realpath(__file__) ) )
 
 import os
 import random
@@ -7,6 +7,8 @@ import random
 from loaders import common as datacommon
 import importlib
 
+MY_DIR = os.path.dirname(os.path.realpath(__file__))
+MY_DIR = MY_DIR.replace('core.', '') ## XXX: hack, should be fixed
 DATA_DIR = './data/' ## by default the data comes here
 
 def set_data_path( path ):
@@ -41,7 +43,8 @@ def data_path():
 def data_sources():
     """ Lists possible data sources hybra core can parse.
     """
-    return ["facebook", "futusome", "mediacloud", "news", "twitter"] ## FIXME
+    global MY_DIR
+    return map( lambda x: x.replace('.py', ''), filter( lambda x: not x.startswith('_') and x.endswith('.py'), os.listdir( MY_DIR + '/loaders/') ) )
 
 def data( source, **kwargs ):
     """ Load data of type `source` using the parser for that data.
