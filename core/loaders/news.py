@@ -13,13 +13,11 @@ from datetime import datetime, timedelta
 
 import common
 
-def load( terms = ['.json'], data_folder = 'media/' ):
+def load( terms = ['.json'], data_dir = '', folder = 'media/' ):
 
     import dateparser
 
-    path = common.__DATA_DIR + data_folder
-
-    print( path )
+    path = data_dir + folder
 
     for dirpath, subdirs, files in os.walk(path):
 

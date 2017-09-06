@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 import common
 
-def load( terms = ['data_'], data_folder = 'twitter/' ):
+def load( terms = ['data_'], data_dir = '', folder = 'twitter/' ):
 
     """This is currently written to deal with data from Twitter's Streaming API.
        The data format for Search API data is slightly different
@@ -21,7 +21,7 @@ def load( terms = ['data_'], data_folder = 'twitter/' ):
        we could write this to work with Streaming API data as well.
     """
 
-    path = common.__DATA_DIR + data_folder
+    path = data_dir + folder
 
     for f in os.listdir( path ):
 

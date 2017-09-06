@@ -12,8 +12,8 @@ from helpers import domains
 class TestUM:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', data_folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', data_folder = '', terms = ['facebook.json'] )
+        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
     def test_filter_text( self ):
         pass

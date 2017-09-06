@@ -6,8 +6,8 @@ from core import hybra
 class TestUM:
 
     def setup(self):
-        self.g = hybra.data( 'news', data_folder = '', terms = ['yle.json'] )
-        self.l = list( hybra.data( 'news', data_folder = '', terms = ['yle.json'] ) )
+        self.g = hybra.data( 'news', folder = '', terms = ['yle.json'] )
+        self.l = list( hybra.data( 'news', folder = '', terms = ['yle.json'] ) )
 
     def test_describe_generator( self ):
         try:

@@ -7,6 +7,8 @@ import random
 from loaders import common as datacommon
 import importlib
 
+__DATA_DIR = './data/' ## by default the data comes here
+
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
         :param path: Where the data is stored
@@ -16,7 +18,7 @@ def set_data_path( path ):
         ``hybra.set_data_path('.') ## search for data from the current folder
         hybra.set_data_path('~/Documents/data/hybra-data') ## data in folder Documents/data/hybra-data``
     """
-    datacommon.__DATA_DIR = path
+    __DATA_DIR = path
 
     ## when data path is set, automatically print out the versions
     for folder in os.listdir( path ):
@@ -32,7 +34,7 @@ def set_data_path( path ):
 def data_path():
     """ Returns the existing data path.
     """
-    return datacommon.__DATA_DIR
+    return __DATA_DIR
 
 def data_sources():
     """ Lists possible data sources hybra core can parse.
@@ -55,7 +57,10 @@ def data( source, **kwargs ):
 
 
     loader = importlib.import_module( 'loaders.' + source )
-    
+
+    if 'data_dir' not in kwargs:
+        kwargs['data_dir'] = __DATA_DIR
+
     return loader.load( **kwargs )
 
 def describe( data ):

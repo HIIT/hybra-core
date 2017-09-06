@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import common
 
 
-def load_futusome( query, data_folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False ):
+def load_futusome( query, data_dir = '', folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False ):
 
     """ Checks local data folder for files matching the given query and returns them if a match is found.
         If no local data is found and an API key is given, Futusome API is queried.
@@ -29,7 +29,7 @@ def load_futusome( query, data_folder = 'futusome/', api_key = '', check_documen
     import requests
     import pytz
 
-    path = common.__DATA_DIR + data_folder
+    path = data_dir + folder
 
     if not os.path.exists( path ):
         os.makedirs( path )

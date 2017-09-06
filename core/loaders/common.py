@@ -14,8 +14,6 @@ from datetime import datetime, timedelta
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
 
-__DATA_DIR = '../data/' ## by default the data comes here
-
 def _version( folder ):
 
     print( "Data in folder", folder )

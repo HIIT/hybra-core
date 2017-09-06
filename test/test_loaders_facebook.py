@@ -5,7 +5,7 @@ from core import hybra
 class TestUM:
 
     def setup(self):
-        self.data = hybra.data( 'facebook', data_folder = '', terms = ['facebook.json'] )
+        self.data = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
         self.listdata = list( self.data )
 
     def test_get_everything(self):

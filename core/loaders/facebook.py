@@ -13,9 +13,9 @@ from datetime import datetime, timedelta
 
 import common
 
-def load( terms = ['.json'], data_folder = 'facebook/' ): ## todo: better filtering
+def load( terms = ['.json'], data_dir = '', folder = 'facebook/' ): ## todo: better filtering
 
-    path = common.__DATA_DIR + data_folder
+    path = data_dir + folder
 
     for f in os.listdir( path ):
 
