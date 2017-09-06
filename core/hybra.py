@@ -3,6 +3,7 @@ sys.path.append( os.path.dirname(os.path.realpath(__file__) ) )
 
 import os
 import random
+import types
 
 from loaders import common as datacommon
 import importlib
@@ -164,6 +165,9 @@ def sample(data, size, seed = 100, export_file = None):
         :param seed: Seed to use in randomization. Defaults to 100.
         :param export_file: Path to output file. Defaults to None.
     """
+
+    if isinstance( data, types.GeneratorType ):
+        data = list( data )
 
     random.seed(seed)
 
