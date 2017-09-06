@@ -1,4 +1,5 @@
 import csv
+import types
 
 def __get_common_keys( data ):
 
@@ -12,6 +13,9 @@ def __get_common_keys( data ):
 
 
 def export_csv( data, file_path ):
+
+    if isinstance( data, types.GeneratorType ):
+        data = list( data )
 
     writer = csv.writer( open(file_path, 'wb'), delimiter=',' )
 
@@ -31,6 +35,9 @@ def export_csv( data, file_path ):
 
 
 def export_xlsx( data, file_path ):
+
+    if isinstance( data, types.GeneratorType ):
+        data = list( data )
 
     import xlsxwriter
 

@@ -5,12 +5,17 @@ import re
 
 def create_wordcloud( data, stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"] ):
 
-    from wordcloud import WordCloud
-    from matplotlib import pyplot as plt
+    import types
+
+    if isinstance( data, types.GeneratorType ):
+        data = list( data )
 
     if len(data) == 0:
         print( "Dataset empty." )
         return
+
+    from wordcloud import WordCloud
+    from matplotlib import pyplot as plt
 
     words = get_words( data )
 

@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import common
 
 
-def load_futusome( query, data_dir = '', folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False ):
+def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False ):
 
     """ Checks local data folder for files matching the given query and returns them if a match is found.
         If no local data is found and an API key is given, Futusome API is queried.
@@ -116,7 +116,7 @@ def load_futusome( query, data_dir = '', folder = 'futusome/', api_key = '', che
         print('Data saved to ' + path + '/' + cache_file + '.json')
 
     # If no data found in cache or Futusome, just return
-    if not unharmonized_data: return data
+    if not unharmonized_data: return
 
     # Harmonize data to common format and return it
     for d in unharmonized_data['documents']:
