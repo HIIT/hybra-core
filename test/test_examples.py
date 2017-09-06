@@ -1,15 +1,14 @@
 # coding=UTF8
-
-import os, sys
-
 import pytest
 
-sys.path.append('../core/')
+import os
+
+from core import hybra
 
 class TestUM:
 
     def setup(self):
-        self.path = '../docs/examples/'
+        self.path = './docs/examples/'
         self.files = filter( lambda x: x.endswith('.py'), os.listdir( self.path ) )
 
 

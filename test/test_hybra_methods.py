@@ -1,11 +1,7 @@
 # coding=UTF8
-
-import os, sys
 import pytest
 
-sys.path.append('../core/')
-
-import hybra
+from core import hybra
 
 class TestUM:
 

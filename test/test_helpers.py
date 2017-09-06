@@ -1,10 +1,8 @@
 # coding=UTF8
+import pytest
 
-import os, sys
+from core import hybra
 
-sys.path.append('../core/')
-
-import hybra
 import datetime
 
 from helpers import filters
