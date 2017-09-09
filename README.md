@@ -12,7 +12,7 @@ Hybra Core is part of the [Hybra Data Analysis Ecosystem](http://research.cs.aal
 
 ## Documentation
 
-See [hybra.readthedocs.org](http://hybra.readthedocs.io/en/latest/) for documentation and code examples.
+See [http://hybra.readthedocs.io/](http://hybra.readthedocs.io/en/latest/) for documentation and code examples.
 
 ## Contents
 
