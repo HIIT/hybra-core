@@ -1,7 +1,6 @@
 language: python
 
 install:
-  - pip install requests
   - pip install dateparser
   - pip install tldextract
   - pip install ipython
@@ -12,6 +11,8 @@ notifications:
   email:
     recipients:
       - juho.paakkonen@helsinki.fi
+      - matti.nelimarkka@aalto.fi
+      - arto.kekkonen@helsinki.fi
 
     on_success: change
     on_failure: always
