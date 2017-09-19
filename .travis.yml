@@ -16,3 +16,8 @@ notifications:
 
     on_success: change
     on_failure: always
+  webhooks:
+    urls:
+      - http://head.hiit.fi/hooks/1e7x53p1fjbqprexeohhq3tzsy
+    on_success: always
+    on_failure: always
