@@ -3,6 +3,8 @@ language: python
 install:
   - pip install requests
   - pip install dateparser
+  - pip install tldextract
+  - pip install ipython
 
 script: python -m pytest
 
