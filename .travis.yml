@@ -1,0 +1,18 @@
+
+language: python
+
+install:
+  - pip install requests
+  - pip install bs4
+
+script: python -m pytest
+
+notifications:
+  email:
+    recipients:
+      - juho.paakkonen@helsinki.fi
+      - matti.nelimarkka@aalto.fi
+      - arto.kekkonen@helsinki.fi
+
+    on_success: change
+    on_failure: always
