@@ -43,7 +43,12 @@ def list_to_vector( l ):
             dataframe[ key ] = []
 
         for row in l:
-            for key, value in row.items():
+            for key in keys:
+                if key not in row:
+                    value = None
+                else:
+                    value = row[key]
+
                 dataframe[ key ].append( value )
 
         dataframe = pandas.DataFrame.from_dict( dataframe )
