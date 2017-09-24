@@ -10,25 +10,31 @@ from rpy2.robjects import pandas2ri
 ## convert magic
 from rpy2.robjects.conversion import Converter
 
+import types
+
 simple_conver = Converter('simple')
 
-def list_to_vector( list ):
-    if len( list ) == 0:
+def list_to_vector( l ):
+
+    if isinstance(l, types.GeneratorType):
+        l = list(l)
+
+    if len( l ) == 0:
         return rpy2.rinterface.NA_Real
 
-    if isinstance( list[0], str ):
-        return rpy2.rinterface.StrSexpVector( list )
-    if isinstance( list[0], int ):
-        return rpy2.rinterface.IntSexpVector( list )
-    if isinstance( list[0], float ):
-        return rpy2.rinterface.FloatSexpVector( list )
-    if isinstance( list[0], bool ):
-        return rpy2.rinterface.BoolSexpVector( list )
+    if isinstance( l[0], str ):
+        return rpy2.rinterface.StrSexpVector( l )
+    if isinstance( l[0], int ):
+        return rpy2.rinterface.IntSexpVector( l )
+    if isinstance( l[0], float ):
+        return rpy2.rinterface.FloatSexpVector( l )
+    if isinstance( l[0], bool ):
+        return rpy2.rinterface.BoolSexpVector( l )
 
-    if isinstance( list[0], dict ): ## need to convert to data frame
+    if isinstance( l[0], dict ): ## need to convert to data frame
 
         ## let's hope the keys are always the same for each of things in the list
-        keys = list[0].keys()
+        keys = l[0].keys()
 
         ## init new dict where values are collected
         dataframe = {}
@@ -36,7 +42,7 @@ def list_to_vector( list ):
         for key in keys:
             dataframe[ key ] = []
 
-        for row in list:
+        for row in l:
             for key, value in row.items():
                 dataframe[ key ].append( value )
 
@@ -45,6 +51,7 @@ def list_to_vector( list ):
 
 
 simple_conver.py2ri.register( list, list_to_vector )
+simple_conver.py2ri.register( types.GeneratorType, list_to_vector )
 
 converter = default_converter + simple_conver
 
