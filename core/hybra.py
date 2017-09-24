@@ -140,7 +140,7 @@ def export( data, file_path ):
         :param file_path: Path to output file.
     """
 
-    import exporter
+    from helpers import exporter
 
     file_type = file_path.split('.')[-1]
 

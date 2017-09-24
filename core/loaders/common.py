@@ -72,8 +72,8 @@ def __init_harmonize_data( data, data_type, common_data_keys ):
 
 def __post_harmonize_data( d ):
 
-    from helpers import domains
+    from helpers import extractor
 
-    d['links_domains'] = domains.extract_domains( d['links'] )
+    d['links_domains'] = extractor.extract_domains( d['links'] )
 
     return d
