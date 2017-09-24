@@ -2,6 +2,9 @@ from __future__ import division, print_function
 import datetime
 from collections import *
 
+import pprint
+pp = pprint.PrettyPrinter(indent=1)
+
 def describe( data ):
 
     import types
@@ -36,15 +39,45 @@ def describe( data ):
     for name, count in counter.items():
         print( '-', name, count )
 
+    print( 'Data structure' )
+    pp.pprint( keys( data ) )
+
     return module_timeline.create_timeline( datasets = [date_ok] )
 
-if __name__ == '__main__':
+def keys( data ):
 
-    for function_name in dir( data_loader ):
+    res = []
 
-        if 'load_' in function_name:
+    ## fake a bit, as different data entries can have different keys
+    for entry in data[0:50]:
+        res.append( _keys( entry ) )
 
-            print( function_name )
-            f =  getattr( data_loader, function_name )
-            data = f()
-            describe( data )
+    ## search for the longest string representation as it most likely has most information
+
+    return sorted( res, key = lambda x : len(str(x)), reverse = True)[0]
+
+def _keys( entry ):
+
+    if isinstance( entry, list ):
+        if len( entry ) > 0:
+            return [ _keys( entry[0] ) ]
+        return []
+
+    if isinstance( entry, dict ):
+        out = {}
+
+        for k, v in entry.items():
+            out[str(k)] = _keys( v )
+
+        return out
+
+    if isinstance( entry, str) or isinstance( entry, unicode):
+        return 'text'
+
+    if isinstance( entry, float) or isinstance( entry, int):
+        return 'number'
+
+    if isinstance( entry, datetime.datetime ):
+        return 'time'
+
+    return str( type( entry ) )
