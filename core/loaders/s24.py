@@ -1,27 +1,27 @@
 import os
 import json
 import datetime
+import cStringIO
 
 from lxml import etree
 
-path = './'
-
-
-
+path = '/Volumes/Suomi24/'
 
 for f in filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( path ) ):
 
     data = open( path + f ).read()
+    print 'Doing', f
     out = []
 
     ## fix to stringio and save some writing to hd
 
-    open('temp.xml', 'w').write("""<?xml version="1.0" encoding="UTF-8" ?>
+    temp = cStringIO.StringIO()
+    temp.write("""<?xml version="1.0" encoding="UTF-8" ?>
     <root>"""
     + data +
     "</root>")
 
-    for d in etree.iterparse( open('temp.xml') , tag = 'text', recover = True ):
+    for d in etree.iterparse( temp , tag = 'text', recover = True ):
         d = d[1]
 
         text = ''
@@ -62,3 +62,4 @@ for f in filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( 
             out.append( o )
 
     json.dump( out, open( f + '.json', 'w' ) )
+    print 'Done', f
