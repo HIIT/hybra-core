@@ -31,3 +31,10 @@ class TestUM:
 
         for i, j in enumerate( dates ):
             assert self.listdata[i]['timestamp'] == j
+
+    def test_links(self):
+
+	links = [ [], [u'http://www.longwarjournal.org/archives/2017/06/qassem-soleimani-spotted-near-the-syrian-border-with-iraqi-militias.php', u'https://www.theatlantic.com/magazine/archive/2016/04/the-obama-doctrine/471525/', u'http://abcnews.go.com/International/us-troops-syria-heres-theyre/story?id=46020582', u'https://yle.fi/uutiset/3-9650625'] ]
+
+        for i, j in enumerate( links ):
+            assert self.listdata[i]['links'] == j
