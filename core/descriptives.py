@@ -13,11 +13,9 @@ def describe( data ):
     if isinstance( data, types.GeneratorType ):
         data = list( data )
 
-    from timeline import module_timeline
+    if not data: return "Dataset empty."
 
-    if len(data) == 0:
-        print( "Dataset empty." )
-        return
+    from timeline import module_timeline
 
     print( "Entries together", len(data) )
     print( "Number of different authors", len( set( map( lambda d: d['creator'], filter( lambda d: d['creator'] is not '', data ) ) ) ) )

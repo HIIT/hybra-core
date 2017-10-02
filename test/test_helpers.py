@@ -193,7 +193,7 @@ class TestExtractor:
         media = extractor.extract_links( self.dataMedia )
 
         assert( len(fb) == 4 )
-        assert( len(media) == 0 )
+        assert( len(media) == 433 )
 
     def test_extract_domains( self ):
 
@@ -204,7 +204,7 @@ class TestExtractor:
         media = extractor.extract_domains( media_links )
 
         assert( len(fb) == 4 )
-        assert( len(media) == 0 )
+        assert( len(media) == 433 )
 
 
 

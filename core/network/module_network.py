@@ -23,6 +23,8 @@ def create_network(data):
 
     d = json_graph.node_link_data(G)
 
+    if not d['nodes']: return "Dataset empty."
+
     graph_div_id = int( time.time() * 1000 )
 
     html_template = Template( codecs.open( path + '/network.html', 'r').read() )

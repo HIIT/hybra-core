@@ -17,6 +17,8 @@ def create_timeline( datasets = [], colors = [] ):
 
     plots = create_plots( datasets )
 
+    if len(plots) < len(datasets): print("Empty datasets in list!")
+
     graph_div_id = int( time.time() * 1000 )
 
     html_template = Template( codecs.open( path + '/timeline.html', 'r').read() )
@@ -38,9 +40,16 @@ def create_timeline( datasets = [], colors = [] ):
 def create_plots( datasets ):
     plots = []
 
+    import types
+
     for data in datasets:
-        x_axis, y_axis = create_axes( data )
-        plots.append( create_data_points( x_axis, y_axis ) )
+
+        if isinstance( data, types.GeneratorType ):
+            data = list( data )
+
+        if data:
+            x_axis, y_axis = create_axes( data )
+            plots.append( create_data_points( x_axis, y_axis ) )
 
     return plots
 
