@@ -5,6 +5,8 @@ from datetime import datetime, date, timedelta
 import time
 from string import Template
 
+from IPython.core.display import HTML, display
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 def create_timeline( datasets = [], colors = [] ):
@@ -25,10 +27,13 @@ def create_timeline( datasets = [], colors = [] ):
                                        'plots' : plots,
                                        'line_colors' : colors} )
 
-    return html_template.substitute( {'graph_div_id': 'timeline_graph_' + str(graph_div_id),
+    html_template = html_template.substitute( {'graph_div_id': 'timeline_graph_' + str(graph_div_id),
                                       'css': css_text,
                                       'js': js_text} )
 
+    display( HTML( html_template ) )
+
+    return None
 
 def create_plots( datasets ):
     plots = []

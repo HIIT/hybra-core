@@ -2,6 +2,8 @@ import os
 import time
 from string import Template
 
+from IPython.core.display import HTML, display
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 def create_network(data):
@@ -34,9 +36,13 @@ def create_network(data):
                                        'nodes' : d['nodes'],
                                        'links' : d['links']} )
 
-    return html_template.substitute( {'graph_div_id': 'network_graph_' + str(graph_div_id),
+    html_template = html_template.substitute( {'graph_div_id': 'network_graph_' + str(graph_div_id),
                                       'css': css_text,
                                       'js': js_text} )
+
+    display( HTML( html_template ) )
+
+    return None
 
 def encode_utf8( string ):
     try:
