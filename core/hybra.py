@@ -12,6 +12,18 @@ MY_DIR = os.path.dirname(os.path.realpath(__file__))
 MY_DIR = MY_DIR.replace('core.', '') ## XXX: hack, should be fixed
 DATA_DIR = './data/' ## by default the data comes here
 
+## toggle to check if running in iPYTHON notebook
+IPYTHON_NOTEBOOK = False
+try:
+    get_ipython
+    IPYTHON_NOTEBOOK = True
+except:
+    pass
+
+if IPYTHON_NOTEBOOK:
+    from IPython.core.display import HTML, display
+    display( HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Visualisations enabled.</p>') )
+
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
         :param path: Where the data is stored
@@ -29,11 +41,7 @@ def set_data_path( path ):
         if( os.path.isdir( path + folder ) ):
             datacommon._version( folder )
 
-
-    from IPython.core.display import HTML
-    ## TOTALLY UNRELATED BUT LETS USE THIS TO INIT THE D3JS TOO
-    ## check if there is any way to not use exernal cloud d3js
-    return HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Data science OK!</p>')
+    return None
 
 def data_path():
     """ Returns the existing data path.
