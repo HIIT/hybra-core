@@ -27,17 +27,9 @@ def load( terms = ['data_'], data_dir = '', folder = 'twitter/' ):
 
         if any( term in f for term in terms ):
 
-            unharmonized_data = []
-
             with open( path + f ) as current_file:
-                unharmonized_data = json.load( current_file )
-
-            for d in unharmonized_data:
-
                 unharmonized_data = []
-
-                with open( path + f ) as current_file:
-                    unharmonized_data = json.load( current_file )
+                unharmonized_data = json.load( current_file )
 
                 for d in unharmonized_data:
 
