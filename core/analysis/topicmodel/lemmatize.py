@@ -55,11 +55,7 @@ def serial( path , index ):
 
    files = filter( lambda x: '.lemma' not in x, files )
 
-   files = map( int , files )
-
-   files = filter( lambda x: x % 200 == index , files )
-
-   files = map( str , files )
+   files = filter( lambda x: hash(x) % 200 == index , files )
 
    for f in files:
        file( path + '/' + f )
