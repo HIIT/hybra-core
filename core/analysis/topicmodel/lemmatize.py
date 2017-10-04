@@ -69,12 +69,14 @@ if __name__ == '__main__':
            serial( path , int( sys.argv[2] ) )
 
     ## take as many parameters as needed
-    for item in sys.argv[1:]:
+    else:
+        
+        for item in sys.argv[1:]:
 
-        if( os.path.isdir( item ) ):
+            if( os.path.isdir( item ) ):
 
-            folder( item )
+                folder( item )
 
-        else:
+            else:
 
-            file( item )
+                file( item )
