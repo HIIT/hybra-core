@@ -8,3 +8,12 @@ This code goes through all of YLE data, searches for word 'kissa' and prints the
 
 
 .. literalinclude:: examples/yle_cats.py
+
+
+Find top 10 most common authors and print them.
+************************************************
+
+This code goes through all of YLE data, searches all authors and prints the most common ones.
+
+
+.. literalinclude:: examples/yle_mostcommon.py
