@@ -55,10 +55,7 @@ def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_docume
 
         for f in os.listdir( path ):
 
-            cmp_cache = unicode(cache_file.decode('utf8'))
-            cmp_f = unicodedata.normalize('NFC', unicode(f.decode('utf8')))
-
-            if cmp_cache == cmp_f.replace('.json', ''):
+            if cache_file == f.replace('.json', ''):
                 print("Data returned from " + path)
 
                 with open( path + '/' + f ) as current_file:
