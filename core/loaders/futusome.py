@@ -55,11 +55,17 @@ def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_docume
 
         for f in os.listdir( path ):
 
-            if cache_file == f.replace('.json', ''):
-                print("Data returned from " + path)
+            # Check for match with unicode strings as well
+            cmp_cache = unicode(cache_file.decode('utf8'))
+            cmp_f = unicodedata.normalize('NFC', unicode(f.decode('utf8')))
 
-                with open( path + '/' + f ) as current_file:
-                    unharmonized_data = json.load( current_file )
+            if ( cache_file != f.replace('.json', '') ) & ( cmp_cache != cmp_f.replace('.json', '') ):
+                continue
+
+            print("Data returned from " + path)
+
+            with open( path + '/' + f ) as current_file:
+                unharmonized_data = json.load( current_file )
 
 
     # If data not found in cache, query Futusome API
