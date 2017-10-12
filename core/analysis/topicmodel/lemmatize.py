@@ -9,6 +9,7 @@ def lemmatize( text ):
 
     text = text.decode('utf8')
     text = re.sub( ' +',' ', text )
+    text = re.sub( u'((?:https?://|www[.])\S*)', '', text ) ## remove urls starting with http(s) or www
     text = re.sub( u'[^a-zA-ZöäåÖÄÅ\.,:?!;]' , ' ' , text ) ## allow basic välimerkit
     text = re.sub( ' +',' ', text )
     text = text.replace('"', '' ) ## no "
