@@ -9,6 +9,7 @@ def lemmatize( text ):
 
     text = text.decode('utf8')
     text = re.sub( ' +',' ', text )
+    text = re.sub( u'((?:https?://|www[.])\S*)', '', text ) ## remove urls starting with http(s) or www
     text = re.sub( u'[^a-zA-ZöäåÖÄÅ\.,:?!;]' , ' ' , text ) ## allow basic välimerkit
     text = re.sub( ' +',' ', text )
     text = text.replace('"', '' ) ## no "
@@ -55,16 +56,14 @@ def serial( path , index ):
 
    files = filter( lambda x: '.lemma' not in x, files )
 
-   files = map( int , files )
-
-   files = filter( lambda x: x % 200 == index , files )
-
-   files = map( str , files )
+   files = filter( lambda x: hash(x) % 200 == index , files )
 
    for f in files:
        file( path + '/' + f )
 
 if __name__ == '__main__':
+
+    path_arg = 1
 
     if sys.argv[1] == 'serial': ## conduct serial lemma
 
@@ -72,8 +71,11 @@ if __name__ == '__main__':
 
            serial( path , int( sys.argv[2] ) )
 
+        path_arg = 3
+
     ## take as many parameters as needed
-    for item in sys.argv[1:]:
+
+    for item in sys.argv[path_arg:]:
 
         if( os.path.isdir( item ) ):
 
