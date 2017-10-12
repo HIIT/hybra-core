@@ -8,7 +8,7 @@ import os
 
 from helpers import filters
 from helpers import counters
-from helpers import extractor
+from helpers import urls
 from helpers import exporter
 
 
@@ -181,27 +181,24 @@ class TestDomainFilter:
 
 
 
-class TestExtractor:
+class TestUrls:
 
     def setup(self):
         self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
         self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
-    def test_extract_links( self ):
+    def test_list_links( self ):
 
-        fb = extractor.extract_links( self.dataFacebook )
-        media = extractor.extract_links( self.dataMedia )
+        fb = urls.links( self.dataFacebook )
+        media = urls.links( self.dataMedia )
 
         assert( len(fb) == 4 )
         assert( len(media) == 433 )
 
     def test_extract_domains( self ):
 
-        fb_links = extractor.extract_links( self.dataFacebook )
-        media_links = extractor.extract_links( self.dataMedia )
-
-        fb = extractor.extract_domains( fb_links )
-        media = extractor.extract_domains( media_links )
+        fb = urls.domains( self.dataFacebook )
+        media = urls.domains( urls.links( self.dataMedia ) )
 
         assert( len(fb) == 4 )
         assert( len(media) == 433 )

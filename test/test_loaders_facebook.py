@@ -14,7 +14,7 @@ class TestUM:
     def test_links(self):
         assert len( self.listdata[0]['links'] ) == 4
 
-        for i, j in enumerate( "http://www.google.com,http://www.hs.fi,http://www.hiit.fi,http://www.google.com/".split(',') ):
+        for i, j in enumerate( "http://www.google.com/,http://www.google.com,http://www.hs.fi,http://www.hiit.fi".split(',') ):
             assert self.listdata[0]['links'][ i ] == j
 
         ## post with no links should be explicit

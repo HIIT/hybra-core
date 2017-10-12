@@ -43,8 +43,8 @@ def load( terms = ['.json'], data_dir = '', folder = 'facebook/' ): ## todo: bet
 
                 d['images'] = attachments
 
-                d['links'] = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', d['text_content'] )
-
+                d['links'] = []
+                
                 if '_link' in d:
                    d['links'].append( d['_link'] )
 
