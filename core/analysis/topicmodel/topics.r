@@ -11,10 +11,10 @@ create_dtm <- function( path ) {
   stop <- c( stopwords("finnish") , stop1, stop2 , recursive=T )
 
   ## bunch of cleanup and transformations
-  a <- tm_map(a, removeNumbers, mc.cores=1 )
-  a <- tm_map(a, stripWhitespace, mc.cores=1 )
-  a <- tm_map(a, removePunctuation, mc.cores=1 )
-  a <- tm_map(a, content_transformer(tolower), mc.cores=1 )
+  a <- tm_map(a, removeNumbers )
+  a <- tm_map(a, stripWhitespace )
+  a <- tm_map(a, removePunctuation )
+  a <- tm_map(a, content_transformer(tolower) )
   a <- tm_map(a, removeWords, stop )
 
   ## compute word frequencies

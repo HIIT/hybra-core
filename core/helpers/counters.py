@@ -14,9 +14,9 @@ def counts_author( data, verbose ):
 
 def counts_domain( data, verbose ):
 
-    import extractor
+    import urls
 
-    domains = extractor.extract_domains( map( lambda d: d['url'], data ) )
+    domains = urls.domains( map( lambda d: d['url'], data ) )
 
     domain_counts = collections.Counter(domains)
 

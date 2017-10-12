@@ -11,6 +11,8 @@ import hashlib
 
 from datetime import datetime, timedelta
 
+
+
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
 
@@ -72,8 +74,9 @@ def __init_harmonize_data( data, data_type, common_data_keys ):
 
 def __post_harmonize_data( d ):
 
-    from helpers import extractor
+    from helpers import urls
 
-    d['links_domains'] = extractor.extract_domains( d['links'] )
+    d['links'] += urls.extract( d['text_content'] )
+    d['links_domains'] = urls.domains( d['links'] )
 
     return d

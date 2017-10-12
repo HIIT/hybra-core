@@ -13,3 +13,4 @@ scikit-learn==0.17.1
 scipy==0.17.1
 XlsxWriter==0.9.6
 wordcloud
+tldextract
