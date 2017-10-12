@@ -1,6 +1,4 @@
 from core import hybra
-from core.helpers import counters
-
 
 hybra.set_data_path('./data/')
 
