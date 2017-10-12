@@ -5,11 +5,19 @@ import sys
 import re
 import subprocess
 
+## todo: not sure if smart
+sys.path.append('../../')
+from helpers import urls as urlshelper
+
 def lemmatize( text ):
 
     text = text.decode('utf8')
-    text = re.sub( ' +',' ', text )
-    text = re.sub( u'((?:https?://|www[.])\S*)', '', text ) ## remove urls starting with http(s) or www
+
+    ## remove URLs
+    urls = urlshelper.extract( text )
+    for url in urls:
+        text= text.replace( url, '')
+
     text = re.sub( u'[^a-zA-ZöäåÖÄÅ\.,:?!;]' , ' ' , text ) ## allow basic välimerkit
     text = re.sub( ' +',' ', text )
     text = text.replace('"', '' ) ## no "
