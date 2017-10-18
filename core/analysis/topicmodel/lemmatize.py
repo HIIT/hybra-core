@@ -74,21 +74,13 @@ if __name__ == '__main__':
     path_arg = 1
 
     if sys.argv[1] == 'serial': ## conduct serial lemma
-
         for path in sys.argv[3:]:
-
            serial( path , int( sys.argv[2] ) )
-
         path_arg = 3
 
-    ## take as many parameters as needed
-
-    for item in sys.argv[path_arg:]:
-
-        if( os.path.isdir( item ) ):
-
-            folder( item )
-
-        else:
-
-            file( item )
+    else:
+        for item in sys.argv[path_arg:]:
+            if( os.path.isdir( item ) ):
+                folder( item )
+            else:
+                file( item )
