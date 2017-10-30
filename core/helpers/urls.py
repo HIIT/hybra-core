@@ -11,7 +11,10 @@ URL_REGEXP = r"""(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net
 def extract( text ):
 
     # Hack to fix backtracking issue with the regex, should be fixed in the regex itself
-    text_for_url_parsing = re.sub('\.{2,}', '', text)
+    stop = ['\.', '"', ',', '!', "'", ';', ':', '<', '>', '«', '»', '“', '”', '‘', '’', '`', '\?']
+    text_for_url_parsing = text
+    for s in stop:
+        text_for_url_parsing = re.sub( s + '{2,}', '', text_for_url_parsing )
 
     return re.findall( URL_REGEXP , text_for_url_parsing )
 
