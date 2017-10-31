@@ -31,8 +31,8 @@ def set_data_path( path ):
 
         :Example:
 
-        ``hybra.set_data_path('.') ## search for data from the current folder
-        hybra.set_data_path('~/Documents/data/hybra-data') ## data in folder Documents/data/hybra-data``
+        * ``hybra.set_data_path('.') ## search for data from the current folder.``
+        * ``hybra.set_data_path('~/Documents/data/hybra-data') ## data in folder Documents/data/hybra-data.``
     """
     global DATA_DIR
     DATA_DIR = path
@@ -262,12 +262,12 @@ def filter_by( data, filter_type, **kwargs ):
 
         :Example:
 
-        ``hybra.filter_by(data, 'text', text = ['research']) ## Return from dataset `data` entries which include the term 'research' in text content.
-        hybra.filter_by(data, 'text', text = ['research', 'science'], substrings = False, inclusive = False) ## Return from dataset `data` entries which include the term 'research' or the term 'science' in text content as full strings.
-        hybra.filter_by(data, 'datetime', after = '2015-2-15') ## Return from dataset `data` entries with timestamp after the date '2015-2-15'.
-        hybra.filter_by(data, 'datetime', after = '2017-1-1', before = '2017-6-30 18:00:00') ## Return from dataset `data` entries with timestamp after the date '2017-1-1' and before the time '2017-6-30 18:00:00'.
-        hybra.filter_by(data, 'author', authors = ['author1', 'author2']) ## Return from dataset `data` entries which have 'author1' or 'author2' as creator.
-        hybra.filter_by(data, 'domain', domains = ['domain1.com', 'domain2.net']) ## Return from dataset `data` entries which are from domains 'domain1.com' or 'domain2.net'.``
+        * ``hybra.filter_by(data, 'text', text = ['research']) ## Return from dataset `data` entries which include the term 'research' in text content.``
+        * ``hybra.filter_by(data, 'text', text = ['research', 'science'], substrings = False, inclusive = False) ## Return from dataset `data` entries which include the term 'research' or the term 'science' in text content as full strings.``
+        * ``hybra.filter_by(data, 'datetime', after = '2015-2-15') ## Return from dataset `data` entries with timestamp after the date '2015-2-15'.``
+        * ``hybra.filter_by(data, 'datetime', after = '2017-1-1', before = '2017-6-30 18:00:00') ## Return from dataset `data` entries with timestamp after the date '2017-1-1' and before the time '2017-6-30 18:00:00'.``
+        * ``hybra.filter_by(data, 'author', authors = ['author1', 'author2']) ## Return from dataset `data` entries which have 'author1' or 'author2' as creator.``
+        * ``hybra.filter_by(data, 'domain', domains = ['domain1.com', 'domain2.net']) ## Return from dataset `data` entries which are from domains 'domain1.com' or 'domain2.net'.``
     """
 
     from helpers import filters
@@ -297,8 +297,8 @@ def counts( data, count_by, verbose = False ):
 
         :Example:
 
-        ``hybra.counts(data, count_by = 'author') ## counts distinct authors in data.
-        hybra.counts(data, count_by = 'domain', verbose = True) ## counts distinct domains in data and print the counts.``
+        * ``hybra.counts(data, count_by = 'author') ## counts distinct authors in data.``
+        * ``hybra.counts(data, count_by = 'domain', verbose = True) ## counts distinct domains in data and print the counts.``
     """
 
     from helpers import counters
