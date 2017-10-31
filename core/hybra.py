@@ -26,7 +26,8 @@ if IPYTHON_NOTEBOOK:
 
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
-        :param path: Where the data is stored
+        :param path: Where the data is stored.
+        :type path: str.
 
         :Example:
 
@@ -55,24 +56,32 @@ def data_sources():
     global MY_DIR
     return map( lambda x: x.replace('.py', ''), filter( lambda x: not x.startswith('_') and x.endswith('.py'), os.listdir( MY_DIR + '/loaders/') ) )
 
-def data( source, **kwargs ):
+def data( source, terms = [], folder = '', **kwargs ):
     """ Load data of type `source` using the parser for that data.
-        The `**kwargs` are data loader spesific, but often include parameters such as folder.
-        See :ref:`data_loader` for details of `**kwargs`
 
-        :param source: type of data loaded. Can be `facebook`, `media`, `twitter`.
+        :param source: Type of data loaded. Can be `facebook`, `media`, `twitter`.
+        :type source: str.
+        :param terms: Terms to be searched for in data filenames. Given as strings.
+        :type terms: list.
+        :param folder: Folder under data path that contains the data to be loaded.
+        :type folder: str.
+
+        Kwargs:
+            data_dir (str): Data directory to override set data path.
 
         :Example:
 
-        ``hybra.data('media', folder = 'yle') ## load yle-data from the subfolder YLE in your data folder.``
+        ``hybra.data('news', terms = ['uutiset'], folder = 'yle') ## load news data from files with filename containing the term 'uutiset' from the subfolder YLE in your data folder.``
     """
     global DATA_DIR
 
     if source not in data_sources():
         raise NameError('Unknown media type')
 
-
     loader = importlib.import_module( 'loaders.' + source )
+
+    for key, value in {'terms' : terms, 'folder' : folder}.items():
+        kwargs[key] = value
 
     if 'data_dir' not in kwargs:
         kwargs['data_dir'] = DATA_DIR
@@ -83,7 +92,8 @@ def describe( data ):
     """ Describe the dataset `data`, showing the amount of posts,
         number of authors, historical data and more detailed data sources.
 
-        :param data: list of data entries.
+        :param data: Data entries. Given as generator or list.
+        :type data: generator or list.
     """
 
     import descriptives
@@ -91,38 +101,43 @@ def describe( data ):
 
     return display( HTML( descriptives.describe( data ) ) )
 
-def timeline( **kwargs ):
+def timeline( datasets = [], **kwargs ):
     """ Draws a timeline the dataset `data`.
 
-        :todo: check kwargs
+        :param datasets: Datasets to plot. Given as generators or lists.
+        :type datasets: list.
 
-        :param data: list of data entries.
+        Kwargs:
+            colors (list): List of css colors given as strings to be used in drawing the timeline plots.
     """
 
     from timeline import module_timeline
     from IPython.core.display import display, HTML
+
+    kwargs['datasets'] = datasets
 
     return display( HTML( module_timeline.create_timeline( **kwargs ) ) )
 
 def network( data ):
     """ Draws a network the dataset `data`.
 
-        :todo: check kwargs
-
-        :param data: list of data entries.
+        :param data: Data entries.
+        :type data: generator or list.
     """
 
     from network import module_network
     from IPython.core.display import display, HTML
 
-    return display( HTML( module_network.create_network(data) ) )
+    return display( HTML( module_network.create_network( data ) ) )
 
 def wordcloud( data, **kwargs ):
     """ Draws a wordcloud the dataset `data`.
 
-        :todo: check kwargs
+        :param data: Data entries.
+        :type data: generator or list.
 
-        :param data: list of data entries.
+        Kwargs:
+            stopwords (list): Words to be ignored in generating the wordcloud. Given as strings.
     """
 
     import wordclouds as module_wordclouds
@@ -143,9 +158,12 @@ def analyse( script, **kwargs ):
 def export( data, file_path ):
     """ Export the dataset `data` in common format to the given file format.
         Recognizes output format from file extension in given file path.
+        Accepted formats: .csv, .xlsx
 
-        :param data: List of data entries to be exported.
+        :param data: Data entries to be exported.
+        :type data: generator or list.
         :param file_path: Path to output file.
+        :type file_path: str.
     """
 
     from helpers import exporter
@@ -166,12 +184,17 @@ def export( data, file_path ):
 
 def sample(data, size, seed = 100, export_file = None):
     """ Takes a random sample of the dataset `data`.
-        Optionally exports the sample to file using the hybra module export method.
+        Exports the sample to file using the hybra module export method
+        if the parameter `export_file` is not None.
 
-        :param data: List of the data entries to be exported.
+        :param data: Data entries to be sampled.
+        :type data: generator or list.
         :param size: An integer value specifying the sample size.
+        :type size: int.
         :param seed: Seed to use in randomization. Defaults to 100.
+        :type seed: int.
         :param export_file: Path to output file. Defaults to None.
+        :type export_file: None or str.
     """
 
     if isinstance( data, types.GeneratorType ):
@@ -191,10 +214,19 @@ def filter_by( data, filter_type, **kwargs ):
         Returns the filtered data if `filter_type` matches a filtering method
         in the modude filters.
 
-        :todo: check kwargs
+        :param data: Data entries to be filtered.
+        :type data: generator or list.
+        :param filter_type: Filter type to be used. Can be `text`, `datetime`, `author` or `domain`.
+        :type filter_type: str.
 
-        :param data: List of the data entries to be filtered.
-        :param filter_type: String giving the filter type to be used.
+        Kwargs:
+            text (list): If filter_type is `text`. List of strings to use for filtering.
+            substrings (bool): If filter_type is `text`. If True, will search substring for terms given in parameter `text`. Defaults to True.
+            inclusive (bool): If filter_type is `text`. If True, returns only entries with all terms given in parameter `text`. Defaults to True.
+            after (str): Date and time after which to return entries.
+            before (str): Date and time before which to return entries.
+            authors (list): If filter_type is `author`. List of authors as strings to filter by.
+            domains (list): If filter_type is `domain`. List of domains as strings to filter by.
     """
 
     from helpers import filters
@@ -215,9 +247,12 @@ def counts( data, count_by, verbose = False ):
     """ Counts the occurrences of the feature `count_by` in the dataset `data`.
         Returns the counts as a Counter object and prints them if `verbose` is True.
 
-        :param data: List of the data entries to be counted.
-        :param count_by: String giving the feature to be used for counting.
-        :param verbose: Boolean determining whether to print the counts.
+        :param data: Data entries to be counted.
+        :type data: generator or list.
+        :param count_by: The feature to be used for counting. Can be `author` or `domain`.
+        :type count_by: str.
+        :param verbose: If True, prints the counts. Defaults to False.
+        :type verbose: bool.
 
         :Example:
 
