@@ -67,7 +67,7 @@ def data( source, terms = [], folder = '', **kwargs ):
         :type folder: str
 
         :Kwargs:
-            * *data_dir* (``str``) --
+            * *data_dir* (*str*) --
               Data directory to override set data path.
 
         :Example:
@@ -109,8 +109,12 @@ def timeline( datasets = [], **kwargs ):
         :type datasets: list
 
         :Kwargs:
-            * *colors* (``list``) --
+            * *colors* (*list*) --
               List of css colors given as strings to be used in drawing the timeline plots.
+
+        :Example:
+
+        ``hybra.timeline(datasets[news_data, fb_data], colors = ['blue', 'red']) ## Plots the dataset `news_data` as blue timeline and the dataset `fb_data` as red timeline.``
     """
 
     from timeline import module_timeline
@@ -139,7 +143,7 @@ def wordcloud( data, **kwargs ):
         :type data: generator or list
 
         :Kwargs:
-            * *stopwords* (``list``) --
+            * *stopwords* (*list*) --
               Words to be ignored in generating the wordcloud. Given as strings.
     """
 
@@ -177,6 +181,10 @@ def export( data, file_path ):
         :type data: generator or list
         :param file_path: Path to output file.
         :type file_path: str
+
+        :Example:
+
+        ``hybra.export(data, 'exported_data.csv') ## Exports data in common format to file 'exported_data.csv' in current path.``
     """
 
     from helpers import exporter
@@ -208,6 +216,10 @@ def sample(data, size, seed = 100, export_file = None):
         :type seed: int
         :param export_file: Path to output file. Defaults to None.
         :type export_file: None or str
+
+        :Example:
+
+        ``hybra.sample(data, 100, seed = 0, export_file = 'exported_sample.csv') ## Takes a random sample of dataset `data` using the seed 0 and exports it to file 'exported_sample.csv' in current path.``
     """
 
     if isinstance( data, types.GeneratorType ):
@@ -233,20 +245,29 @@ def filter_by( data, filter_type, **kwargs ):
         :type filter_type: str
 
         :Kwargs:
-            * *text* (``list``) --
+            * *text* (*list*) --
               If filter_type is `text`. List of strings to use for filtering.
-            * *substrings* (``bool``) --
-              If filter_type is `text`. If True, will search substring for terms given in parameter `text`. Defaults to True.
-            * *inclusive* (``bool``) --
+            * *substrings* (*bool*) --
+              If filter_type is `text`. If True, will search substrings in text content for terms given in parameter `text`. Defaults to True.
+            * *inclusive* (*bool*) --
               If filter_type is `text`. If True, returns only entries with all terms given in parameter `text`. Defaults to True.
-            * *after* (``str``) --
+            * *after* (*str*) --
               Date and time after which to return entries.
-            * *before* (``str``) --
+            * *before* (*str*) --
               Date and time before which to return entries.
-            * *authors* (``list``) --
+            * *authors* (*list*) --
               If filter_type is `author`. List of authors as strings to filter by.
-            * *domains* (``list``) --
+            * *domains* (*list*) --
               If filter_type is `domain`. List of domains as strings to filter by.
+
+        :Example:
+
+        ``hybra.filter_by(data, 'text', text = ['research']) ## Return from dataset `data` entries which include the term 'research' in text content.
+        hybra.filter_by(data, 'text', text = ['research', 'science'], substrings = False, inclusive = False) ## Return from dataset `data` entries which include the term 'research' or the term 'science' in text content as full strings.
+        hybra.filter_by(data, 'datetime', after = '2015-2-15') ## Return from dataset `data` entries with timestamp after the date '2015-2-15'.
+        hybra.filter_by(data, 'datetime', after = '2017-1-1', before = '2017-6-30 18:00:00') ## Return from dataset `data` entries with timestamp after the date '2017-1-1' and before the time '2017-6-30 18:00:00'.
+        hybra.filter_by(data, 'author', authors = ['author1', 'author2']) ## Return from dataset `data` entries which have 'author1' or 'author2' as creator.
+        hybra.filter_by(data, 'domain', domains = ['domain1.com', 'domain2.net']) ## Return from dataset `data` entries which are from domains 'domain1.com' or 'domain2.net'.``
     """
 
     from helpers import filters
@@ -276,8 +297,8 @@ def counts( data, count_by, verbose = False ):
 
         :Example:
 
-        ``hybra.counts(data, count_by = 'author') ## counts distinct authors in data.``
-        ``hybra.counts(data, count_by = 'domain') ## counts distinct domain in data.``
+        ``hybra.counts(data, count_by = 'author') ## counts distinct authors in data.
+        hybra.counts(data, count_by = 'domain', verbose = True) ## counts distinct domains in data and print the counts.``
     """
 
     from helpers import counters
