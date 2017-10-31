@@ -145,6 +145,16 @@ def wordcloud( data, **kwargs ):
     module_wordclouds.create_wordcloud( data, **kwargs )
 
 def analyse( script, **kwargs ):
+    """ Run R script given in parameter `script` using rpy2.
+
+        :param script: R script to be run.
+        :type script: str.
+
+        Kwargs:
+            Parameters and their values with which to parameterize the R script.
+
+        :todo: Add example.
+    """
 
     from analysis.runr import runr
 
