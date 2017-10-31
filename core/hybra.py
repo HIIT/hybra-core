@@ -27,7 +27,7 @@ if IPYTHON_NOTEBOOK:
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
         :param path: Where the data is stored.
-        :type path: str.
+        :type path: str
 
         :Example:
 
@@ -60,14 +60,15 @@ def data( source, terms = [], folder = '', **kwargs ):
     """ Load data of type `source` using the parser for that data.
 
         :param source: Type of data loaded. Can be `facebook`, `media`, `twitter`.
-        :type source: str.
+        :type source: str
         :param terms: Terms to be searched for in data filenames. Given as strings.
-        :type terms: list.
+        :type terms: list
         :param folder: Folder under data path that contains the data to be loaded.
-        :type folder: str.
+        :type folder: str
 
-        Kwargs:
-            data_dir (str): Data directory to override set data path.
+        :Kwargs:
+            * *data_dir* (``str``) --
+              Data directory to override set data path.
 
         :Example:
 
@@ -93,7 +94,7 @@ def describe( data ):
         number of authors, historical data and more detailed data sources.
 
         :param data: Data entries. Given as generator or list.
-        :type data: generator or list.
+        :type data: generator or list
     """
 
     import descriptives
@@ -105,10 +106,11 @@ def timeline( datasets = [], **kwargs ):
     """ Draws a timeline the dataset `data`.
 
         :param datasets: Datasets to plot. Given as generators or lists.
-        :type datasets: list.
+        :type datasets: list
 
-        Kwargs:
-            colors (list): List of css colors given as strings to be used in drawing the timeline plots.
+        :Kwargs:
+            * *colors* (``list``) --
+              List of css colors given as strings to be used in drawing the timeline plots.
     """
 
     from timeline import module_timeline
@@ -122,7 +124,7 @@ def network( data ):
     """ Draws a network the dataset `data`.
 
         :param data: Data entries.
-        :type data: generator or list.
+        :type data: generator or list
     """
 
     from network import module_network
@@ -134,10 +136,11 @@ def wordcloud( data, **kwargs ):
     """ Draws a wordcloud the dataset `data`.
 
         :param data: Data entries.
-        :type data: generator or list.
+        :type data: generator or list
 
-        Kwargs:
-            stopwords (list): Words to be ignored in generating the wordcloud. Given as strings.
+        :Kwargs:
+            * *stopwords* (``list``) --
+              Words to be ignored in generating the wordcloud. Given as strings.
     """
 
     import wordclouds as module_wordclouds
@@ -148,9 +151,9 @@ def analyse( script, **kwargs ):
     """ Run R script given in parameter `script` using rpy2.
 
         :param script: R script to be run.
-        :type script: str.
+        :type script: str
 
-        Kwargs:
+        :Kwargs:
             Parameters and their values with which to parameterize the R script.
 
         :todo: Add example.
@@ -171,9 +174,9 @@ def export( data, file_path ):
         Accepted formats: .csv, .xlsx
 
         :param data: Data entries to be exported.
-        :type data: generator or list.
+        :type data: generator or list
         :param file_path: Path to output file.
-        :type file_path: str.
+        :type file_path: str
     """
 
     from helpers import exporter
@@ -198,13 +201,13 @@ def sample(data, size, seed = 100, export_file = None):
         if the parameter `export_file` is not None.
 
         :param data: Data entries to be sampled.
-        :type data: generator or list.
+        :type data: generator or list
         :param size: An integer value specifying the sample size.
-        :type size: int.
+        :type size: int
         :param seed: Seed to use in randomization. Defaults to 100.
-        :type seed: int.
+        :type seed: int
         :param export_file: Path to output file. Defaults to None.
-        :type export_file: None or str.
+        :type export_file: None or str
     """
 
     if isinstance( data, types.GeneratorType ):
@@ -225,18 +228,25 @@ def filter_by( data, filter_type, **kwargs ):
         in the modude filters.
 
         :param data: Data entries to be filtered.
-        :type data: generator or list.
+        :type data: generator or list
         :param filter_type: Filter type to be used. Can be `text`, `datetime`, `author` or `domain`.
-        :type filter_type: str.
+        :type filter_type: str
 
-        Kwargs:
-            text (list): If filter_type is `text`. List of strings to use for filtering.
-            substrings (bool): If filter_type is `text`. If True, will search substring for terms given in parameter `text`. Defaults to True.
-            inclusive (bool): If filter_type is `text`. If True, returns only entries with all terms given in parameter `text`. Defaults to True.
-            after (str): Date and time after which to return entries.
-            before (str): Date and time before which to return entries.
-            authors (list): If filter_type is `author`. List of authors as strings to filter by.
-            domains (list): If filter_type is `domain`. List of domains as strings to filter by.
+        :Kwargs:
+            * *text* (``list``) --
+              If filter_type is `text`. List of strings to use for filtering.
+            * *substrings* (``bool``) --
+              If filter_type is `text`. If True, will search substring for terms given in parameter `text`. Defaults to True.
+            * *inclusive* (``bool``) --
+              If filter_type is `text`. If True, returns only entries with all terms given in parameter `text`. Defaults to True.
+            * *after* (``str``) --
+              Date and time after which to return entries.
+            * *before* (``str``) --
+              Date and time before which to return entries.
+            * *authors* (``list``) --
+              If filter_type is `author`. List of authors as strings to filter by.
+            * *domains* (``list``) --
+              If filter_type is `domain`. List of domains as strings to filter by.
     """
 
     from helpers import filters
@@ -258,11 +268,11 @@ def counts( data, count_by, verbose = False ):
         Returns the counts as a Counter object and prints them if `verbose` is True.
 
         :param data: Data entries to be counted.
-        :type data: generator or list.
+        :type data: generator or list
         :param count_by: The feature to be used for counting. Can be `author` or `domain`.
-        :type count_by: str.
+        :type count_by: str
         :param verbose: If True, prints the counts. Defaults to False.
-        :type verbose: bool.
+        :type verbose: bool
 
         :Example:
 
