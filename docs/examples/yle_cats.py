@@ -1,9 +1,9 @@
-from core import hybra
+from hybra import core
 
-hybra.set_data_path('./data/')
+core.set_data_path('./data/')
 
-yle = hybra.data( 'news', folder = '', terms = ['yle.json'] )
+yle = core.data( 'news', folder = '', terms = ['yle.json'] )
 
-yle_cats = hybra.filter_by( yle, 'text', text = ['kissa'] )
+yle_cats = core.filter_by( yle, 'text', text = ['kissa'] )
 
 print len( yle_cats )

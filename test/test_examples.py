@@ -3,7 +3,7 @@ import pytest
 
 import os
 
-from core import hybra
+from hybra import core
 
 class TestUM:
 

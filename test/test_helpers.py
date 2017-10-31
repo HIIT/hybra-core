@@ -1,7 +1,7 @@
 # coding=UTF8
 import pytest
 
-from core import hybra
+from hybra import core
 
 import datetime
 import os
@@ -16,8 +16,8 @@ from helpers import exporter
 class TestTextFilter:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
     def test_filter_text_empty( self ):
 
@@ -72,8 +72,8 @@ class TestTextFilter:
 class TestDatetimeFilter:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
     def test_filter_datetime_no_dates( self ):
 
@@ -112,8 +112,8 @@ class TestDatetimeFilter:
 class TestAuthorFilter:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
     def test_filter_author_empty( self ):
 
@@ -152,8 +152,8 @@ class TestAuthorFilter:
 class TestDomainFilter:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
     def test_filter_domain_empty( self ):
 
@@ -184,8 +184,8 @@ class TestDomainFilter:
 class TestUrls:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
     def test_list_links( self ):
 
@@ -208,8 +208,8 @@ class TestUrls:
 class TestCounter:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
     def test_count_authors( self ):
 
@@ -232,8 +232,8 @@ class TestCounter:
 class TestXlsxExporter:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
         self.out_fb = 'out_fb'
         self.out_media = 'out_media'
@@ -277,8 +277,8 @@ class TestXlsxExporter:
 class TestCsvExporter:
 
     def setup(self):
-        self.dataMedia = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
 
         self.out_fb = 'out_fb'
         self.out_media = 'out_media'

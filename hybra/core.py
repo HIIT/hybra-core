@@ -31,8 +31,8 @@ def set_data_path( path ):
 
         :Example:
 
-        * ``hybra.set_data_path('.') ## search for data from the current folder.``
-        * ``hybra.set_data_path('~/Documents/data/hybra-data') ## data in folder Documents/data/hybra-data.``
+        * ``core.set_data_path('.') ## search for data from the current folder.``
+        * ``core.set_data_path('~/Documents/data/hybra-data') ## data in folder Documents/data/hybra-data.``
     """
     global DATA_DIR
     DATA_DIR = path
@@ -56,23 +56,23 @@ def data_sources():
     global MY_DIR
     return map( lambda x: x.replace('.py', ''), filter( lambda x: not x.startswith('_') and x.endswith('.py'), os.listdir( MY_DIR + '/loaders/') ) )
 
-def data( source, terms = [], folder = '', **kwargs ):
+def data( source, folder = '', **kwargs ):
     """ Load data of type `source` using the parser for that data.
 
         :param source: Type of data loaded. Can be `facebook`, `media`, `twitter`.
         :type source: str
-        :param terms: Terms to be searched for in data filenames. Given as strings.
-        :type terms: list
         :param folder: Folder under data path that contains the data to be loaded.
         :type folder: str
 
         :Kwargs:
+            * *terms* (*list*) --
+              If source is `facebook`, `news` or `twitter`. Terms to be searched for in data filenames. Given as strings.
             * *data_dir* (*str*) --
               Data directory to override set data path.
 
         :Example:
 
-        ``hybra.data('news', terms = ['uutiset'], folder = 'yle') ## load news data from files with filename containing the term 'uutiset' from the subfolder YLE in your data folder.``
+        ``core.data('news', terms = ['uutiset'], folder = 'yle') ## load news data from files with filename containing the term 'uutiset' from the subfolder YLE in your data folder.``
     """
     global DATA_DIR
 
@@ -81,8 +81,7 @@ def data( source, terms = [], folder = '', **kwargs ):
 
     loader = importlib.import_module( 'loaders.' + source )
 
-    for key, value in {'terms' : terms, 'folder' : folder}.items():
-        kwargs[key] = value
+    kwargs['folder'] = folder
 
     if 'data_dir' not in kwargs:
         kwargs['data_dir'] = DATA_DIR
@@ -114,7 +113,7 @@ def timeline( datasets = [], **kwargs ):
 
         :Example:
 
-        ``hybra.timeline(datasets[news_data, fb_data], colors = ['blue', 'red']) ## Plots the dataset `news_data` as blue timeline and the dataset `fb_data` as red timeline.``
+        ``core.timeline(datasets[news_data, fb_data], colors = ['blue', 'red']) ## Plots the dataset `news_data` as blue timeline and the dataset `fb_data` as red timeline.``
     """
 
     from timeline import module_timeline
@@ -184,7 +183,7 @@ def export( data, file_path ):
 
         :Example:
 
-        ``hybra.export(data, 'exported_data.csv') ## Exports data in common format to file 'exported_data.csv' in current path.``
+        ``core.export(data, 'exported_data.csv') ## Exports data in common format to file 'exported_data.csv' in current path.``
     """
 
     from helpers import exporter
@@ -205,7 +204,7 @@ def export( data, file_path ):
 
 def sample(data, size, seed = 100, export_file = None):
     """ Takes a random sample of the dataset `data`.
-        Exports the sample to file using the hybra module export method
+        Exports the sample to file using the core module export method
         if the parameter `export_file` is not None.
 
         :param data: Data entries to be sampled.
@@ -219,7 +218,7 @@ def sample(data, size, seed = 100, export_file = None):
 
         :Example:
 
-        ``hybra.sample(data, 100, seed = 0, export_file = 'exported_sample.csv') ## Takes a random sample of dataset `data` using the seed 0 and exports it to file 'exported_sample.csv' in current path.``
+        ``core.sample(data, 100, seed = 0, export_file = 'exported_sample.csv') ## Takes a random sample of dataset `data` using the seed 0 and exports it to file 'exported_sample.csv' in current path.``
     """
 
     if isinstance( data, types.GeneratorType ):
@@ -262,12 +261,12 @@ def filter_by( data, filter_type, **kwargs ):
 
         :Example:
 
-        * ``hybra.filter_by(data, 'text', text = ['research']) ## Return from dataset `data` entries which include the term 'research' in text content.``
-        * ``hybra.filter_by(data, 'text', text = ['research', 'science'], substrings = False, inclusive = False) ## Return from dataset `data` entries which include the term 'research' or the term 'science' in text content as full strings.``
-        * ``hybra.filter_by(data, 'datetime', after = '2015-2-15') ## Return from dataset `data` entries with timestamp after the date '2015-2-15'.``
-        * ``hybra.filter_by(data, 'datetime', after = '2017-1-1', before = '2017-6-30 18:00:00') ## Return from dataset `data` entries with timestamp after the date '2017-1-1' and before the time '2017-6-30 18:00:00'.``
-        * ``hybra.filter_by(data, 'author', authors = ['author1', 'author2']) ## Return from dataset `data` entries which have 'author1' or 'author2' as creator.``
-        * ``hybra.filter_by(data, 'domain', domains = ['domain1.com', 'domain2.net']) ## Return from dataset `data` entries which are from domains 'domain1.com' or 'domain2.net'.``
+        * ``core.filter_by(data, 'text', text = ['research']) ## Return from dataset `data` entries which include the term 'research' in text content.``
+        * ``core.filter_by(data, 'text', text = ['research', 'science'], substrings = False, inclusive = False) ## Return from dataset `data` entries which include the term 'research' or the term 'science' in text content as full strings.``
+        * ``core.filter_by(data, 'datetime', after = '2015-2-15') ## Return from dataset `data` entries with timestamp after the date '2015-2-15'.``
+        * ``core.filter_by(data, 'datetime', after = '2017-1-1', before = '2017-6-30 18:00:00') ## Return from dataset `data` entries with timestamp after the date '2017-1-1' and before the time '2017-6-30 18:00:00'.``
+        * ``core.filter_by(data, 'author', authors = ['author1', 'author2']) ## Return from dataset `data` entries which have 'author1' or 'author2' as creator.``
+        * ``core.filter_by(data, 'domain', domains = ['domain1.com', 'domain2.net']) ## Return from dataset `data` entries which are from domains 'domain1.com' or 'domain2.net'.``
     """
 
     from helpers import filters
@@ -297,8 +296,8 @@ def counts( data, count_by, verbose = False ):
 
         :Example:
 
-        * ``hybra.counts(data, count_by = 'author') ## counts distinct authors in data.``
-        * ``hybra.counts(data, count_by = 'domain', verbose = True) ## counts distinct domains in data and print the counts.``
+        * ``core.counts(data, count_by = 'author') ## counts distinct authors in data.``
+        * ``core.counts(data, count_by = 'domain', verbose = True) ## counts distinct domains in data and print the counts.``
     """
 
     from helpers import counters

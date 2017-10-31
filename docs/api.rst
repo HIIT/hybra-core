@@ -1,7 +1,7 @@
 API
 =======
 
-.. automodule:: hybra
+.. automodule:: core
    :members:
    :undoc-members:
 
@@ -10,7 +10,7 @@ Internals
 **********
 
 These are internal APIs and no promises are made about their stability.
-Always use the `hybra` to access these directly.
+Always use the `core` to access these directly.
 
 .. automodule:: data_loader
    :members:
