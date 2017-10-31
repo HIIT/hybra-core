@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 import common
 
-def load( terms = ['.json'], data_dir = '', folder = 'media/' ):
+def load( terms = ['.json'], data_dir = '', folder = 'news/' ):
 
     import dateparser
 
