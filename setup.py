@@ -7,7 +7,7 @@ setup(
   name = 'hybra',
   packages = ['hybra'],
   version = '0.1',
-  description = 'A random test lib',
+  description = 'Toolkit for data management and analysis',
   author = 'Matti Nelimarkka, Juho Pääkkönen, Arto Kekkonen',
   author_email = 'matti.nelimarkka@aalto.fi, juho.paakkonen@aalto.fi, arto.kekkonen@helsinki.fi',
   url = 'https://github.com/HIIT/hybra-core',
