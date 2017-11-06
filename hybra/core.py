@@ -151,15 +151,21 @@ def wordcloud( data, **kwargs ):
     module_wordclouds.create_wordcloud( data, **kwargs )
 
 def analyse( script, **kwargs ):
-    """ Run R script given in parameter `script` using rpy2.
+    """ Run R code given in parameter `script` using rpy2.
+        You can provide the R code python variables in kwargs and those are automatically transfered to suitable R format.
 
-        :param script: R script to be run.
+        :param script: R code or a path to script to be run.
         :type script: str
 
         :Kwargs:
             Parameters and their values with which to parameterize the R script.
 
-        :todo: Add example.
+        :Example:
+
+        ``core.analyse( """t <- table( df$a, df$b)
+        print( chisq.test( t ) )
+        """, df = data)
+        ## Runs the χ²-test to examine the expected cross-tabulated frequencies of a and b to observed frequeincies in data. data is a list of dictonaries, each dictonary having a and b variables.``
     """
 
     from analysis.runr import runr
