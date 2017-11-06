@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys, os
 sys.path.append( os.path.dirname(os.path.realpath(__file__) ) )
 
@@ -162,9 +164,9 @@ def analyse( script, **kwargs ):
 
         :Example:
 
-        ``core.analyse( """t <- table( df$a, df$b)
+        ``core.analyse( \"\"\"t <- table( df$a, df$b)
         print( chisq.test( t ) )
-        """, df = data)
+        \"\"\", df = data)
         ## Runs the χ²-test to examine the expected cross-tabulated frequencies of a and b to observed frequeincies in data. data is a list of dictonaries, each dictonary having a and b variables.``
     """
 
