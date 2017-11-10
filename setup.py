@@ -1,18 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
   name = 'hybra-core',
-  version = '0.1.0a1',
+  version = '0.1.1a1',
   description = 'Toolkit for data management and analysis.',
   keywords = ['data management', 'data analysis'],
   url = 'https://github.com/HIIT/hybra-core',
   download_url = 'https://github.com/HIIT/hybra-core/archive/0.1.0.tar.gz',
   author = 'Matti Nelimarkka, Juho Pääkkönen, Arto Kekkonen',
   author_email = 'matti.nelimarkka@aalto.fi, juho.paakkonen@aalto.fi, arto.kekkonen@helsinki.fi',
-  packages = ['hybra'],
+  packages = find_packages(exclude=['docs', 'test']),
   licence = 'MIT',
 
   install_requires=[
