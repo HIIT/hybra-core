@@ -1,14 +1,14 @@
 # coding=UTF8
 import pytest
 
-from core import hybra
+from hybra import core
 
 import datetime
 
 class TestUM:
 
     def setup(self):
-        self.data = hybra.data( 'news', folder = '', terms = ['yle.json'] )
+        self.data = core.data( 'news', folder = '', terms = ['yle.json'] )
         self.listdata = list( self.data )
 
     def test_get_everything(self):

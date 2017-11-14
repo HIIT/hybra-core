@@ -31,6 +31,8 @@ We thank following funders for supporting this work
    * Racisms and public communications in the hybrid media environment (HYBRA) project uses this tool as its primary computational data analysis environment.
 * Kone Foundation
    * Matti Nelimarkka's work on mainstreaming this tool was supported by Digital Humanities of Public Policy Making.
+* TEKES - the Finnish Funding Agency for Innovation
+   * Smarter Social Media Analytics
 * Sanoma Foundation
    * Early work towards this ecosystem was done in Digivaalit 2015 project.
 

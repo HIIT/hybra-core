@@ -1,11 +1,11 @@
 import pytest
 
-from core import hybra
+from hybra import core
 
 class TestUM:
 
     def setup(self):
-        self.data = hybra.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.data = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
         self.listdata = list( self.data )
 
     def test_get_everything(self):

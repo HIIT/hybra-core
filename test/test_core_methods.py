@@ -1,46 +1,46 @@
 # coding=UTF8
 import pytest
 
-from core import hybra
+from hybra import core
 
 class TestUM:
 
     def setup(self):
-        self.g = hybra.data( 'news', folder = '', terms = ['yle.json'] )
-        self.l = list( hybra.data( 'news', folder = '', terms = ['yle.json'] ) )
+        self.g = core.data( 'news', folder = '', terms = ['yle.json'] )
+        self.l = list( core.data( 'news', folder = '', terms = ['yle.json'] ) )
 
     def test_describe_generator( self ):
         try:
-            hybra.describe( self.g )
+            core.describe( self.g )
         except Exception, e:
             pytest.fail("Exception " + str(e) )
 
     def test_describe_list( self ):
         try:
-            hybra.describe( self.l )
+            core.describe( self.l )
         except Exception, e:
             pytest.fail("Exception " + str(e) )
 
     def test_timeline_generator( self ):
         try:
-            hybra.timeline( datasets = [self.g] )
+            core.timeline( datasets = [self.g] )
         except Exception, e:
             pytest.fail("Exception " + str(e) )
 
     def test_timeline_list( self ):
         try:
-            hybra.timeline( datasets = [self.l] )
+            core.timeline( datasets = [self.l] )
         except Exception, e:
             pytest.fail("Exception " + str(e) )
 
     #def test_wordcloud_generator( self ):
     #    try:
-    #        hybra.wordcloud( data = [self.g] )
+    #        core.wordcloud( data = [self.g] )
     #    except Exception, e:
     #        pytest.fail("Exception " + str(e) )
 
     #def test_wordcloud_list( self ):
     #    try:
-    #        hybra.wordcloud( data = [self.l] )
+    #        core.wordcloud( data = [self.l] )
     #    except Exception, e:
     #        pytest.fail("Exception " + str(e) )

@@ -3,7 +3,7 @@ import datetime
 from collections import *
 
 import pprint
-import hybra
+import core
 pp = pprint.PrettyPrinter(indent=1)
 
 def describe( data ):
@@ -42,7 +42,7 @@ def describe( data ):
     pp.pprint( keys( data ) )
 
 
-    if hybra.IPYTHON_NOTEBOOK:
+    if core.IPYTHON_NOTEBOOK:
         from IPython.core.display import HTML, display
         module_timeline.create_timeline( datasets = [date_ok] )
 
