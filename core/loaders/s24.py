@@ -5,9 +5,18 @@ import cStringIO
 
 from lxml import etree
 
-path = '/Volumes/Suomi24/'
+path = '/appl/kielipankki/Suomi24/'
 
-for f in filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( path ) ):
+files = filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( path ) )
+
+has_already = filter( lambda x: x.endswith('VRT2.json') or x.endswith('VRT.json'), os.listdir( '/homeappl/home/mnelimar' ) )
+has_already = map( lambda x: x.replace('.json', ''), has_already)
+
+files = set(files) - set(has_already)
+
+for f in files:
+
+ try:
 
     data = open( path + f ).read()
     print 'Doing', f
@@ -15,13 +24,13 @@ for f in filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( 
 
     ## fix to stringio and save some writing to hd
 
-    temp = cStringIO.StringIO()
+    temp = open('temp.xml', 'w')
     temp.write("""<?xml version="1.0" encoding="UTF-8" ?>
     <root>"""
     + data +
     "</root>")
 
-    for d in etree.iterparse( temp , tag = 'text', recover = True ):
+    for d in etree.iterparse( open('temp.xml') , tag = 'text', recover = True ):
         d = d[1]
 
         text = ''
@@ -63,3 +72,6 @@ for f in filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( 
 
     json.dump( out, open( f + '.json', 'w' ) )
     print 'Done', f
+
+ except:
+       print 'Failed', f
