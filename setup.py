@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
   name = 'hybra-core',
-  version = '0.1.1a2',
+  version = '0.1.1a3',
   description = 'Toolkit for data management and analysis.',
   keywords = ['data management', 'data analysis'],
   url = 'https://github.com/HIIT/hybra-core',
