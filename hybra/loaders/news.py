@@ -21,7 +21,7 @@ def load( terms = ['.json'], data_dir = '', folder = 'news/' ):
 
     for dirpath, subdirs, files in os.walk(path):
 
-        for f in files:
+        for f in filter( lambda x: x.endswith('.json'), files ):
 
             f = os.path.join( dirpath, f )
 

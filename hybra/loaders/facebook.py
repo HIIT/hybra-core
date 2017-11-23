@@ -19,7 +19,7 @@ def load( terms = ['.json'], data_dir = '', folder = 'facebook/' ): ## todo: bet
 
     for f in os.listdir( path ):
 
-        if any( term in f for term in terms ):
+        if f.endswith('.json') and any( term in f for term in terms ):
 
             dump = json.load( open( path + f ) )
 
@@ -44,7 +44,7 @@ def load( terms = ['.json'], data_dir = '', folder = 'facebook/' ): ## todo: bet
                 d['images'] = attachments
 
                 d['links'] = []
-                
+
                 if '_link' in d:
                    d['links'].append( d['_link'] )
 
