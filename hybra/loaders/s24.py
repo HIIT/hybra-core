@@ -14,7 +14,14 @@ has_already = map( lambda x: x.replace('.json', ''), has_already)
 
 files = set(files) - set(has_already)
 
-keywords = ['turvapaikanhak', 'maahanmuutt', 'pakolai']
+keywords = raw_input('Define keywords, separated by commas ')
+
+outdir = keywords.replace(' ', '')
+
+if not os.path.exists( outdir ):
+    os.makedirs( outdir )
+
+keywords = keywords.split(',')
 
 for f in files:
 
@@ -77,7 +84,7 @@ for f in files:
 
             out.append( o )
 
-    json.dump( out, open( f + '.json', 'w' ) )
+    json.dump( out, open( outdir + '/' + f + '.json', 'w' ) )
     print 'Done', f
 
  except Exception, e:
