@@ -9,10 +9,12 @@ path = '/appl/kielipankki/Suomi24/'
 
 files = filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( path ) )
 
-has_already = filter( lambda x: x.endswith('VRT2.json') or x.endswith('VRT.json'), os.listdir( '/homeappl/home/mnelimar' ) )
+has_already = filter( lambda x: x.endswith('VRT2.json') or x.endswith('VRT.json'), os.listdir( '.' ) )
 has_already = map( lambda x: x.replace('.json', ''), has_already)
 
 files = set(files) - set(has_already)
+
+keywords = ['turvapaikanhak', 'maahanmuutt', 'pakolai']
 
 for f in files:
 
@@ -50,8 +52,13 @@ for f in files:
                         text_lemma += line[2] + ' '
 
 
+        flag = False
 
-        if 'rasis' in text or 'rasis' in text_lemma:
+        for kw in keywords:
+            if kw in text or kw in text_lemma:
+                flag = True
+
+        if flag:
 
             o = {}
             o['text_content'] = d.get('title') + ' ' + text
@@ -73,5 +80,6 @@ for f in files:
     json.dump( out, open( f + '.json', 'w' ) )
     print 'Done', f
 
- except:
+ except Exception, e:
        print 'Failed', f
+       print e
