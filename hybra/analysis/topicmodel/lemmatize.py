@@ -44,7 +44,7 @@ def lemmatize( text, path ):
             f.write(cmd.encode('utf-8'))
 
         os.chmod(file_name + '.sh', 0o777)
-        out = subprocess.check_output([os.path.dirname(os.path.realname(__file__)) + file_name + '.sh'], shell = False)
+        out = subprocess.check_output([os.path.dirname(os.path.realpath(__file__)) + '/' + file_name + '.sh'], shell = False)
         os.remove(file_name + '.sh')
 
     lemma = ''
