@@ -170,14 +170,14 @@ def analyse( script, **kwargs ):
         ## Runs the χ²-test to examine the expected cross-tabulated frequencies of a and b to observed frequeincies in data. data is a list of dictonaries, each dictonary having a and b variables.``
     """
 
-    from analysis.runr import runr
+    from analysis.run import run
 
     globalenv = None
     if 'previous' in kwargs:
         globalenv = kwargs[ g ]
         del kwargs['previous']
 
-    return runr( script, globalenv, **kwargs )
+    return run( script, globalenv, **kwargs )
 
 def export( data, file_path ):
     """ Export the dataset `data` in common format to the given file format.

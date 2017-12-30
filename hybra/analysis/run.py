@@ -1,5 +1,7 @@
 import os
 
+import imp
+
 import rpy2
 import rpy2.robjects as robjects
 from rpy2.robjects import default_converter
@@ -11,8 +13,6 @@ from rpy2.robjects import pandas2ri
 from rpy2.robjects.conversion import Converter
 
 import types
-
-simple_conver = Converter('simple')
 
 def list_to_vector( l ):
 
@@ -54,13 +54,30 @@ def list_to_vector( l ):
         dataframe = pandas.DataFrame.from_dict( dataframe )
         return pandas2ri.py2ri( dataframe )
 
-
+simple_conver = Converter('simple')
 simple_conver.py2ri.register( list, list_to_vector )
 simple_conver.py2ri.register( types.GeneratorType, list_to_vector )
 
 converter = default_converter + simple_conver
 
-def runr( execute, globalenv = None, **kwargs ):
+def run( execute, globalenv = None, **kwargs ):
+
+    ## search inside analsis folder
+    home = os.path.realpath(__file__)
+
+    ## check if the command is a python file
+
+    f = os.path.dirname( home ) + '/' + execute + '.py'
+
+    if os.path.isfile( f ):
+        execute = f
+
+    if os.path.isfile( execute ) and execute.endswith('.py'):
+
+        module = imp.load_source( 'run', execute )
+        return module.run( kwargs )
+
+    ## assume script is R
 
     if globalenv:
         rpy2.robjects.globalenv = globalenv
@@ -74,25 +91,20 @@ def runr( execute, globalenv = None, **kwargs ):
         else:
             rpy2.robjects.globalenv[ name ] = converter.py2ri( value )
 
+    f = os.path.dirname( home ) + '/' + execute + '.r'
 
-    ## rpy2.robjects.globalenv['cats'] = interface.p2ri( kwargs['cats'] )
-
-    ## search inside analsis folder
-    p = os.path.realpath(__file__)
-    p = os.path.dirname( p ) + '/' + execute + '.r'
-
-    if os.path.isfile( p ):
-        execute = open( p ).read()
+    if os.path.isfile( f ):
+        execute = open( f ).read()
 
     if os.path.isfile( execute ):
         execute = open( execute ).read()
-
 
     robjects.r( execute )
 
     return robjects.r ## return all computed things
 
 if __name__ == '__main__':
+
     execute = '''
         library('ggplot2')
         # create a function `f`
@@ -109,4 +121,4 @@ if __name__ == '__main__':
         x = f(4)
         '''
 
-    runr( execute, example1 = [1,2,3,4], example2 = [{'name': 'example2', 'value': 5}]  )
+    run( execute, example1 = [1,2,3,4], example2 = [{'name': 'example2', 'value': 5}]  )
