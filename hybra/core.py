@@ -241,6 +241,20 @@ def sample(data, size, seed = 100, export_file = None):
 
     return data_sample
 
+def unduplicate( data ):
+    """ Removes all dulicates from `data` and returns only unique items.
+
+        :param data: Entries of data with potential duplicates.
+        :type data: generator or list
+    """
+
+    _data = {}
+
+    for d in data:
+        _data[ d['id'] ] = d
+
+    return _data.values()
+
 def filter_by( data, filter_type, **kwargs ):
     """ Filters the dataset `data` with the filter given in `filter_type`.
         Returns the filtered data if `filter_type` matches a filtering method
