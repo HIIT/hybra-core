@@ -79,4 +79,16 @@ def __post_harmonize_data( d ):
     d['links'] += urls.extract( d['text_content'] )
     d['links_domains'] = urls.domains( d['links'] )
 
+    if '_id' in d:
+        d['id'] = d['source'].lower() + '_' + d['_id']
+    else: ## compute an ID for the object
+
+        _url = ''
+        if '_url' in d:
+            _url = d['_url'].encode('ascii', 'ignore')
+
+        text = d['text_content']-encode('ascii', 'ignore')
+
+        d['id'] = d['source'].lower() + '_' + hashlib.md5( url + str( document['timestamp'] ) + text ).hexdigest()
+
     return d
