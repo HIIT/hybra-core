@@ -87,8 +87,8 @@ def __post_harmonize_data( d ):
         if '_url' in d:
             _url = d['_url'].encode('ascii', 'ignore')
 
-        text = d['text_content']-encode('ascii', 'ignore')
+        text = d['text_content'].encode('ascii', 'ignore')
 
-        d['id'] = d['source'].lower() + '_' + hashlib.md5( url + str( document['timestamp'] ) + text ).hexdigest()
+        d['id'] = d['source'].lower() + '_' + hashlib.md5( _url + str( d['timestamp'] ) + text ).hexdigest()
 
     return d
