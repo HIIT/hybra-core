@@ -3,17 +3,20 @@ source('topics.r')
 
 args <- commandArgs(trailingOnly = TRUE)
 
-dtm <- args[1]
+dtm_path <- args[1]
 
-if( ! grepl( '.rdata', dtm ) ) {
-   dtm <- paste( dtm, 'dtm.rdata', sep='' )
+if( ! grepl( '.rdata', dtm_path ) ) {
+   dtm_path <- paste( dtm, 'dtm.rdata', sep='' )
 }
 
-load( dtm )
+load( dtm_path )
 
 k <- as.integer( args[2] )
 
 model <- create_model( dtm , k )
 
-path <- paste( dtm , '/topic-', args[2], '.rdata' , sep = '' )
+path <- paste( dtm_path , 'topic-', args[2], '.rdata' , sep = '' )
+
+print( path )
+
 save( model , file = path )
