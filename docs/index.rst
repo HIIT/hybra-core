@@ -12,6 +12,7 @@ HYBRA-CORE
 
    api
    examples
+   topicmodel
 
 
 Indices and tables
