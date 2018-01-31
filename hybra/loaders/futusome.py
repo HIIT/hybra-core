@@ -142,8 +142,6 @@ def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_docume
 
         d['timestamp'] = d['timestamp'].replace(tzinfo = None)
 
-        d['links'] = urls.extract( d['text_content'] )
-
         if '_forum_post_id' in d:
             d['_id'] = d['_forum_post_id']
         elif '_twitter_retweet_id' in d:
