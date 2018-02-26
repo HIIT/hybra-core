@@ -6,7 +6,7 @@ args <- commandArgs(trailingOnly = TRUE)
 dtm_path <- args[1]
 
 if( ! grepl( '.rdata', dtm_path ) ) {
-   dtm_path <- paste( dtm, 'dtm.rdata', sep='' )
+   dtm_path <- paste( dtm_path, '/dtm.rdata', sep='' )
 }
 
 load( dtm_path )
