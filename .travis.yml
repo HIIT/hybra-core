@@ -4,6 +4,7 @@ install:
   - pip install dateparser
   - pip install tldextract
   - pip install ipython
+  - pip install matplotlib
 
 script: python -m pytest
 
