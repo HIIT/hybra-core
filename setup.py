@@ -39,7 +39,7 @@ setup(
     'wordcloud>=1.2.1',
     'tldextract>=2.1.0',
     'pandas>=0.22.0',
-    'rpy2>=2.8.6'
+    'rpy2<=2.8.6'
   ],
 
   # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
