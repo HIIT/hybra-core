@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from collections import Counter
 import re
 
-def create_wordcloud( data, stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"] ):
+def create_wordcloud( data, plt, stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"] ):
 
     import types
 
