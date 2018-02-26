@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
   name = 'hybra-core',
-  version = '0.1.1a4',
+  version = '0.1.1a5',
   description = 'Toolkit for data management and analysis.',
   keywords = ['data management', 'data analysis'],
   url = 'https://github.com/HIIT/hybra-core',
@@ -37,7 +37,9 @@ setup(
     'scipy>=0.17.1',
     'XlsxWriter>=0.9.6',
     'wordcloud>=1.2.1',
-    'tldextract>=2.1.0'
+    'tldextract>=2.1.0',
+    'pandas>=0.22.0',
+    'rpy2>=2.8.6'
   ],
 
   # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
