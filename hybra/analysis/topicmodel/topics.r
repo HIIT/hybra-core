@@ -1,14 +1,18 @@
-create_dtm <- function( path ) {
+create_dtm <- function( path, upper = 0.001, lower = 0.1, stopwords = c('stop_generic.txt') ) {
 
   library(tm)
   library(slam)
 
   a <- Corpus( DirSource( path, encoding = "UTF-8", recursive = T ) )
 
-  stop1 <- scan('stop_generic.txt', what = list(""), sep = '\n' )
-  stop2 <- c()
-##  stop2 <- scan('stop_digivaalit.txt', what = list(""), sep = '\n' )
-  stop <- c( stopwords("finnish") , stop1, stop2 , recursive=T )
+  stop <- c()
+
+  for( stopword_file in stopwords ) {
+
+    stopword <- scan( stopword_file , what = list(""), sep = '\n' )
+    stop <- c( stop, stopword, recursive=T )
+
+  }
 
   ## bunch of cleanup and transformations
   a <- tm_map(a, removeNumbers )
@@ -25,13 +29,13 @@ create_dtm <- function( path ) {
 
   ## choose removal boundaries for further data analysis
 
-  upper = floor( length( frequency ) * .001 )
+  upper = floor( length( frequency ) * upper )
   ##upper = Inf
-  lower = floor( length( frequency) * .9 )
-  
+  lower = floor( length( frequency) * ( 1 - lower) )
+
   upper = frequency[ upper ]
   lower = frequency[ lower ]
-  
+
   upper = as.integer( upper )
   lower = as.integer( lower ) + 1
 
