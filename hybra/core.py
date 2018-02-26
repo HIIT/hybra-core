@@ -7,6 +7,8 @@ import os
 import random
 import types
 
+from matplotlib import pyplot as plt
+
 from loaders import common as datacommon
 import importlib
 
@@ -150,7 +152,7 @@ def wordcloud( data, **kwargs ):
 
     import wordclouds as module_wordclouds
 
-    module_wordclouds.create_wordcloud( data, **kwargs )
+    module_wordclouds.create_wordcloud( data, plt, **kwargs )
 
 def analyse( script, **kwargs ):
     """ Run R code given in parameter `script` using rpy2.

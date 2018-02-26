@@ -15,61 +15,18 @@ def create_wordcloud( data, stopwords = ["the", "a", "or", "tai", "and", "ja", "
         return
 
     from wordcloud import WordCloud
-    from matplotlib import pyplot as plt
 
-    words = get_words( data )
-
-    frequencies = Counter( words )
-
-    ## remove stopwords
-    for word in stopwords:
-        del frequencies[word]
-
-    print_frequencies( frequencies )
-
-    wordcloud = WordCloud( background_color = "white" ).generate_from_frequencies( frequencies.items() )
-
-    plt.figure()
-    plt.imshow(wordcloud)
-    plt.axis("off")
-
-def get_words( data ):
-    words = []
+    text = ''
     for d in data:
-        words += re.findall(r'\w+', decode_utf8( d['text_content'].lower() ), re.UNICODE)
+        text += d['text_content'].lower() + ' '
+    text = text.strip()
 
-        if '_comments' in d:
-            for c in d['_comments']:
-                if 'message' in c:
-                    words += re.findall(r'\w+', decode_utf8( c['message'].lower() ), re.UNICODE)
-    return words
+    stopwords = map( lambda w: str(w), stopwords )
 
-def print_frequencies( frequencies ):
-    print(  "\nDistinct words:", len(frequencies) )
-    print( "10 most common words:" )
+    wc = WordCloud( background_color="white", width=800, height=400, stopwords = stopwords )
+    wc.generate( text )
 
-    i = 1
-    for word in frequencies.most_common(10):
-        print( i , " ", word[0], "-", word[1] )
-        i += 1
-
-
-def decode_utf8( string ):
-    try:
-        return string.decode('utf8')
-    except UnicodeEncodeError:
-        return string
-
-if __name__ == '__main__':
-
-    from matplotlib import pyplot as plt
-
-    for function_name in dir( data_loader ):
-
-        if 'load_' in function_name:
-
-            print( function_name )
-            f =  getattr( data_loader, function_name )
-            data = f()
-            create_wordcloud( data )
-            plt.show()
+    plt.figure(figsize=(15,10))
+    plt.imshow(wc, interpolation="bilinear")
+    plt.axis("off")
+    plt.show()
