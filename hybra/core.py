@@ -26,7 +26,6 @@ except:
 
 if IPYTHON_NOTEBOOK:
     from IPython.core.display import HTML, display
-
     display( HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Visualisations enabled.</p>') )
 
 def version():
@@ -152,7 +151,6 @@ def network( data ):
     from IPython.core.display import display, HTML
 
     return display( HTML( module_network.create_network( data ) ) )
-
 
 def wordcloud( data, **kwargs ):
     """ Draws a wordcloud the dataset `data`.
