@@ -2,6 +2,7 @@ import os
 import time
 from string import Template
 import random
+import re
 
 from IPython.core.display import HTML, display
 
@@ -19,10 +20,7 @@ def create_wordcloud( data, plt, stopwords = ["the", "a", "or", "tai", "and", "j
     texts = ""
     for node in data:
         text = node['text_content']
-        text = text.replace(",", "")
-        text = text.replace(".", "")
-        text = text.replace("!", "")
-        text = text.replace("?", "")
+        text = re.sub("\,|\?|\.|\!", '', text)
         for word in text.split(" "):
             if word not in stopwords:
                 texts += word + " "
