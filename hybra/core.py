@@ -153,22 +153,8 @@ def network( data ):
 
     return display( HTML( module_network.create_network( data ) ) )
 
+
 def wordcloud( data, **kwargs ):
-    """ Draws a wordcloud the dataset `data`.
-
-        :param data: Data entries.
-        :type data: generator or list
-
-        :Kwargs:
-            * *stopwords* (*list*) --
-              Words to be ignored in generating the wordcloud. Given as strings.
-    """
-
-    import wordclouds as module_wordclouds
-
-    module_wordclouds.create_wordcloud( data, plt, **kwargs )
-
-def wordcloud2( data, **kwargs ):
     """ Draws a wordcloud the dataset `data`.
 
         :param data: Data entries.
