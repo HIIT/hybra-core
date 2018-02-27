@@ -165,9 +165,9 @@ def wordcloud( data, **kwargs ):
               Words to be ignored in generating the wordcloud. Given as strings.
     """
 
-    from wordcloud import module_wordclouds2
+    from wordcloud import module_wordclouds
     from IPython.core.display import display, HTML
-    return display(HTML(module_wordclouds2.create_wordcloud( data, plt, **kwargs )))
+    return display(HTML(module_wordclouds.create_wordcloud( data, plt, **kwargs )))
 
 def analyse( script, **kwargs ):
     """ Run R code given in parameter `script` using rpy2.
