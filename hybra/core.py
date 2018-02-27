@@ -26,6 +26,7 @@ except:
 
 if IPYTHON_NOTEBOOK:
     from IPython.core.display import HTML, display
+
     display( HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Visualisations enabled.</p>') )
 
 def version():
@@ -166,6 +167,21 @@ def wordcloud( data, **kwargs ):
     import wordclouds as module_wordclouds
 
     module_wordclouds.create_wordcloud( data, plt, **kwargs )
+
+def wordcloud2( data, **kwargs ):
+    """ Draws a wordcloud the dataset `data`.
+
+        :param data: Data entries.
+        :type data: generator or list
+
+        :Kwargs:
+            * *stopwords* (*list*) --
+              Words to be ignored in generating the wordcloud. Given as strings.
+    """
+
+    from wordcloud import module_wordclouds2
+    from IPython.core.display import display, HTML
+    return display(HTML(module_wordclouds2.create_wordcloud( data, plt, **kwargs )))
 
 def analyse( script, **kwargs ):
     """ Run R code given in parameter `script` using rpy2.
