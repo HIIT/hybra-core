@@ -1,4 +1,4 @@
-// wordcloud code starts
+// wordcloud code starts, copied from https://github.com/jasondavies/d3-cloud/blob/master/build/d3.layout.cloud.js 
 // Word cloud layout by Jason Davies, http://www.jasondavies.com/word-cloud/
 // Algorithm due to Jonathan Feinberg, http://static.mrfeinberg.com/bv_ch03.pdf
     function cloud() {
