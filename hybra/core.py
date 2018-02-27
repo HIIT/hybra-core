@@ -28,6 +28,19 @@ if IPYTHON_NOTEBOOK:
     from IPython.core.display import HTML, display
     display( HTML('<p><script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>Visualisations enabled.</p>') )
 
+def version():
+    try:
+        from git import Repo
+        r = Repo( MY_DIR + '/../' )
+        return str( r.heads.master.commit )
+    except:
+        return open( MY_DIR + '/../version.txt').read().strip()
+
+if IPYTHON_NOTEBOOK:
+    display( HTML('Version ' + version()) )
+else:
+    print "HYBRA now in version", version()
+
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
         :param path: Where the data is stored.
