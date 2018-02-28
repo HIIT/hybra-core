@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 import time
 from string import Template
@@ -19,8 +22,8 @@ def create_wordcloud( data, plt, stopwords = ["the", "a", "or", "tai", "and", "j
 
     texts = ""
     for node in data:
-        text = node['text_content']
-        text = re.sub("\,|\?|\.|\!", '', text)
+        text = encode_utf8(node['text_content'])
+        text = re.sub('[^0-9a-zA-Zöä\s]+', '', text)
         for word in text.split(" "):
             if word not in stopwords:
                 texts += word + " "
