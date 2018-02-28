@@ -105,18 +105,20 @@ def data( source, folder = '', **kwargs ):
 
     return loader.load( **kwargs )
 
-def describe( data ):
+def describe( data, structure = False ):
     """ Describe the dataset `data`, showing the amount of posts,
         number of authors, historical data and more detailed data sources.
 
         :param data: Data entries. Given as generator or list.
         :type data: generator or list
+        :param strcture: print structure of data entry
+        :type structure: boolean
     """
 
     import descriptives
     from IPython.core.display import display, HTML
 
-    return display( HTML( descriptives.describe( data ) ) )
+    return display( HTML( descriptives.describe( data, structure ) ) )
 
 def timeline( datasets = [], **kwargs ):
     """ Draws a timeline the dataset `data`.

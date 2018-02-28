@@ -6,7 +6,7 @@ import pprint
 import core
 pp = pprint.PrettyPrinter(indent=1)
 
-def describe( data ):
+def describe( data, structure = False ):
 
     import types
 
@@ -38,8 +38,9 @@ def describe( data ):
     for name, count in counter.items():
         print( '-', name, count )
 
-    print( 'Data structure' )
-    pp.pprint( keys( data ) )
+    if structure:
+    	print( 'Data structure' )
+    	pp.pprint( keys( data ) )
 
 
     if core.IPYTHON_NOTEBOOK:
