@@ -24,6 +24,8 @@ def list_to_vector( l ):
 
     if isinstance( l[0], str ):
         return rpy2.rinterface.StrSexpVector( l )
+    if isinstance( l[0], unicode ):
+        return rpy2.rinterface.StrSexpVector( l )
     if isinstance( l[0], int ):
         return rpy2.rinterface.IntSexpVector( l )
     if isinstance( l[0], float ):
@@ -54,6 +56,9 @@ def list_to_vector( l ):
         dataframe = pandas.DataFrame.from_dict( dataframe )
         return pandas2ri.py2ri( dataframe )
 
+    ## default to NA just in case
+    return rpy2.rinterface.NA_Real
+
 simple_conver = Converter('simple')
 simple_conver.py2ri.register( list, list_to_vector )
 simple_conver.py2ri.register( types.GeneratorType, list_to_vector )
@@ -62,7 +67,7 @@ converter = default_converter + simple_conver
 
 def run( execute, globalenv = None, **kwargs ):
 
-    ## search inside analsis folder
+    ## search inside analysis folder
     home = os.path.realpath(__file__)
 
     ## check if the command is a python file
@@ -73,9 +78,8 @@ def run( execute, globalenv = None, **kwargs ):
         execute = f
 
     if os.path.isfile( execute ) and execute.endswith('.py'):
-
-        module = imp.load_source( 'run', execute )
-        return module.run( kwargs )
+        module = imp.load_source( 'main', execute )
+        return module.main( **kwargs )
 
     ## assume script is R
 
@@ -83,6 +87,10 @@ def run( execute, globalenv = None, **kwargs ):
         rpy2.robjects.globalenv = globalenv
 
     for name, value in kwargs.items():
+
+        ## for debug conversion errors
+        # print name
+        # print type( value )
 
         if isinstance( value, dict ):
             ## use pandas
