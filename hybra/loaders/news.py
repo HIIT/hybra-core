@@ -3,7 +3,7 @@
 
 from __future__ import division, print_function
 
-import cjson as json
+import ujson as json
 import os
 import sys
 import re
