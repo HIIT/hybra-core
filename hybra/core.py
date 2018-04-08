@@ -187,7 +187,7 @@ def analyse( script, **kwargs ):
         ## Runs the χ²-test to examine the expected cross-tabulated frequencies of a and b to observed frequeincies in data. data is a list of dictonaries, each dictonary having a and b variables.``
     """
 
-    from analysis.run import run
+    from plugin import run
 
     globalenv = None
     if 'previous' in kwargs:
