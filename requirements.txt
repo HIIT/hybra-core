@@ -16,3 +16,5 @@ wordcloud>=1.2.1
 tldextract>=2.1.0
 pandas>=0.22.0
 rpy2<=2.8.6
+cjson
+json
