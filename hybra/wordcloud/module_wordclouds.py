@@ -6,6 +6,7 @@ import time
 from string import Template
 import random
 import re
+import helpers.urls as urls
 
 from IPython.core.display import HTML, display
 
@@ -13,7 +14,7 @@ from collections import Counter
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-def create_wordcloud( data, plt, stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this", "http", "www", "fi", "com"], width=850, height=350 ):
+def create_wordcloud( data, plt, stopwords = ["the", "a", "or", "tai", "and", "ja", "to", "on", "in", "of", "for", "is", "i", "this"], width=850, height=350 ):
 
     import codecs
     html_template = Template( codecs.open( path + '/wordcloud.html', 'r').read() )
@@ -22,9 +23,13 @@ def create_wordcloud( data, plt, stopwords = ["the", "a", "or", "tai", "and", "j
 
     texts = ""
     for node in data:
-        text = encode_utf8(node['text_content'])
-        text = re.sub('[^0-9a-zA-Zöä\s]+', '', text)
-        for word in text.split(" "):
+        text = encode_utf8(node['text_content']).lower()
+
+        ## clean up: remove URLs non-alphabet characters
+        text = re.sub( urls.URL_REGEXP, ' ', text )
+        text = re.sub('[^a-zöä\s]+', ' ', text)
+
+        for word in text.split(" "): ## todo? should we use nltk?
             if word not in stopwords:
                 texts += word + " "
 
