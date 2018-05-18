@@ -169,8 +169,9 @@ def wordcloud( data, **kwargs ):
     from IPython.core.display import display, HTML
     return display(HTML(module_wordclouds.create_wordcloud( data, plt, **kwargs )))
 
-def analyse( script, **kwargs ):
-    """ Run R code given in parameter `script` using rpy2.
+def plugin( script, **kwargs ):
+    """ Run external plugins written in R or Python.
+        Run python code file in parameter `script` or run R code (or code file) given in parameter `script` using rpy2.
         You can provide the R code python variables in kwargs and those are automatically transfered to suitable R format.
 
         :param script: R code or a path to script to be run.
@@ -187,7 +188,7 @@ def analyse( script, **kwargs ):
         ## Runs the χ²-test to examine the expected cross-tabulated frequencies of a and b to observed frequeincies in data. data is a list of dictonaries, each dictonary having a and b variables.``
     """
 
-    from analysis.run import run
+    from plugin import run
 
     globalenv = None
     if 'previous' in kwargs:
@@ -195,6 +196,10 @@ def analyse( script, **kwargs ):
         del kwargs['previous']
 
     return run( script, globalenv, **kwargs )
+
+def analyse( script, **kwargs ):
+    """Deprecated. Use plugin instead."""
+    plugin( script, **kwargs )
 
 def export( data, file_path ):
     """ Export the dataset `data` in common format to the given file format.
