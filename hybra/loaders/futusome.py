@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import common
 
 
-def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False ):
+def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False, cache_file = '' ):
 
     """ Checks local data folder for files matching the given query and returns them if a match is found.
         If no local data is found and an API key is given, Futusome API is queried.
@@ -37,7 +37,8 @@ def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_docume
 
     query_base = 'https://api.futusome.com/api/searches.json?&api_search[query]='
 
-    cache_file = query.replace('/', '_') # Slashes not allowed in filenames
+    if not cache_file:
+        cache_file = query.replace('/', '_') # Slashes not allowed in filenames
 
     # If just checking document count, query for only one document
     if check_document_count:
