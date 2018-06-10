@@ -41,6 +41,7 @@ def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = def
 
                 if len( entry['text_lemma'] ) > 0:
                     try:
+                        r = None
                         r = requests.post( lasserver + '/las/baseform', {'text' : entry['text_lemma'] } )
                         r = r.json()
 
@@ -48,6 +49,8 @@ def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = def
                     except:
                         ## store what we have
                         pickle.dump( data, open(saveto + '/data.temp', 'w' ) ) ## save process this far
+                        if r is None:
+                            raise Exception("LAS failed: Is LAS server running?")
                         raise Exception("LAS failed: " + str(r) )
 
             bar.value += 1
