@@ -14,7 +14,7 @@ MY_DIR = os.path.dirname(os.path.realpath(__file__))
 
 default_stopwords = open( MY_DIR + '/stop_generic_en.txt').readlines() + open( MY_DIR + '/stop_generic.txt').readlines()
 
-def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = default_stopwords ):
+def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = [] ):
 
     if len( data ) == 0:
         raise Exception("No data given for analysis.")
@@ -65,6 +65,7 @@ def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = def
 
     display( HTML("<h4>Data analysis</h4>") )
 
+    stopwords += default_stopwords
     stopwords = map( lambda x: x.strip().lower(), stopwords )
 
     display( HTML("<p>This may take a while</p>") )
