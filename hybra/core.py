@@ -195,7 +195,16 @@ def plugin( script, **kwargs ):
         globalenv = kwargs[ g ]
         del kwargs['previous']
 
-    return run( script, globalenv, **kwargs )
+    try:
+        return run( script, globalenv, **kwargs )
+    except Exception as e:
+
+        display( HTML( """<div style='border: 1px solid red; padding: 2em;'>
+                <p style='color:red; font-weight: bold;'>Failed to run analysis.</p>
+                <p style='color:red;'>%s</p>
+            </div>""" % e.message
+        ) )
+
 
 def analyse( script, **kwargs ):
     """Deprecated. Use plugin instead."""
