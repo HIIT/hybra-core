@@ -1,4 +1,4 @@
-create_dtm <- function( path, upper = 0.001, lower = 0.1, stopwords = c('stop_generic.txt') ) {
+create_dtm <- function( path, upper = 0.001, lower = 0.1, stopwords = c('stop_generic_fi.txt', 'stop_generic_fi_lemma.txt' ) ) {
 
   library(tm)
   library(slam)
