@@ -4,6 +4,8 @@ Yopu need to have a SeCo lexical analysis service running.
 
 More details, see: https://github.com/jiemakel/las-ws
 
+If you install it as a Docker installation, this command starts and binds the codebase correctly: docker run -p 127.0.0.1:19990:9000 jiemakel/las-ws:1.1 .
+
 This is required to lemmatize content for topic models.
 
 Running
