@@ -1,9 +1,10 @@
 from __future__ import division, print_function
+from __future__ import absolute_import
 import datetime
 from collections import *
 
 import pprint
-import core
+from . import core
 pp = pprint.PrettyPrinter(indent=1)
 
 def describe( data, structure = False ):
@@ -15,7 +16,7 @@ def describe( data, structure = False ):
 
     if not data: return "Dataset empty."
 
-    from timeline import module_timeline
+    from .timeline import module_timeline
 
     print( "Entries together", len(data) )
     print( "Number of different authors", len( set( map( lambda d: d['creator'], filter( lambda d: d['creator'] is not '', data ) ) ) ) )
@@ -24,8 +25,9 @@ def describe( data, structure = False ):
     date_ok = filter( lambda d: d['timestamp'] is not '', data )
     date_ok = filter( lambda d: d['timestamp'] > datetime.datetime(1970,1,1,23,59), date_ok )
 
-    print( "First post", min( map( lambda d: d['timestamp'], date_ok ) ) )
-    print( "Last post", max( map( lambda d: d['timestamp'], date_ok  ) ) )
+    dates = [ d['timestamp'] for d in  date_ok ]
+    print( "First post", min( dates ) )
+    print( "Last post", max( dates ) )
 
     print("Data sources")
 

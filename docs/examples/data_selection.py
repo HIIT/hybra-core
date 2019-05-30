@@ -15,4 +15,6 @@ sample2 = core.filter_by( d, 'text', text = keyword.split(',') )
 
 import pickle
 
-pickle.dump( sample1 + sample2, open( keyword + '.pickle', 'w' ) )
+print( sample1[0] )
+
+pickle.dump( sample1 + sample2, open( keyword + '.pickle', 'wb' ) )

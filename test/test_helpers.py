@@ -12,308 +12,327 @@ from helpers import urls
 from helpers import exporter
 
 
-
 class TestTextFilter:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
-    def test_filter_text_empty( self ):
+    def test_filter_text_empty(self):
 
-        fb = filters.filter_by_text( self.dataFacebook )
-        media = filters.filter_by_text( self.dataMedia )
+        fb = filters.filter_by_text(self.dataFacebook)
+        media = filters.filter_by_text(self.dataMedia)
 
-        assert( len( list(fb) ) == 4 )
-        assert( len( list(media) ) == 276 )
+        assert(len(list(fb)) == 4)
+        assert(len(list(media)) == 276)
 
     def test_filter_text_uppercase(self):
 
-        fb = filters.filter_by_text( self.dataFacebook, text = ['POST'] )
-        media = filters.filter_by_text( self.dataMedia, text = ['ALGORITMI'] )
+        fb = filters.filter_by_text(self.dataFacebook, text=['POST'])
+        media = filters.filter_by_text(self.dataMedia, text=['ALGORITMI'])
 
-        assert( len(fb) == 3 )
-        assert( len(media) == 1 )
+        assert(len(fb) == 3)
+        assert(len(media) == 1)
 
     def test_filter_text_substrings(self):
 
-        fb = filters.filter_by_text( self.dataFacebook, text = ['pos'] )
-        media = filters.filter_by_text( self.dataMedia, text = ['algorit'] )
+        fb = filters.filter_by_text(self.dataFacebook, text=['pos'])
+        media = filters.filter_by_text(self.dataMedia, text=['algorit'])
 
-        assert( len(fb) == 3)
-        assert( len(media) == 1)
+        assert(len(fb) == 3)
+        assert(len(media) == 1)
 
     def test_filter_text_substrings_false(self):
 
-        fb = filters.filter_by_text( self.dataFacebook, text = ['pos'], substrings = False )
-        media = filters.filter_by_text( self.dataMedia, text = ['algorit'], substrings = False )
+        fb = filters.filter_by_text(self.dataFacebook, text=[
+                                    'pos'], substrings=False)
+        media = filters.filter_by_text(
+            self.dataMedia, text=['algorit'], substrings=False)
 
-        assert( len(fb) == 0 )
-        assert( len(media) == 0)
+        assert(len(fb) == 0)
+        assert(len(media) == 0)
 
     def test_filter_text_inclusive(self):
 
-        fb = filters.filter_by_text( self.dataFacebook, text = ['post', 'missing text'] )
-        media = filters.filter_by_text( self.dataMedia, text = ['algoritmi', 'missing text'] )
+        fb = filters.filter_by_text(self.dataFacebook, text=[
+                                    'post', 'missing text'])
+        media = filters.filter_by_text(
+            self.dataMedia, text=['algoritmi', 'missing text'])
 
-        assert( len(fb) == 0 )
-        assert( len(media) == 0)
+        assert(len(fb) == 0)
+        assert(len(media) == 0)
 
     def test_filter_text_not_inclusive(self):
 
-        fb = filters.filter_by_text( self.dataFacebook, text = ['post', 'missing text'], inclusive = False )
-        media = filters.filter_by_text( self.dataMedia, text = ['algoritmi', 'missing text'], inclusive = False )
+        fb = filters.filter_by_text(self.dataFacebook, text=[
+                                    'post', 'missing text'], inclusive=False)
+        media = filters.filter_by_text(
+            self.dataMedia, text=['algoritmi', 'missing text'], inclusive=False)
 
-        assert( len(fb) == 3 )
-        assert( len(media) == 1)
-
+        assert(len(fb) == 3)
+        assert(len(media) == 1)
 
 
 class TestDatetimeFilter:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
-    def test_filter_datetime_no_dates( self ):
+    def test_filter_datetime_no_dates(self):
 
-        fb = filters.filter_by_datetime( self.dataFacebook )
-        media = filters.filter_by_datetime( self.dataMedia )
+        fb = filters.filter_by_datetime(self.dataFacebook)
+        media = filters.filter_by_datetime(self.dataMedia)
 
-        assert( len( list(fb) ) == 4 )
-        assert( len( list(media) ) == 276 )
+        assert(len(list(fb)) == 4)
+        assert(len(list(media)) == 276)
 
     def test_filter_datetime_after(self):
 
-        fb = filters.filter_by_datetime( self.dataFacebook, after = '2017-1-1' )
-        media = filters.filter_by_datetime( self.dataMedia, after = '2017-6-30 21:00:00' )
+        fb = filters.filter_by_datetime(self.dataFacebook, after='2017-1-1')
+        media = filters.filter_by_datetime(
+            self.dataMedia, after='2017-6-30 21:00:00')
 
-        assert( len(fb) == 2 )
-        assert( len(media) == 4)
+        assert(len(fb) == 2)
+        assert(len(media) == 4)
 
     def test_filter_datetime_before(self):
 
-        fb = filters.filter_by_datetime( self.dataFacebook, before = '2017-1-1' )
-        media = filters.filter_by_datetime( self.dataMedia, before = '2017-6-30 21:00:00' )
+        fb = filters.filter_by_datetime(self.dataFacebook, before='2017-1-1')
+        media = filters.filter_by_datetime(
+            self.dataMedia, before='2017-6-30 21:00:00')
 
-        assert( len(fb) == 2 )
-        assert( len(media) == 272 )
+        assert(len(fb) == 2)
+        assert(len(media) == 272)
 
     def test_filter_datetime_after_before(self):
 
-        fb = filters.filter_by_datetime( self.dataFacebook, after = '2017-1-3 15:09:23', before = '2017-2-6 19:52:09' )
-        media = filters.filter_by_datetime( self.dataMedia, after = '2017-6-30 21:00:04', before = '2017-6-30 23:13:53' )
+        fb = filters.filter_by_datetime(
+            self.dataFacebook, after='2017-1-3 15:09:23', before='2017-2-6 19:52:09')
+        media = filters.filter_by_datetime(
+            self.dataMedia, after='2017-6-30 21:00:04', before='2017-6-30 23:13:53')
 
-        assert( len(fb) == 1 )
-        assert( len(media) == 3 )
-
+        assert(len(fb) == 1)
+        assert(len(media) == 3)
 
 
 class TestAuthorFilter:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
-    def test_filter_author_empty( self ):
+    def test_filter_author_empty(self):
 
-        fb = filters.filter_by_author( self.dataFacebook )
-        media = filters.filter_by_author( self.dataMedia )
+        fb = filters.filter_by_author(self.dataFacebook)
+        media = filters.filter_by_author(self.dataMedia)
 
-        assert( len( list(fb) ) == 4 )
-        assert( len( list(media) ) == 276 )
+        assert(len(list(fb)) == 4)
+        assert(len(list(media)) == 276)
 
-    def test_filter_author_one( self ):
+    def test_filter_author_one(self):
 
-        fb = filters.filter_by_author( self.dataFacebook, authors = ['Matti Nelimarkka'] )
-        media = filters.filter_by_author( self.dataMedia, authors = ['Teemu Toivola'] )
+        fb = filters.filter_by_author(
+            self.dataFacebook, authors=['Matti Nelimarkka'])
+        media = filters.filter_by_author(
+            self.dataMedia, authors=['Teemu Toivola'])
 
-        assert( len( fb ) == 4 )
-        assert( len(media) == 2 )
+        assert(len(fb) == 4)
+        assert(len(media) == 2)
 
-    def test_filter_author_two( self ):
+    def test_filter_author_two(self):
 
-        fb = filters.filter_by_author( self.dataFacebook, authors = ['Matti Nelimarkka', 'Heikki Heiskanen'] )
-        media = filters.filter_by_author( self.dataMedia, authors = ['Teemu Toivola', 'Heikki Heiskanen'] )
+        fb = filters.filter_by_author(self.dataFacebook, authors=[
+                                      'Matti Nelimarkka', 'Heikki Heiskanen'])
+        media = filters.filter_by_author(self.dataMedia, authors=[
+                                         'Teemu Toivola', 'Heikki Heiskanen'])
 
-        assert( len( fb ) == 4 )
-        assert( len(media) == 3 )
+        assert(len(fb) == 4)
+        assert(len(media) == 3)
 
-    def test_filter_author_not_found( self ):
+    def test_filter_author_not_found(self):
 
-        fb = filters.filter_by_author( self.dataFacebook, authors = ['Missing author'] )
-        media = filters.filter_by_author( self.dataMedia, authors = ['Missing author', 'Missing author2'] )
+        fb = filters.filter_by_author(
+            self.dataFacebook, authors=['Missing author'])
+        media = filters.filter_by_author(self.dataMedia, authors=[
+                                         'Missing author', 'Missing author2'])
 
-        assert( len( fb ) == 0 )
-        assert( len(media) == 0 )
-
+        assert(len(fb) == 0)
+        assert(len(media) == 0)
 
 
 class TestDomainFilter:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
-    def test_filter_domain_empty( self ):
+    def test_filter_domain_empty(self):
 
-        fb = filters.filter_by_domain( self.dataFacebook )
-        media = filters.filter_by_domain( self.dataMedia )
+        fb = filters.filter_by_domain(self.dataFacebook)
+        media = filters.filter_by_domain(self.dataMedia)
 
-        assert( len( list(fb) ) == 4 )
-        assert( len( list(media) ) == 276 )
+        assert(len(list(fb)) == 4)
+        assert(len(list(media)) == 276)
 
-    def test_filter_domain_one( self ):
+    def test_filter_domain_one(self):
 
-        fb = filters.filter_by_domain( self.dataFacebook, domains = ['facebook.com'] )
-        media = filters.filter_by_domain( self.dataMedia, domains = ['yle.fi'] )
+        fb = filters.filter_by_domain(
+            self.dataFacebook, domains=['facebook.com'])
+        media = filters.filter_by_domain(self.dataMedia, domains=['yle.fi'])
 
-        assert( len( list(fb) ) == 4 )
-        assert( len( list(media) ) == 276 )
+        assert(len(list(fb)) == 4)
+        assert(len(list(media)) == 276)
 
-    def test_filter_domain_missing( self ):
+    def test_filter_domain_missing(self):
 
-        fb = filters.filter_by_domain( self.dataFacebook, domains = ['twitter.com'] )
-        media = filters.filter_by_domain( self.dataMedia, domains = ['hs.fi'] )
+        fb = filters.filter_by_domain(
+            self.dataFacebook, domains=['twitter.com'])
+        media = filters.filter_by_domain(self.dataMedia, domains=['hs.fi'])
 
-        assert( len( list(fb) ) == 0 )
-        assert( len( list(media) ) == 0 )
-
+        assert(len(list(fb)) == 0)
+        assert(len(list(media)) == 0)
 
 
 class TestUrls:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
-    def test_list_links( self ):
+    def test_list_links(self):
 
-        fb = urls.links( self.dataFacebook )
-        media = urls.links( self.dataMedia )
+        fb = urls.links(self.dataFacebook)
+        media = urls.links(self.dataMedia)
 
-        assert( len(fb) == 4 )
-        assert( len(media) == 433 )
+        assert(len(fb) == 4)
+        assert(len(media) == 433)
 
-    def test_extract_domains( self ):
+    def test_extract_domains(self):
 
-        fb = urls.domains( self.dataFacebook )
-        media = urls.domains( urls.links( self.dataMedia ) )
+        fb = urls.domains(self.dataFacebook)
+        media = urls.domains(urls.links(self.dataMedia))
 
-        assert( len(fb) == 4 )
-        assert( len(media) == 433 )
-
+        assert(len(fb) == 4)
+        assert(len(media) == 433)
 
 
 class TestCounter:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
-    def test_count_authors( self ):
+    def test_count_authors(self):
 
-        fb = counters.counts_author( self.dataFacebook, verbose = False )
-        media = counters.counts_author( self.dataMedia, verbose = False )
+        fb = counters.counts_author(self.dataFacebook, verbose=False)
+        media = counters.counts_author(self.dataMedia, verbose=False)
 
-        assert( len( fb.keys() ) == 1 )
-        assert( len( media.keys() ) == 140 )
+        assert(len(fb.keys()) == 1)
+        assert(len(media.keys()) == 140)
 
-    def test_count_domains( self ):
+    def test_count_domains(self):
 
-        fb = counters.counts_domain( self.dataFacebook, verbose = False )
-        media = counters.counts_domain( self.dataMedia, verbose = False )
+        fb = counters.counts_domain(self.dataFacebook, verbose=False)
+        media = counters.counts_domain(self.dataMedia, verbose=False)
 
-        assert( len( fb.keys() ) == 1 )
-        assert( len( media.keys() ) == 1 )
-
+        assert(len(fb.keys()) == 1)
+        assert(len(media.keys()) == 1)
 
 
 class TestXlsxExporter:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
         self.out_fb = 'out_fb'
         self.out_media = 'out_media'
 
-    def test_export_generator_xlsx( self ):
+    def test_export_generator_xlsx(self):
 
         try:
-            exporter.export_csv( self.dataMedia, self.out_media + '.xlsx' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+            exporter.export_csv(self.dataMedia, self.out_media + '.xlsx')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
         try:
-            exporter.export_csv( self.dataFacebook, self.out_fb + '.xlsx' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+            exporter.export_csv(self.dataFacebook, self.out_fb + '.xlsx')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
-        assert( os.path.isfile( self.out_media + '.xlsx' ) )
-        assert( os.path.isfile( self.out_fb + '.xlsx' ) )
+        assert(os.path.isfile(self.out_media + '.xlsx'))
+        assert(os.path.isfile(self.out_fb + '.xlsx'))
 
-    def test_export_list_xlsx( self ):
-
-        try:
-            exporter.export_csv( list( self.dataMedia ), self.out_media + '.xlsx' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+    def test_export_list_xlsx(self):
 
         try:
-            exporter.export_csv( list( self.dataFacebook ), self.out_fb + '.xlsx' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+            exporter.export_csv(list(self.dataMedia), self.out_media + '.xlsx')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
-        assert( os.path.isfile( self.out_media + '.xlsx' ) )
-        assert( os.path.isfile( self.out_fb + '.xlsx' ) )
+        try:
+            exporter.export_csv(list(self.dataFacebook), self.out_fb + '.xlsx')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
-    def teardown( self ):
+        assert(os.path.isfile(self.out_media + '.xlsx'))
+        assert(os.path.isfile(self.out_fb + '.xlsx'))
 
-        os.remove( self.out_media + '.xlsx' )
-        os.remove( self.out_fb + '.xlsx' )
+    def teardown(self):
+
+        os.remove(self.out_media + '.xlsx')
+        os.remove(self.out_fb + '.xlsx')
 
 
 class TestCsvExporter:
 
     def setup(self):
-        self.dataMedia = core.data( 'news', folder = '', terms = ['yle.json'] )
-        self.dataFacebook = core.data( 'facebook', folder = '', terms = ['facebook.json'] )
+        self.dataMedia = core.data('news', folder='', terms=['yle.json'])
+        self.dataFacebook = core.data(
+            'facebook', folder='', terms=['facebook.json'])
 
         self.out_fb = 'out_fb'
         self.out_media = 'out_media'
 
-    def test_export_generator_csv( self ):
+    def test_export_generator_csv(self):
 
         try:
-            exporter.export_csv( self.dataMedia, self.out_media + '.csv' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+            exporter.export_csv(self.dataMedia, self.out_media + '.csv')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
         try:
-            exporter.export_csv( self.dataFacebook, self.out_fb + '.csv' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+            exporter.export_csv(self.dataFacebook, self.out_fb + '.csv')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
-        assert( os.path.isfile( self.out_media + '.csv' ) )
-        assert( os.path.isfile( self.out_fb + '.csv' ) )
+        assert(os.path.isfile(self.out_media + '.csv'))
+        assert(os.path.isfile(self.out_fb + '.csv'))
 
-    def test_export_list_csv( self ):
-
-        try:
-            exporter.export_csv( list( self.dataMedia ), self.out_media + '.csv' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+    def test_export_list_csv(self):
 
         try:
-            exporter.export_csv( list( self.dataFacebook ), self.out_fb + '.csv' )
-        except Exception, e:
-            pytest.fail( "Exception " + str(e) )
+            exporter.export_csv(list(self.dataMedia), self.out_media + '.csv')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
-        assert( os.path.isfile( self.out_media + '.csv' ) )
-        assert( os.path.isfile( self.out_fb + '.csv' ) )
+        try:
+            exporter.export_csv(list(self.dataFacebook), self.out_fb + '.csv')
+        except Exception as e:
+            pytest.fail( msg = e.args[0] )
 
-    def teardown( self ):
+        assert(os.path.isfile(self.out_media + '.csv'))
+        assert(os.path.isfile(self.out_fb + '.csv'))
 
-        os.remove( self.out_media + '.csv' )
-        os.remove( self.out_fb + '.csv' )
+    def teardown(self):
+
+        os.remove(self.out_media + '.csv')
+        os.remove(self.out_fb + '.csv')

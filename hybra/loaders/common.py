@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from __future__ import division, print_function
-
 import json
 import os
 import sys
@@ -62,7 +60,7 @@ def __init_harmonize_data( data, data_type, common_data_keys ):
 
             harmonized_data[value] = harmonized_data[value].strip()
 
-        except Exception, e:
+        except Exception as e:
             harmonized_data['broken'][value] = e
 
     if not harmonized_data['timestamp']:
@@ -85,10 +83,11 @@ def __post_harmonize_data( d ):
 
         _url = ''
         if '_url' in d:
-            _url = d['_url'].encode('ascii', 'ignore')
+            _url = d['_url']
 
-        text = d['text_content'].encode('ascii', 'ignore')
+        text = d['text_content']
 
-        d['id'] = d['source'].lower() + '_' + hashlib.md5( _url + str( d['timestamp'] ) + text ).hexdigest()
+        content =  _url + str(d['timestamp']) + text
+        d['id'] = d['source'].lower() + '_' + hashlib.md5(content.encode()).hexdigest()
 
     return d

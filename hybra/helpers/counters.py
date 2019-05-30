@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import collections
 
 def counts_author( data, verbose ):
@@ -14,7 +16,7 @@ def counts_author( data, verbose ):
 
 def counts_domain( data, verbose ):
 
-    import urls
+    from . import urls
 
     domains = urls.domains( map( lambda d: d['url'], data ) )
 
@@ -30,9 +32,9 @@ def print_counts( counts, count_type ):
 
     total_count = len( counts.keys() )
 
-    print count_type.title() + 's found in data:', total_count
+    print(count_type.title() + 's found in data:', total_count)
 
-    print 'Entry counts by ' + count_type + ':'
+    print('Entry counts by ' + count_type + ':')
 
     for key, value in counts.most_common(total_count):
-        print '-', key, value
+        print('-', key, value)

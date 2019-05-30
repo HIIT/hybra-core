@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import json
 import datetime
@@ -28,7 +29,7 @@ for f in files:
  try:
 
     data = open( path + f ).read()
-    print 'Doing', f
+    print('Doing', f)
     out = []
 
     ## fix to stringio and save some writing to hd
@@ -85,8 +86,8 @@ for f in files:
             out.append( o )
 
     json.dump( out, open( outdir + '/' + f + '.json', 'w' ) )
-    print 'Done', f
+    print('Done', f)
 
- except Exception, e:
-       print 'Failed', f
-       print e
+ except Exception as e:
+       print('Failed', f)
+       print(e)

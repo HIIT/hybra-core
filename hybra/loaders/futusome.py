@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division, print_function
+from __future__ import absolute_import
 
 import json
 import os
@@ -11,7 +12,7 @@ import unicodedata
 
 from datetime import datetime, timedelta
 
-import common
+from . import common
 
 
 def load( query, data_dir = '', folder = 'futusome/', api_key = '', check_document_count = False, override_cache = False, cache_file = '' ):
