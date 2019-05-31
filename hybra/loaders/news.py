@@ -16,8 +16,6 @@ from . import common
 
 def load( terms = ['.json'], data_dir = '', folder = 'news/' ):
 
-    import dateparser
-
     path = data_dir + folder
 
     for dirpath, subdirs, files in os.walk(path):
@@ -44,7 +42,7 @@ def load( terms = ['.json'], data_dir = '', folder = 'news/' ):
                         d['_datetime_list'] = [ d['_datetime_list'] ]
 
                     try:
-                        d['timestamp'] = dateparser.parse( min( d['_datetime_list'] ), ) ## should take care of the various formats
+                        d['timestamp'] = common._text_to_datetime( min( d['_datetime_list'] ), ) ## should take care of the various formats
                     except Exception as e:
                         d['broken']['_datetime_list'] = e
 

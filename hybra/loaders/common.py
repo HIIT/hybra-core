@@ -9,10 +9,23 @@ import hashlib
 
 from datetime import datetime, timedelta
 
-
-
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
+
+import dateparser
+## try a few common formats first, then fall back to date parser (slow)
+def _text_to_datetime( text ):
+    try:# 2017-06-30 23:13:53
+        return datetime.datetime.strptime( text , '%Y-%m-%d %H:%M:%S')
+    except:
+        pass
+
+    try: # 2017-02-06T19:52:10+0000
+        return datetime.datetime.strptime( text , '%Y-%m-%dT%H:%M:%S%z')
+    except:
+        pass
+
+    return dateparser.parse( text , settings={'RETURN_AS_TIMEZONE_AWARE': False} )
 
 def _version( folder ):
 
@@ -66,7 +79,7 @@ def __init_harmonize_data( data, data_type, common_data_keys ):
     if not harmonized_data['timestamp']:
         harmonized_data['timestamp'] = '1970-01-01 00:00:00'
 
-    harmonized_data['timestamp'] = dateparser.parse( harmonized_data['timestamp'], settings={'RETURN_AS_TIMEZONE_AWARE': False} )
+    harmonized_data['timestamp'] = _text_to_datetime( harmonized_data['timestamp'] )
 
     return harmonized_data
 

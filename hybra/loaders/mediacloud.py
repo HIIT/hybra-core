@@ -1,6 +1,6 @@
-def load( file = '' ):
+from . import common
 
-    import dateparser
+def load( file = '' ):
 
     ## TODO: implement here hybra-core like caching and API management
 
@@ -11,7 +11,7 @@ def load( file = '' ):
             d = {}
 
             d['text_content'] = e['full_text_bow']
-            d['timestamp'] = dateparser.parse( e['publish_date'] )
+            d['timestamp'] = common._text_to_datetime( e['publish_date'] )
             d['source'] = e['media_name']
             d['source_detail'] = e['publish_date']
 
