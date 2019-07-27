@@ -1,7 +1,7 @@
 library(stm)
 library(lubridate)
 
-md <- data.frame( timestamp = ymd_hms( timestamps ) )
+md <- data.frame( timestamp = ymd_hms( timestamps ), source = sources, author = authors, text = texts )
 
 processed <- textProcessor( documents, metadata = md, stem = FALSE, striphtml = TRUE, language = NA, customstopwords = stopwords )
 

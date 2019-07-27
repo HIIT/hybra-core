@@ -61,7 +61,13 @@ def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = [] 
         os.remove( saveto + '/data.temp' ) ## temporary file not needed anymore, remove it
 
     documents = map( lambda x: x['text_lemma'], data )
+
+    ## metadata
+    ## todo: manage smarter
     timestamps = map( lambda x: str( x['timestamp'] ) , data )
+    source_details = map( lambda x: str( x['source_detail'] ) , data )
+    authors = map( lambda x: x['author'], data )
+    texts = map( lambda x: x['text'], data )
 
     display( HTML("<h4>Data analysis</h4>") )
 
@@ -70,4 +76,4 @@ def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = [] 
 
     display( HTML("<p>This may take a while</p>") )
     ## this stage does not yet work
-    core.plugin( MY_DIR + '/stm.r', documents = documents, timestamps = timestamps, k = k, saveto = saveto, stopwords = stopwords )
+    core.plugin( MY_DIR + '/stm.r', documents = documents, timestamps = timestamps, sources = source_details, authors = authors, texts = texts, k = k, saveto = saveto, stopwords = stopwords )
