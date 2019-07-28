@@ -19,6 +19,8 @@ def list_to_vector( l ):
 
     if isinstance(l, types.GeneratorType):
         l = list(l)
+    if isinstance(l, map):
+        l = list(l)
 
     if len( l ) == 0:
         return rpy2.rinterface.NA_Real
@@ -60,6 +62,7 @@ def list_to_vector( l ):
 
 simple_conver = Converter('simple')
 simple_conver.py2rpy.register( list, list_to_vector )
+simple_conver.py2rpy.register( map, list_to_vector )
 simple_conver.py2rpy.register( types.GeneratorType, list_to_vector )
 
 converter = default_converter + simple_conver
@@ -78,8 +81,9 @@ def run( execute, globalenv = None, **kwargs ):
 
 
     if os.path.isfile( execute ) and execute.endswith('.py'):
-        module = importlib.util.spec_from_file_location( 'main', execute )
-        module = importlib.util.module_from_spec( module )
+        module_spec = importlib.util.spec_from_file_location( 'plugin_module', execute )
+        module = importlib.util.module_from_spec( module_spec )
+        module_spec.loader.exec_module(module)
         return module.main( **kwargs )
 
     ## assume script is R
