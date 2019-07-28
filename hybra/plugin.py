@@ -1,18 +1,19 @@
 import os
 
-import imp
+## for python code
+import importlib
 
+## for r-code
+import pandas
 import rpy2
 import rpy2.robjects as robjects
 from rpy2.robjects import default_converter
-
-import pandas
 from rpy2.robjects import pandas2ri
-
 ## convert magic
 from rpy2.robjects.conversion import Converter
-
 import types
+
+pandas2ri.activate()
 
 def list_to_vector( l ):
 
@@ -23,8 +24,6 @@ def list_to_vector( l ):
         return rpy2.rinterface.NA_Real
 
     if isinstance( l[0], str ):
-        return rpy2.rinterface.StrSexpVector( l )
-    if isinstance( l[0], unicode ):
         return rpy2.rinterface.StrSexpVector( l )
     if isinstance( l[0], int ):
         return rpy2.rinterface.IntSexpVector( l )
@@ -54,14 +53,15 @@ def list_to_vector( l ):
                 dataframe[ key ].append( value )
 
         dataframe = pandas.DataFrame.from_dict( dataframe )
-        return pandas2ri.py2ri( dataframe )
+        print( dataframe )
+        return pandas2ri.py2rpy( dataframe )
 
     ## default to NA just in case
     return rpy2.rinterface.NA_Real
 
 simple_conver = Converter('simple')
-simple_conver.py2ri.register( list, list_to_vector )
-simple_conver.py2ri.register( types.GeneratorType, list_to_vector )
+simple_conver.py2rpy.register( list, list_to_vector )
+simple_conver.py2rpy.register( types.GeneratorType, list_to_vector )
 
 converter = default_converter + simple_conver
 
@@ -77,8 +77,13 @@ def run( execute, globalenv = None, **kwargs ):
     if os.path.isfile( f ):
         execute = f
 
+    print("Is file")
+
     if os.path.isfile( execute ) and execute.endswith('.py'):
-        module = imp.load_source( 'main', execute )
+        print("Is python file")
+        module = importlib.util.spec_from_file_location( 'main', execute )
+        module = importlib.util.module_from_spec( module )
+        print("Loading main")
         return module.main( **kwargs )
 
     ## assume script is R
@@ -95,9 +100,9 @@ def run( execute, globalenv = None, **kwargs ):
         if isinstance( value, dict ):
             ## use pandas
             value = pandas.DataFrame.from_dict( value )
-            rpy2.robjects.globalenv[ name ] = pandas2ri.py2ri( value )
+            rpy2.robjects.globalenv[ name ] = pandas2ri.py2rpy( value )
         else:
-            rpy2.robjects.globalenv[ name ] = converter.py2ri( value )
+            rpy2.robjects.globalenv[ name ] = converter.py2rpy( value )
 
     f = os.path.dirname( home ) + '/' + execute + '.r'
 
