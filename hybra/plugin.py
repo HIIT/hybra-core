@@ -53,7 +53,6 @@ def list_to_vector( l ):
                 dataframe[ key ].append( value )
 
         dataframe = pandas.DataFrame.from_dict( dataframe )
-        print( dataframe )
         return pandas2ri.py2rpy( dataframe )
 
     ## default to NA just in case
@@ -77,13 +76,10 @@ def run( execute, globalenv = None, **kwargs ):
     if os.path.isfile( f ):
         execute = f
 
-    print("Is file")
 
     if os.path.isfile( execute ) and execute.endswith('.py'):
-        print("Is python file")
         module = importlib.util.spec_from_file_location( 'main', execute )
         module = importlib.util.module_from_spec( module )
-        print("Loading main")
         return module.main( **kwargs )
 
     ## assume script is R
