@@ -1,32 +1,28 @@
+from __future__ import print_function
 import re
-from urlparse import urlparse
 from collections import Counter
 
 def filter_by_text( data, text = [], substrings = True, inclusive = True ):
 
     filtered_data = []
 
-    if text:
-        text = map( lambda t: t.decode('utf8'), text)
-    else:
-        print('No text given for filtering!')
-        return data
+    terms = [ term.lower() for term in text ]
 
     for d in data:
         if substrings:
             if inclusive:
-                if all( string.lower() in d['text_content'].lower() for string in text ):
+                if all( term in d['text_content'].lower() for term in terms ):
                     filtered_data.append( d )
             else:
-                if any( string.lower() in d['text_content'].lower() for string in text ):
+                if any( term in d['text_content'].lower() for term in terms ):
                     filtered_data.append( d )
         else:
-            words = re.findall(r'\w+', d['text_content'].lower(), re.UNICODE)
+            words = re.findall(r'\w+', d['text_content'].lower() )
             if inclusive:
-                if all( string.lower() in words for string in text ):
+                if all( term in words for term in terms ):
                     filtered_data.append( d )
             else:
-                if any( string.lower() in words for string in text ):
+                if any( term in words for term in terms ):
                     filtered_data.append( d )
 
     return filtered_data
@@ -45,20 +41,20 @@ def filter_by_datetime( data, after = '', before = '' ):
     elif before:
         data = filter( lambda d: d['timestamp'] < before, data )
     else:
-        print 'No dates given for filtering!'
+        print('No dates given for filtering!')
 
-    return data
+    return list(data)
 
 def filter_by_author( data, authors = [] ):
 
-    authors = set( map( lambda a: a.decode('utf8'), authors) )
+    authors = set( authors )
 
     if authors:
         data = filter( lambda d: d['creator'] in authors, data )
     else:
-        print 'No authors given for filtering!'
+        print('No authors given for filtering!')
 
-    return data
+    return list(data)
 
 def filter_by_domain( data, domains = [] ):
 
@@ -69,6 +65,6 @@ def filter_by_domain( data, domains = [] ):
     if domains:
         data = filter( lambda d: '.'.join( tldextract.extract( d['url'] )[-2:] ) in domains, data )
     else:
-        print 'No domains given for filtering!'
+        print('No domains given for filtering!')
 
-    return data
+    return list(data)

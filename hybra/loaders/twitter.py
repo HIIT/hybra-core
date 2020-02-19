@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division, print_function
+from __future__ import absolute_import
 
-import json
+import ujson as json
 import os
 import sys
 import re
@@ -11,7 +12,7 @@ import hashlib
 
 from datetime import datetime, timedelta
 
-import common
+from . import common
 
 def load( terms = ['data_'], data_dir = '', folder = 'twitter/' ):
 
@@ -45,7 +46,7 @@ def load( terms = ['data_'], data_dir = '', folder = 'twitter/' ):
 
                     try:
                         d['url'] = 'https://www.twitter.com/statuses/' + d['_id_str']
-                    except Exception, e:
+                    except Exception as e:
                         d['broken']['url'] = e
 
                     d = common.__post_harmonize_data( d )

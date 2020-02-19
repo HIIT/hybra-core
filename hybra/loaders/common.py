@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from __future__ import division, print_function
-
 import json
 import os
 import sys
@@ -11,10 +9,23 @@ import hashlib
 
 from datetime import datetime, timedelta
 
-
-
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
+
+import dateparser
+## try a few common formats first, then fall back to date parser (slow)
+def _text_to_datetime( text ):
+    try:# 2017-06-30 23:13:53
+        return datetime.datetime.strptime( text , '%Y-%m-%d %H:%M:%S')
+    except:
+        pass
+
+    try: # 2017-02-06T19:52:10+0000
+        return datetime.datetime.strptime( text , '%Y-%m-%dT%H:%M:%S%z')
+    except:
+        pass
+
+    return dateparser.parse( text , settings={'RETURN_AS_TIMEZONE_AWARE': False} )
 
 def _version( folder ):
 
@@ -62,13 +73,13 @@ def __init_harmonize_data( data, data_type, common_data_keys ):
 
             harmonized_data[value] = harmonized_data[value].strip()
 
-        except Exception, e:
+        except Exception as e:
             harmonized_data['broken'][value] = e
 
     if not harmonized_data['timestamp']:
         harmonized_data['timestamp'] = '1970-01-01 00:00:00'
 
-    harmonized_data['timestamp'] = dateparser.parse( harmonized_data['timestamp'], settings={'RETURN_AS_TIMEZONE_AWARE': False} )
+    harmonized_data['timestamp'] = _text_to_datetime( harmonized_data['timestamp'] )
 
     return harmonized_data
 
@@ -85,10 +96,11 @@ def __post_harmonize_data( d ):
 
         _url = ''
         if '_url' in d:
-            _url = d['_url'].encode('ascii', 'ignore')
+            _url = d['_url']
 
-        text = d['text_content'].encode('ascii', 'ignore')
+        text = d['text_content']
 
-        d['id'] = d['source'].lower() + '_' + hashlib.md5( _url + str( d['timestamp'] ) + text ).hexdigest()
+        content =  _url + str(d['timestamp']) + text
+        d['id'] = d['source'].lower() + '_' + hashlib.md5(content.encode()).hexdigest()
 
     return d

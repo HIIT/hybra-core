@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+from __future__ import absolute_import
 import sys, os
 sys.path.append( os.path.dirname(os.path.realpath(__file__) ) )
 
@@ -9,7 +11,7 @@ import types
 
 from matplotlib import pyplot as plt
 
-from loaders import common as datacommon
+from .loaders import common as datacommon
 import importlib
 
 MY_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -39,7 +41,7 @@ def version():
 if IPYTHON_NOTEBOOK:
     display( HTML('Version ' + version()) )
 else:
-    print "HYBRA now in version", version()
+    print("HYBRA now in version", version())
 
 def set_data_path( path ):
     """ Sets the path where the data is stored. Relative to where you run your Python.
@@ -115,7 +117,7 @@ def describe( data, structure = False ):
         :type structure: boolean
     """
 
-    import descriptives
+    from . import descriptives
     from IPython.core.display import display, HTML
 
     return display( HTML( descriptives.describe( data, structure ) ) )
@@ -135,7 +137,7 @@ def timeline( datasets = [], **kwargs ):
         ``core.timeline(datasets[news_data, fb_data], colors = ['blue', 'red']) ## Plots the dataset `news_data` as blue timeline and the dataset `fb_data` as red timeline.``
     """
 
-    from timeline import module_timeline
+    from .timeline import module_timeline
     from IPython.core.display import display, HTML
 
     kwargs['datasets'] = datasets
@@ -149,7 +151,7 @@ def network( data ):
         :type data: generator or list
     """
 
-    from network import module_network
+    from .network import module_network
     from IPython.core.display import display, HTML
 
     return display( HTML( module_network.create_network( data ) ) )
@@ -165,7 +167,7 @@ def wordcloud( data, **kwargs ):
               Words to be ignored in generating the wordcloud. Given as strings.
     """
 
-    from wordcloud import module_wordclouds
+    from .wordcloud import module_wordclouds
     from IPython.core.display import display, HTML
     return display(HTML(module_wordclouds.create_wordcloud( data, plt, **kwargs )))
 
@@ -188,7 +190,7 @@ def plugin( script, **kwargs ):
         ## Runs the χ²-test to examine the expected cross-tabulated frequencies of a and b to observed frequeincies in data. data is a list of dictonaries, each dictonary having a and b variables.``
     """
 
-    from plugin import run
+    from .plugin import run
 
     globalenv = None
     if 'previous' in kwargs:
@@ -199,10 +201,12 @@ def plugin( script, **kwargs ):
         return run( script, globalenv, **kwargs )
     except Exception as e:
 
+        print( e )
+
         display( HTML( """<div style='border: 1px solid red; padding: 2em;'>
                 <p style='color:red; font-weight: bold;'>Failed to run analysis.</p>
                 <p style='color:red;'>%s</p>
-            </div>""" % e.message
+            </div>""" % repr( e )
         ) )
 
 
@@ -225,7 +229,7 @@ def export( data, file_path ):
         ``core.export(data, 'exported_data.csv') ## Exports data in common format to file 'exported_data.csv' in current path.``
     """
 
-    from helpers import exporter
+    from .helpers import exporter
 
     file_type = file_path.split('.')[-1]
 
@@ -234,7 +238,7 @@ def export( data, file_path ):
 
         file_exporter( data, file_path )
 
-    except Exception, e:
+    except Exception as e:
         print(repr(e))
         print("File export failed. Supported file types:")
 
@@ -322,14 +326,14 @@ def filter_by( data, filter_type, **kwargs ):
         * ``core.filter_by(data, 'domain', domains = ['domain1.com', 'domain2.net']) ## Return from dataset `data` entries which are from domains 'domain1.com' or 'domain2.net'.``
     """
 
-    from helpers import filters
+    from .helpers import filters
 
     try:
         filter_helper = getattr( filters, 'filter_by_' + filter_type )
 
         return filter_helper( data, **kwargs )
 
-    except Exception, e:
+    except Exception as e:
         print(repr(e))
         print('Data filtering failed. Supported filters:')
 
@@ -353,14 +357,14 @@ def counts( data, count_by, verbose = False ):
         * ``core.counts(data, count_by = 'domain', verbose = True) ## counts distinct domains in data and print the counts.``
     """
 
-    from helpers import counters
+    from .helpers import counters
 
     try:
         counts_helper = getattr( counters, 'counts_' + count_by )
 
         return counts_helper( data, verbose )
 
-    except Exception, e:
+    except Exception as e:
         print(repr(e))
         print("Getting counts failed. Supported features to count by:")
 

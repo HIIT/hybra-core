@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division, print_function
+from __future__ import absolute_import
 
 import ujson as json
 import os
@@ -11,11 +12,9 @@ import hashlib
 
 from datetime import datetime, timedelta
 
-import common
+from . import common
 
 def load( terms = ['.json'], data_dir = '', folder = 'news/' ):
-
-    import dateparser
 
     path = data_dir + folder
 
@@ -39,12 +38,12 @@ def load( terms = ['.json'], data_dir = '', folder = 'news/' ):
                     d = common.__init_harmonize_data( d, 'news_media', common_data_keys )
 
                     ## ensure data is always in a list
-                    if isinstance( d['_datetime_list'] , str) or isinstance( d['_datetime_list']  , unicode):
+                    if isinstance( d['_datetime_list'] , str):
                         d['_datetime_list'] = [ d['_datetime_list'] ]
 
                     try:
-                        d['timestamp'] = dateparser.parse( min( d['_datetime_list'] ), ) ## should take care of the various formats
-                    except Exception, e:
+                        d['timestamp'] = common._text_to_datetime( min( d['_datetime_list'] ), ) ## should take care of the various formats
+                    except Exception as e:
                         d['broken']['_datetime_list'] = e
 
                     d['images'] = d['_images']

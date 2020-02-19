@@ -4,8 +4,7 @@ import os
 import os.path
 import pickle
 
-import helpers.urls as urls
-import core
+from hybra import core
 
 from ipywidgets import IntProgress
 from IPython.display import display, HTML
@@ -37,7 +36,7 @@ def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = [] 
         for entry in data:
             if not 'text_lemma' in entry: ## check this has not been lemmatized before
 
-                entry['text_lemma'] = re.sub( urls.URL_REGEXP, ' ', entry['text_content'] ).strip()
+                entry['text_lemma'] = re.sub( core.helpers.urls.URL_REGEXP, ' ', entry['text_content'] ).strip()
 
                 if len( entry['text_lemma'] ) > 0:
                     try:
@@ -61,13 +60,20 @@ def main( data, saveto, k, lasserver = "http://localhost:19990", stopwords = [] 
         os.remove( saveto + '/data.temp' ) ## temporary file not needed anymore, remove it
 
     documents = map( lambda x: x['text_lemma'], data )
+
+    ## metadata
+    ## todo: manage smarter
     timestamps = map( lambda x: str( x['timestamp'] ) , data )
+    source_details = map( lambda x: x['source_detail'] , data )
+    authors = map( lambda x: x['author'] if 'author' in x else None, data )
+    texts = map( lambda x: x['text_content'], data )
 
     display( HTML("<h4>Data analysis</h4>") )
 
+    stopwords = list( stopwords )
     stopwords += default_stopwords
     stopwords = map( lambda x: x.strip().lower(), stopwords )
 
     display( HTML("<p>This may take a while</p>") )
     ## this stage does not yet work
-    core.plugin( MY_DIR + '/stm.r', documents = documents, timestamps = timestamps, k = k, saveto = saveto, stopwords = stopwords )
+    core.plugin( MY_DIR + '/stm.r', documents = documents, timestamps = timestamps, sources = source_details, authors = authors, texts = texts, k = k, saveto = saveto, stopwords = stopwords )

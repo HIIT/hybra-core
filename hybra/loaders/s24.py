@@ -1,5 +1,6 @@
+from __future__ import print_function
 import os
-import pickle
+import json
 import datetime
 import cStringIO
 import re
@@ -33,7 +34,7 @@ for f in files:
  try:
 
     data = open( path + f ).read()
-    print 'Doing', f
+    print('Doing', f)
     out = []
 
     ## fix to stringio and save some writing to hd
@@ -93,12 +94,9 @@ for f in files:
 
             out.append( o )
 
-    pickle.dump( out, open( outdir + '/' + f + '.pickle', 'w' ) )
-    print 'Done', f
+    json.dump( out, open( outdir + '/' + f + '.json', 'w' ) )
+    print('Done', f)
 
- except Exception, e:
-       print 'Failed', f
-       print e
-
-
-print 'Total number of messages', total
+ except Exception as e:
+       print('Failed', f)
+       print(e)
