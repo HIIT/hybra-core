@@ -1,24 +1,23 @@
 import os
-import json
+import pickle
 import datetime
 import cStringIO
+import re
 
 from lxml import etree
 
 path = '/appl/kielipankki/Suomi24/2017H2/'
 
-files = filter( lambda x: x.endswith('VRT2') or x.endswith('VRT'), os.listdir( path ) )
+files = filter( lambda x: x.endswith('vrt'), os.listdir( path ) )
 files = filter( lambda x: x.startswith('comments'), files )
 
-has_already = filter( lambda x: x.endswith('VRT2.json') or x.endswith('VRT.json'), os.listdir( '.' ) )
+has_already = filter( lambda x: x.endswith('vrt.json'), os.listdir( '.' ) )
 has_already = map( lambda x: x.replace('.json', ''), has_already)
 
 files = set(files) - set(has_already)
 
 import sys
 keywords = sys.argv[1]
-
-print keywords
 
 outdir = keywords.replace(' ', '')
 
@@ -27,7 +26,7 @@ if not os.path.exists( outdir ):
 
 keywords = keywords.split(',')
 
-total_sum = 0
+total = 0
 
 for f in files:
 
@@ -46,6 +45,8 @@ for f in files:
     "</root>")
 
     for d in etree.iterparse( open('temp.xml') , tag = 'text' , recover = True ):
+
+        total += 1
         d = d[1]
 
         text = ''
@@ -59,45 +60,45 @@ for f in files:
 
                     line = line.split('\t')
 
-                    if len( line ) > 3:
+                    if len( line ) > 2:
 
                         text += line[0] + ' '
-                        text_lemma += line[2] + ' '
+                        text_lemma += line[1] + ' '
 
 
-        flag = True
+        flag = False
 
-        for kw in keywords:
-            if kw in text or kw in text_lemma:
-                flag = True
+        #for kw in keywords:
+        #    if kw in text or kw in text_lemma:
+        #        flag = True
+
+        flag = re.search( '[^\s]*rasism[^\s]*|[^\s]*rasist[^\s]*' , text, re.I ) or  re.search( '[^\s]*rasism[^\s]*|[^\s]*rasist[^\s]*' , text_lemma, re.I )
 
         if flag:
 
             o = {}
-            o['text_content'] = d.get('title') + ' ' + text
+            o['text_content'] = text
             o['text_content_lemma'] = text_lemma
             o['source'] = 'Suomi24'
-            o['source_detail'] =  d.get('discussionarea') + '/' + d.get('subsections')
-            o['url'] = d.get('urlmsg')
+            o['source_detail'] =  d.get('topics')
+            o['url'] = 'https://keskustelu.suomi24.fi/t/' +  d.get('thread') + '#comment-' + d.get('comment')
 
-            dt = d.get('date').split('.') + d.get('time').split(':')
+            dt = d.get('date').split('-') + d.get('time').split(':')
             dt = map( int, dt )
 
-            o['timestamp'] = datetime.datetime( dt[2], dt[1], dt[0], dt[3], dt[4])
+            o['timestamp'] = datetime.datetime( dt[0], dt[1], dt[2], dt[3], dt[4])
 
-            o['creator'] = d.get('anonnick')
-            o['id'] = d.get('tid') + '-' + d.get('cid')
+            o['creator'] = d.get('nick')
+            o['id'] = d.get('thread') + '-' + d.get('comment')
 
-            if datetime.datetime( 2011, 1, 1, 0, 0, 1 ) <= o['timestamp'] <= datetime.datetime( 2015, 11, 15, 23, 59 ):
-               total_sum += 1
+            out.append( o )
 
-            ## out.append( o )
-
-    # json.dump( out, open( outdir + '/' + f + '.json', 'w' ) )
-    # print 'Done', f
+    pickle.dump( out, open( outdir + '/' + f + '.pickle', 'w' ) )
+    print 'Done', f
 
  except Exception, e:
        print 'Failed', f
        print e
 
-open('total_sum.txt', 'w').write( str( total_sum ) )
+
+print 'Total number of messages', total
