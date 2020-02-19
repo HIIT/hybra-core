@@ -30,17 +30,20 @@ def lemmatize( text, path ):
     text = text.replace('"', '' ) ## no "
 
     try:
-        out = subprocess.check_output( 'module load finnish-process; echo "' + text + '" | finnish-process', shell = True)
+        out = subprocess.check_output( 'module load kieli; echo "' + text + '" | finnish-analyze-words', shell = True)
     except:
 
         ## In case the above returns an argument too long error, write the command in a shell script and run it
         ## The shell script is written in a file called file_name.sh in the directory that lemmatize.py is ran from
         ## and removed immediately afterwards.
 
-        file_name = path.rsplit('/', 1)[1]
+        if '/' in path:
+          file_name = path.rsplit('/', 1)[1]
+        else:
+          file_name = './'
 
         with open(file_name + '.sh', 'w') as f:
-	    cmd = '#!/bin/bash -l\n\nmodule load finnish-process; echo "' + text + '" | finnish-process'
+	    cmd = '#!/bin/bash -l\n\nmodule load kieli; echo "' + text + '" | finnish-analyze-words'
             f.write(cmd.encode('utf-8'))
 
         os.chmod(file_name + '.sh', 0o777)
